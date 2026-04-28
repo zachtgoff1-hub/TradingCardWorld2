@@ -218,7 +218,7 @@ body{background:radial-gradient(ellipse at top,#2a0a1a 0%,var(--bg) 60%);color:#
 <body>
 
 <div class="screen on" id="home">
-  <a class="launcher-back" href="../launcher.html">‹ HUB</a>
+  <a class="launcher-back" href="../index.html" onclick="var t=this,x=new XMLHttpRequest();try{x.open('HEAD','../index.html',false);x.send();if(x.status>=400)t.href='../launcher.html';}catch(e){}">‹ HUB</a>
   <div class="shield">👑</div>
   <div class="logo-main">CLASH</div><div class="logo-sub">ARENA</div><div class="logo-tag">FULL EDITION · TURN · BOARD · STORY</div>
   <div class="mode-pill">⚔️ TURN BATTLE</div><button class="menu-btn" onclick="goScreen('quick-tb')"><span class="ico">🎮</span><span class="lbl">QUICK BATTLE<span class="sub">Pokemon-style 1v1</span></span><span class="arr">›</span></button>
@@ -427,26 +427,20 @@ function mapClashType(typ,name,art){
 }
 
 function processClashText(text){
-  // Build art map from A object: keyword:`<img src="data:image/jpeg;base64,...">`
+  // Build art map from A object: each entry is `key:`<img ...src="data:image...">`,`
+  // Some entries have style/class attributes BEFORE src=, so we can't assume src= is right after <img.
   const artMap={};
-  let pos=0;
-  while(pos<text.length){
-    const k=text.indexOf(':`<img src=\"data:image',pos);
-    if(k===-1)break;
-    let keyStart=k-1;
-    while(keyStart>=0&&/[a-zA-Z0-9_]/.test(text[keyStart]))keyStart--;
-    const key=text.substring(keyStart+1,k);
-    const imgStart=text.indexOf('data:image',k);
-    const imgEnd=text.indexOf('\">',imgStart);
-    if(imgEnd===-1)break;
-    artMap[key]=text.substring(imgStart,imgEnd);
-    pos=imgEnd+2;
+  // Match any identifier followed by :`<img (any attributes) src="data:image...">
+  const artRe=/([a-zA-Z_][a-zA-Z0-9_]*):`<img\b[^>]*?\bsrc="(data:image\/[a-zA-Z0-9+._-]+;base64,[A-Za-z0-9+/=]+)"/g;
+  let am;
+  while((am=artRe.exec(text))!==null){
+    artMap[am[1]]=am[2];
   }
   // Helper to grab a quoted/numeric field
   function pluck(s,key){const re2=new RegExp(key+":\\s*(?:'([^']*)'|\"([^\"]*)\"|(-?\\d+|null))");const m2=s.match(re2);if(!m2)return null;return m2[1]!==undefined?m2[1]:(m2[2]!==undefined?m2[2]:m2[3])}
   // Scan for each card object using id markers
   const found=[];const seen=new Set();
-  pos=0;
+  let pos=0;
   while(pos<text.length){
     const idStart=text.indexOf("id:'s",pos);
     if(idStart===-1)break;
@@ -486,14 +480,14 @@ function processClashText(text){
   if(found.length>0){
     ROSTER.length=0;ROSTER.push(...found);
     if($('artStatus')){$('artStatus').innerHTML=`✓ Loaded ${found.length} cards with artwork! <span style="opacity:.6">Cached.</span> <button onclick="document.getElementById('artStatus').style.display='none'" style="margin-left:8px;padding:4px 10px;background:rgba(0,0,0,.3);border:1px solid #000;color:#000;font-family:'Black Ops One',cursive;font-size:10px;border-radius:6px;cursor:pointer">✕ DISMISS</button>`;setTimeout(()=>{const s=$('artStatus');if(s)s.style.display='none'},4000)}
-    try{localStorage.setItem('clash-art-cache',JSON.stringify({art:CLASH_ART,roster:ROSTER,ver:1}))}catch(e){console.warn('Cache failed',e)}
+    try{localStorage.setItem('clash-art-cache',JSON.stringify({art:CLASH_ART,roster:ROSTER,ver:2}))}catch(e){console.warn('Cache failed',e)}
     if(document.querySelector('#roster.on'))renderRoster();
     if(document.querySelector('#select.on'))renderSelect();
     return true;
   }
   return false;
 }
-function loadCachedClash(){try{const c=localStorage.getItem('clash-art-cache');if(!c)return false;const d=JSON.parse(c);if(!d.art||!d.roster)return false;Object.assign(CLASH_ART,d.art);ROSTER.length=0;ROSTER.push(...d.roster);if($('artStatus'))$('artStatus').style.display='none';return true}catch(e){return false}}
+function loadCachedClash(){try{const c=localStorage.getItem('clash-art-cache');if(!c)return false;const d=JSON.parse(c);if(!d.art||!d.roster||d.ver!==2){localStorage.removeItem('clash-art-cache');return false}Object.assign(CLASH_ART,d.art);ROSTER.length=0;ROSTER.push(...d.roster);if($('artStatus'))$('artStatus').style.display='none';return true}catch(e){return false}}
 async function tryFetchClash(){try{const res=await fetch('../clash(7).html');if(!res.ok)return false;const text=await res.text();return processClashText(text)}catch(e){return false}}
 function tryXhrClash(){return new Promise(resolve=>{try{const x=new XMLHttpRequest();x.open('GET','../clash(7).html',true);x.responseType='text';x.onload=()=>{if(x.status===200||x.status===0&&x.responseText){resolve(processClashText(x.responseText))}else resolve(false)};x.onerror=()=>resolve(false);x.send()}catch(e){resolve(false)}})}
 function tryIframeClash(){return new Promise(resolve=>{try{const f=document.createElement('iframe');f.style.cssText='position:absolute;left:-9999px;width:1px;height:1px';f.src='../clash(7).html';let resolved=false;const finish=(v)=>{if(resolved)return;resolved=true;try{f.remove()}catch(e){}resolve(v)};f.onload=()=>{setTimeout(()=>{try{const doc=f.contentDocument||f.contentWindow.document;if(!doc){finish(false);return}const text=doc.documentElement.outerHTML;finish(processClashText(text))}catch(e){finish(false)}},800)};f.onerror=()=>finish(false);document.body.appendChild(f);setTimeout(()=>finish(false),5000)}catch(e){resolve(false)}})}

@@ -220,7 +220,7 @@ body{background:radial-gradient(ellipse at top,#1a0a3a 0%,var(--bg) 60%);color:#
 <body>
 
 <div class="screen on" id="home">
-  <a class="launcher-back" href="../launcher.html">‹ HUB</a>
+  <a class="launcher-back" href="../index.html" onclick="var t=this,x=new XMLHttpRequest();try{x.open('HEAD','../index.html',false);x.send();if(x.status>=400)t.href='../launcher.html';}catch(e){}">‹ HUB</a>
   <div class="shield">⚔️</div>
   <div class="logo-main">SUPER SMASH</div><div class="logo-sub">ARENA</div><div class="logo-tag">FULL EDITION · TURN · BOARD · STORY</div>
   <div class="mode-pill">⚔️ TURN BATTLE</div><button class="menu-btn" onclick="goScreen('quick-tb')"><span class="ico">🎮</span><span class="lbl">QUICK BATTLE<span class="sub">Pokemon-style 1v1</span></span><span class="arr">›</span></button>

@@ -9,6 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="Marvel Arena">
 <meta name="theme-color" content="#1a0a14">
 <link rel="manifest" href="../manifest.json">
+<link rel="apple-touch-icon" href="../assets/marvel-icon.jpg">
 <title>Marvel Arena — Full Edition</title>
 <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
@@ -246,6 +247,7 @@ body{background:radial-gradient(ellipse at top,#1a0a0a 0%,var(--bg) 60%);color:#
 
 <div class="screen on" id="home">
   <a class="launcher-back" href="../index.html" onclick="var t=this,x=new XMLHttpRequest();try{x.open('HEAD','../index.html',false);x.send();if(x.status>=400)t.href='../launcher.html';}catch(e){}">‹ HUB</a>
+  <img src="../assets/marvel-logo.png" alt="Marvel" style="display:block;max-width:88%;max-height:90px;margin:8px auto 6px;object-fit:contain;filter:drop-shadow(0 4px 12px rgba(0,0,0,.5))" onerror="this.style.display='none'">
   <div class="shield">🦸</div>
   <div class="logo-main">MARVEL</div><div class="logo-sub">ARENA</div><div class="logo-tag">FULL EDITION · TURN · BOARD · STORY</div>
   <div class="mode-pill">⚔️ TURN BATTLE</div><button class="menu-btn" onclick="goScreen('quick-tb')"><span class="ico">🎮</span><span class="lbl">QUICK BATTLE<span class="sub">Pokemon-style 1v1</span></span><span class="arr">›</span></button>
@@ -1105,6 +1107,58 @@ html{background:var(--bg,#06080F)!important}
       });
     }
     injectHandInfoButtons();
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+
+<!-- GAME CONTROLS — speed, pause, mute, unstick + roster balance -->
+<style>
+#gameControls{position:fixed;top:max(8px,calc(env(safe-area-inset-top) + 4px));right:8px;z-index:9000;display:flex;gap:4px;font-family:'Black Ops One',cursive;flex-direction:column;align-items:flex-end;pointer-events:none}
+#gameControls > div,#gameControls button{pointer-events:auto}
+.gc-btn{padding:6px 9px;background:rgba(0,0,0,.78);border:1px solid var(--gold,#ffcb05);color:var(--gold,#ffcb05);border-radius:8px;font-family:'Black Ops One',cursive;font-size:11px;cursor:pointer;min-width:36px;letter-spacing:.5px}
+.gc-btn:active{transform:scale(.94)}
+.gc-btn.unstick{background:rgba(220,38,38,.9);border-color:#fff;color:#fff;font-size:10px;letter-spacing:1px;animation:gc-pulse 1s infinite}
+@keyframes gc-pulse{0%,100%{box-shadow:0 0 6px rgba(220,38,38,.5)}50%{box-shadow:0 0 14px rgba(220,38,38,.95)}}
+</style>
+<script>
+(function(){
+  const PREFS_KEY='arena-prefs-v1';
+  const prefs=(()=>{try{return JSON.parse(localStorage.getItem(PREFS_KEY))||{}}catch(e){return{}}})();
+  if(prefs.speed==null)prefs.speed=1;if(prefs.muted==null)prefs.muted=false;
+  let paused=false,pauseResolvers=[],lastLogTime=Date.now();
+  function savePrefs(){try{localStorage.setItem(PREFS_KEY,JSON.stringify(prefs))}catch(e){}}
+  function init(){
+    if(typeof sleep!=='function'||typeof state==='undefined'){setTimeout(init,150);return}
+    const _origSleep=sleep;
+    window.sleep=function(ms){const adjusted=Math.max(20,Math.round(ms/Math.max(0.25,prefs.speed||1)));return new Promise(resolve=>{const fire=()=>{if(paused)pauseResolvers.push(fire);else setTimeout(resolve,adjusted)};fire()})};
+    if(typeof tone==='function'){const _o=tone;window.tone=function(){if(prefs.muted)return;return _o.apply(this,arguments)}}
+    if(typeof bbLog==='function'){const _o=bbLog;window.bbLog=function(){lastLogTime=Date.now();return _o.apply(this,arguments)}}
+    if(typeof log==='function'){const _o=log;window.log=function(){lastLogTime=Date.now();return _o.apply(this,arguments)}}
+    if(typeof ROSTER!=='undefined'&&Array.isArray(ROSTER)){
+      const ELIXIR_WOUNDS={0:2,1:2,2:3,3:3,4:4,5:4,6:5,7:5,8:6,9:6,10:7};
+      ROSTER.forEach(card=>{
+        if(card._balanced||card.elixir==null)return;
+        card._balanced=true;
+        const cap=ELIXIR_WOUNDS[card.elixir]||5;
+        const baseHp=card.hp||140;
+        const currentWounds=Math.max(2,Math.min(7,Math.round(baseHp/40)));
+        if(currentWounds>cap){card.hp=cap*40;card.hpMax=card.hp}
+        if(card.elixir<=2&&card.atk)card.atk=Math.round(card.atk*1.1);
+      });
+    }
+    buildUI();
+    setInterval(()=>{const ub=document.getElementById('ctrlUnstick');if(!ub)return;const stuck=state&&state.bb&&state.bb.busy&&(Date.now()-lastLogTime>12000);ub.style.display=stuck?'block':'none'},2000);
+  }
+  function buildUI(){
+    if(document.getElementById('gameControls'))return;
+    const c=document.createElement('div');c.id='gameControls';
+    c.innerHTML='<div style="display:flex;gap:4px"><button id="ctrlSpeed" class="gc-btn" title="Speed">'+prefs.speed+'x</button><button id="ctrlPause" class="gc-btn" title="Pause">⏸</button><button id="ctrlMute" class="gc-btn" title="Sound" style="font-size:14px">'+(prefs.muted?'🔇':'🔊')+'</button></div><button id="ctrlUnstick" class="gc-btn unstick" style="display:none;margin-top:4px">⚠ UNSTICK</button>';
+    document.body.appendChild(c);
+    document.getElementById('ctrlSpeed').onclick=()=>{const speeds=[0.5,1,2];const idx=speeds.indexOf(prefs.speed);prefs.speed=speeds[(idx+1)%speeds.length];savePrefs();document.getElementById('ctrlSpeed').textContent=prefs.speed+'x'};
+    document.getElementById('ctrlPause').onclick=()=>{paused=!paused;document.getElementById('ctrlPause').textContent=paused?'▶':'⏸';if(!paused){const all=pauseResolvers.slice();pauseResolvers=[];all.forEach((r,i)=>setTimeout(r,i*30))}};
+    document.getElementById('ctrlMute').onclick=()=>{prefs.muted=!prefs.muted;savePrefs();document.getElementById('ctrlMute').textContent=prefs.muted?'🔇':'🔊'};
+    document.getElementById('ctrlUnstick').onclick=()=>{if(state&&state.bb){state.bb.busy=false;state.bb.phase='deploy';state.bb.whoseTurn='ply';if(typeof bbLog==='function')bbLog('⚙️ Force-unstuck — your turn.');if(typeof refreshBoard==='function')refreshBoard()}if(state)state.busy=false;lastLogTime=Date.now();document.getElementById('ctrlUnstick').style.display='none'};
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();

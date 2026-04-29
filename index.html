@@ -9,6 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="Arena Hub">
 <meta name="theme-color" content="#06080F">
 <link rel="manifest" href="./manifest.json">
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9IjEwMCIgZmlsbD0iIzA2MDgwRiIvPjxjaXJjbGUgY3g9IjI1NiIgY3k9IjI1NiIgcj0iMTUwIiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkNCMDUiIHN0cm9rZS13aWR0aD0iMTAiLz48dGV4dCB4PSI1MCUiIHk9IjQ1JSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIxNDAiPvCfjq48L3RleHQ+PHRleHQgeD0iNTAlIiB5PSI3MyUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCBCbGFjayIgZm9udC1zaXplPSI0NCIgZmlsbD0iI0ZGQ0IwNSIgZm9udC13ZWlnaHQ9ImJvbGQiIGxldHRlci1zcGFjaW5nPSI0Ij5BUkVOQTwvdGV4dD48L3N2Zz4=">
 <title>ARENA HUB — Pick a World</title>
 <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
@@ -84,7 +85,9 @@ body{
   border:3px solid #fff;
   box-shadow:0 4px 16px rgba(0,0,0,.5);
   position:relative;
+  overflow:hidden;
 }
+.gcard .ico img{max-width:78%;max-height:78%;object-fit:contain;display:block;filter:drop-shadow(0 2px 4px rgba(0,0,0,.6))}
 .gcard .text{flex:1;min-width:0}
 .gcard .nm{
   font-family:'Black Ops One',cursive;
@@ -239,7 +242,7 @@ body{
   <div class="cards" id="cards">
     <a class="gcard pokemon" href="./story-edition/pokemon-full.html" data-game="pokemon">
       <div class="body">
-        <div class="ico">⚡</div>
+        <div class="ico"><img src="./assets/pokemon-icon.png" alt="Pokemon" onerror="this.outerHTML='⚡'"></div>
         <div class="text">
           <div class="nm">POKEMON ARENA</div>
           <div class="sub">Gotta catch 'em all — battle &amp; deploy</div>
@@ -255,7 +258,7 @@ body{
 
     <a class="gcard marvel" href="./story-edition/marvel-full.html" data-game="marvel">
       <div class="body">
-        <div class="ico">🦸</div>
+        <div class="ico"><img src="./assets/marvel-icon.jpg" alt="Marvel" onerror="this.outerHTML='🦸'"></div>
         <div class="text">
           <div class="nm">MARVEL ARENA</div>
           <div class="sub">Heroes &amp; villains — all-out war</div>
@@ -271,7 +274,7 @@ body{
 
     <a class="gcard smash" href="./story-edition/smash-full.html" data-game="smash">
       <div class="body">
-        <div class="ico">⚔️</div>
+        <div class="ico"><img src="./assets/smash-icon.png" alt="Smash" onerror="this.outerHTML='⚔️'"></div>
         <div class="text">
           <div class="nm">SUPER SMASH</div>
           <div class="sub">Cross-franchise brawlers — fight &amp; rush</div>
@@ -287,7 +290,7 @@ body{
 
     <a class="gcard clash" href="./story-edition/clash-full.html" data-game="clash">
       <div class="body">
-        <div class="ico">👑</div>
+        <div class="ico"><img src="./assets/clash-icon.png" alt="Clash" onerror="this.outerHTML='👑'"></div>
         <div class="text">
           <div class="nm">CLASH ARENA</div>
           <div class="sub">Towers, troops, and dice — Royale-style</div>

@@ -375,7 +375,10 @@ html,body{height:100vh;height:100dvh;overflow:hidden}
       <div class="stat"><span class="v" id="statLast">—</span><span class="k">LAST WORLD</span></div>
     </div>
     <div class="ver">ARENA HUB · v1.0 · LOCAL SAVE</div>
-    <button class="clear-btn" onclick="clearLocal()">🗑 CLEAR PROGRESS</button>
+    <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:4px">
+      <button class="clear-btn" onclick="showProfileModal()" style="background:rgba(255,203,5,.15);border-color:#FFCB05;color:#FFCB05">👤 PROFILE</button>
+      <button class="clear-btn" onclick="clearLocal()">🗑 CLEAR</button>
+    </div>
   </div>
 
 </div>
@@ -431,6 +434,39 @@ function clearLocal(){
 
 // Service worker hint for installable PWA-ish behavior (no-op here)
 if('serviceWorker' in navigator){ /* no-op for static hosting */ }
+
+// === MY PROFILE MODAL — aggregates stats from all 4 game stores ===
+function showProfileModal(){
+  const games=[
+    {key:'pokemon-arena-full',name:'POKEMON',ico:'⚡',color:'#FFCB05'},
+    {key:'marvel-arena-full',name:'MARVEL',ico:'🦸',color:'#EE1515'},
+    {key:'smash-arena-full',name:'SUPER SMASH',ico:'⚔️',color:'#FFD700'},
+    {key:'clash-arena-full',name:'CLASH',ico:'👑',color:'#FFB81C'}
+  ];
+  let total={tbWins:0,tbLosses:0,bbWins:0,bbLosses:0,dmg:0,turns:0,story:0,name:''};
+  const data=games.map(g=>{let st={},prof={};try{const s=JSON.parse(localStorage.getItem(g.key))||{};st=s.stats||{};prof=s.profile||{}}catch(e){}const tbW=st.tbWins||0,tbL=st.tbLosses||0,bbW=st.bbWins||0,bbL=st.bbLosses||0;total.tbWins+=tbW;total.tbLosses+=tbL;total.bbWins+=bbW;total.bbLosses+=bbL;total.dmg+=st.totalDmg||0;total.turns+=st.totalTurns||0;total.story+=st.storyCleared||0;if(prof.name&&!total.name)total.name=prof.name;return{...g,tbW,tbL,bbW,bbL,dmg:st.totalDmg||0,turns:st.totalTurns||0,story:st.storyCleared||0,name:prof.name||''}});
+  const totalWins=total.tbWins+total.bbWins,totalLosses=total.tbLosses+total.bbLosses;
+  const totalGames=totalWins+totalLosses;
+  const winRate=totalGames>0?Math.round(totalWins/totalGames*100):0;
+  let rank='⭐ ROOKIE',rankColor='#9ca3af';
+  if(totalWins>=10){rank='🥉 BRONZE LEAGUE';rankColor='#cd7f32'}
+  if(totalWins>=25){rank='🥈 SILVER LEAGUE';rankColor='#c0c0c0'}
+  if(totalWins>=50){rank='🥇 GOLD LEAGUE';rankColor='#FFCB05'}
+  if(totalWins>=100){rank='💎 LEGENDARY';rankColor='#22d3ee'}
+  if(totalWins>=200){rank='👑 ULTIMATE CHAMPION';rankColor='#a855f7'}
+  const ov=document.createElement('div');ov.id='profileModal';
+  ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.94);z-index:9000;display:flex;flex-direction:column;align-items:center;padding:20px;padding-top:max(40px,calc(env(safe-area-inset-top) + 30px));overflow-y:auto;font-family:Black Ops One,cursive';
+  let html='<div style="font-size:22px;color:'+rankColor+';letter-spacing:2px;margin-bottom:4px;text-align:center">👤 MY PROFILE</div>';
+  html+='<div style="color:'+rankColor+';font-size:14px;letter-spacing:1.5px;margin-bottom:6px;text-align:center;text-shadow:0 0 12px '+rankColor+'80">'+rank+'</div>';
+  if(total.name)html+='<div style="color:#fff;font-size:13px;letter-spacing:2px;margin-bottom:14px">«'+total.name+'»</div>';
+  html+='<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;width:100%;max-width:400px;margin-bottom:6px"><div style="background:linear-gradient(160deg,#1a1f2c,#11151f);border:1px solid rgba(34,197,94,.5);border-radius:8px;padding:8px;text-align:center"><div style="color:#22c55e;font-size:18px">'+totalWins+'</div><div style="color:rgba(255,255,255,.7);font-size:9px;letter-spacing:1px">WINS</div></div><div style="background:linear-gradient(160deg,#1a1f2c,#11151f);border:1px solid rgba(220,38,38,.5);border-radius:8px;padding:8px;text-align:center"><div style="color:#dc2626;font-size:18px">'+totalLosses+'</div><div style="color:rgba(255,255,255,.7);font-size:9px;letter-spacing:1px">LOSSES</div></div><div style="background:linear-gradient(160deg,#1a1f2c,#11151f);border:1px solid rgba(255,203,5,.5);border-radius:8px;padding:8px;text-align:center"><div style="color:#FFCB05;font-size:18px">'+winRate+'%</div><div style="color:rgba(255,255,255,.7);font-size:9px;letter-spacing:1px">WIN RATE</div></div></div>';
+  html+='<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;width:100%;max-width:400px;margin-bottom:14px"><div style="background:linear-gradient(160deg,#1a1f2c,#11151f);border:1px solid var(--bdr);border-radius:8px;padding:8px;text-align:center"><div style="color:#FFCB05;font-size:16px">'+total.dmg+'</div><div style="color:rgba(255,255,255,.7);font-size:9px;letter-spacing:1px">TOTAL DMG</div></div><div style="background:linear-gradient(160deg,#1a1f2c,#11151f);border:1px solid var(--bdr);border-radius:8px;padding:8px;text-align:center"><div style="color:#FFCB05;font-size:16px">'+total.turns+'</div><div style="color:rgba(255,255,255,.7);font-size:9px;letter-spacing:1px">TURNS</div></div><div style="background:linear-gradient(160deg,#1a1f2c,#11151f);border:1px solid var(--bdr);border-radius:8px;padding:8px;text-align:center"><div style="color:#FFCB05;font-size:16px">'+total.story+'</div><div style="color:rgba(255,255,255,.7);font-size:9px;letter-spacing:1px">BOSSES BEATEN</div></div></div>';
+  html+='<div style="color:#FFCB05;font-size:12px;letter-spacing:2px;margin-bottom:8px">PER WORLD</div><div style="width:100%;max-width:400px">';
+  data.forEach(d=>{const w=d.tbW+d.bbW;html+='<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(255,255,255,.05);border:1px solid var(--bdr);border-radius:10px;margin-bottom:6px"><span style="font-size:1.6rem">'+d.ico+'</span><div style="flex:1"><div style="color:'+d.color+';font-size:12px;letter-spacing:1px">'+d.name+'</div><div style="color:rgba(255,255,255,.65);font-size:9px;margin-top:2px">⚔ '+d.tbW+'-'+d.tbL+' · 🃏 '+d.bbW+'-'+d.bbL+' · 📖 '+d.story+'</div></div><div style="color:'+d.color+';font-size:14px;font-weight:bold">'+w+'W</div></div>'});
+  html+='</div><button onclick="this.parentElement.remove()" style="margin-top:14px;padding:10px 24px;background:rgba(255,80,80,.15);border:1px solid #EE1515;color:#fff;font-family:Black Ops One,cursive;cursor:pointer;border-radius:8px;font-size:11px;letter-spacing:1.5px">✕ CLOSE</button>';
+  ov.innerHTML=html;document.body.appendChild(ov);
+}
+window.showProfileModal=showProfileModal;
 
 // === AUTO-FULLSCREEN + INSTALL PROMPT ===
 // iOS Safari blocks requestFullscreen() on iPhone — only "Add to Home Screen"

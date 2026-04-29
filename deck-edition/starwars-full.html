@@ -759,7 +759,7 @@ function artHTML(p){
   if(!p) return '<span class="emoji">❓</span>';
   var id = p.id||'';
   if(window.STARWARS_OVERRIDES[id]){
-    return '<img class="card-art" src="'+window.STARWARS_OVERRIDES[id]+'" alt="'+(p.n||id)+'" style="width:100%;height:100%;object-fit:cover;border-radius:inherit"/>';
+    return '<img class="card-art" src="'+window.STARWARS_OVERRIDES[id]+'" alt="'+(p.n||id)+'" style="width:100%;height:100%;object-fit:contain;border-radius:inherit"/>';
   }
   if(window.STARWARS_CARDS && window.STARWARS_CARDS[id]){
     return '<div class="card-art-svg" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;border-radius:inherit;overflow:hidden">'+window.STARWARS_CARDS[id].svg+'</div>';

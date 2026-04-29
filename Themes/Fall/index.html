@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Goff Family Hub · Fall</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#f7eed5">
+<meta http-equiv="refresh" content="0;url=../../index.html?theme=fall">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@1,9..144,400..600,0..100,0..1&display=swap" rel="stylesheet">
+<style>
+  html, body {
+    margin: 0; padding: 0; height: 100%;
+    background: #f7eed5; color: #2d1f12;
+    font-family: -apple-system, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  body::before {
+    content: ""; position: fixed; inset: 0;
+    background:
+      radial-gradient(900px 600px at 90% 10%, rgba(194, 65, 12, 0.14), transparent 60%),
+      radial-gradient(700px 500px at 6% 94%, rgba(190, 18, 60, 0.10), transparent 60%);
+    pointer-events: none;
+  }
+  .wrap {
+    position: relative; z-index: 1; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; text-align: center; padding: 24px;
+  }
+  .mark { font-size: 64px; margin-bottom: 16px; animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    50% { transform: scale(1.08) rotate(-3deg); }
+  }
+  h1 {
+    font-family: "Fraunces", Georgia, serif;
+    font-style: italic; font-weight: 500; font-size: 40px;
+    color: #c2410c; margin: 0 0 8px;
+    letter-spacing: -0.02em;
+    font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144;
+  }
+  p { color: #8a704f; font-size: 14px; margin: 0; letter-spacing: 0.02em; }
+  .fallback {
+    margin-top: 24px; color: #be123c; font-size: 13px; text-decoration: none;
+    border: 1px solid rgba(190, 18, 60, 0.3); padding: 10px 22px;
+    border-radius: 999px; transition: all 0.2s ease;
+    opacity: 0; animation: fadeIn 0.4s ease 1.5s forwards;
+  }
+  @keyframes fadeIn { to { opacity: 1; } }
+  .fallback:hover { background: rgba(190, 18, 60, 0.08); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="mark">🍂</div>
+  <h1>Fall</h1>
+  <p>Loading the Goff Family Hub…</p>
+  <a class="fallback" href="../../index.html?theme=fall">Tap if it doesn't load</a>
+</div>
+<script>
+  setTimeout(function() { location.replace('../../index.html?theme=fall'); }, 60);
+</script>
+</body>
+</html>

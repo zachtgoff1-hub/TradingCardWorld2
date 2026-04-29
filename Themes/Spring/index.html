@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Goff Family Hub · Spring</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#faf6ed">
+<meta http-equiv="refresh" content="0;url=../../index.html?theme=spring">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@1,9..144,400..600,0..100,0..1&display=swap" rel="stylesheet">
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: #faf6ed;
+    color: #2d2820;
+    font-family: -apple-system, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(900px 600px at 90% 10%, rgba(16, 185, 129, 0.10), transparent 60%),
+      radial-gradient(700px 500px at 5% 95%, rgba(236, 72, 153, 0.08), transparent 60%);
+    pointer-events: none;
+  }
+  .wrap {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    padding: 24px;
+  }
+  .mark {
+    font-size: 64px;
+    margin-bottom: 16px;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+  }
+  h1 {
+    font-family: "Fraunces", Georgia, serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 40px;
+    color: #10b981;
+    margin: 0 0 8px;
+    letter-spacing: -0.02em;
+    font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144;
+  }
+  p {
+    color: #8a7e6a;
+    font-size: 14px;
+    margin: 0;
+    letter-spacing: 0.02em;
+  }
+  .fallback {
+    margin-top: 24px;
+    color: #ec4899;
+    font-size: 13px;
+    text-decoration: none;
+    border: 1px solid rgba(236, 72, 153, 0.3);
+    padding: 10px 22px;
+    border-radius: 999px;
+    transition: all 0.2s ease;
+    opacity: 0;
+    animation: fadeIn 0.4s ease 1.5s forwards;
+  }
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+  .fallback:hover {
+    background: rgba(236, 72, 153, 0.08);
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="mark">🌸</div>
+  <h1>Spring</h1>
+  <p>Loading the Goff Family Hub…</p>
+  <a class="fallback" href="../../index.html?theme=spring">Tap if it doesn't load</a>
+</div>
+<script>
+  // JS-driven redirect (faster than meta-refresh on most browsers / kiosks)
+  setTimeout(function() {
+    location.replace('../../index.html?theme=spring');
+  }, 60);
+</script>
+</body>
+</html>

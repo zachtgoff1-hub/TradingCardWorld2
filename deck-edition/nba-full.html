@@ -581,7 +581,7 @@ function artHTML(p){
   if(!p) return '<span class="emoji">❓</span>';
   var id = p.id||'';
   if(window.NBA_OVERRIDES[id]){
-    return '<img class="card-art" src="'+window.NBA_OVERRIDES[id]+'" alt="'+(p.n||id)+'" style="width:100%;height:100%;object-fit:cover;border-radius:inherit"/>';
+    return '<img class="card-art" src="'+window.NBA_OVERRIDES[id]+'" alt="'+(p.n||id)+'" style="width:100%;height:100%;object-fit:contain;border-radius:inherit"/>';
   }
   if(window.NBA_CARDS && window.NBA_CARDS[id]){
     return '<div class="card-art-svg" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;border-radius:inherit;overflow:hidden">'+window.NBA_CARDS[id].svg+'</div>';

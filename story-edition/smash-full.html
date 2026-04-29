@@ -1275,5 +1275,81 @@ html{background:var(--bg,#06080F)!important}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
 </script>
+
+<!-- v3 — story 1v1, dice anim, roll history, end-turn card, etc. -->
+<style>
+#home > .shield, #home > .pokeball{display:none!important}
+.dice-rolling-active .dice-cube{animation:diceSpin 1s linear infinite!important}
+.dice-rolling-active .dice-face{background:linear-gradient(135deg,#ffcb05,#ff6b00)!important;color:#000!important;text-shadow:0 0 10px rgba(255,255,255,.6);box-shadow:0 0 30px rgba(255,203,5,.8),inset 0 0 20px rgba(0,0,0,.25)!important;border-color:#fff!important}
+@keyframes diceSpin{0%{transform:rotateX(0) rotateY(0) rotateZ(0)}100%{transform:rotateX(720deg) rotateY(540deg) rotateZ(360deg)}}
+.roll-history{position:fixed;bottom:max(160px,calc(env(safe-area-inset-bottom) + 160px));left:6px;background:rgba(0,0,0,.78);border:1px solid rgba(255,203,5,.5);border-radius:8px;padding:5px 8px;font-family:'Black Ops One',cursive;font-size:9px;color:#ffcb05;z-index:7000;letter-spacing:.5px;display:none;max-width:160px}
+.roll-history.show{display:block}
+.roll-history span{color:#fff;background:rgba(255,255,255,.1);padding:1px 5px;border-radius:4px;margin-left:3px;font-size:8px}
+.end-turn-card{flex-shrink:0;width:78px;background:linear-gradient(160deg,#16a34a,#15803d)!important;border:2px solid #22c55e!important;border-radius:10px;color:#fff;cursor:pointer;font-family:'Black Ops One',cursive;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px;text-align:center;min-height:108px;letter-spacing:1px}
+.end-turn-card:active{transform:scale(.96)}
+.end-turn-card:disabled{opacity:.35;cursor:not-allowed}
+.end-turn-card .icon{font-size:32px;margin-bottom:6px;line-height:1}
+.end-turn-card .label{font-size:10px;line-height:1.15}
+</style>
+<script>
+(function(){
+  function init(){
+    if(typeof state==='undefined'||typeof refreshBoard!=='function'){setTimeout(init,150);return}
+    if(window._v3Inited)return;window._v3Inited=true;
+    function toggleControls(){const onBoard=document.querySelector('#bbattle.on');const ss=document.getElementById('ctrlSpeed');const pp=document.getElementById('ctrlPause');if(ss)ss.style.display=onBoard?'':'none';if(pp)pp.style.display=onBoard?'':'none'}
+    setInterval(toggleControls,400);toggleControls();
+    if(typeof showDice==='function'){
+      const _origShowDice=showDice;
+      window.showDice=function(type,fixedN,cb){
+        const o=document.getElementById('diceOverlay');const face=document.getElementById('diceFace');const num=document.getElementById('diceNum');const lbl=document.getElementById('diceLabel');const cont=document.getElementById('diceContinue');
+        if(!o||!face){return _origShowDice.apply(this,arguments)}
+        o.classList.add('on');o.classList.add('dice-rolling-active');
+        face.textContent='?';if(num)num.textContent='?';if(lbl)lbl.textContent='Rolling '+type+'…';if(cont)cont.style.display='none';
+        const max={D20:20,D6:6,D8:8,D12:12}[type]||20;
+        const tickInt=setInterval(()=>{face.textContent=Math.floor(Math.random()*max)+1},65);
+        setTimeout(()=>{clearInterval(tickInt);o.classList.remove('dice-rolling-active');const n=fixedN!=null?fixedN:Math.floor(Math.random()*max)+1;face.textContent=n;if(num)num.textContent=n;if(state.bb){state.bb.rollHistory=[{n,type},...(state.bb.rollHistory||[]).slice(0,2)];updateRollHistoryUI()}cb(n)},1100);
+      };
+    }
+    function updateRollHistoryUI(){let el=document.getElementById('rollHistory');if(!el){el=document.createElement('div');el.id='rollHistory';el.className='roll-history';document.body.appendChild(el)}const hist=state.bb&&state.bb.rollHistory?state.bb.rollHistory:[];const onBoard=!!document.querySelector('#bbattle.on');if(hist.length===0||!onBoard){el.classList.remove('show');return}el.innerHTML='🎲 LAST ROLLS '+hist.map(r=>'<span>'+r.type+':'+r.n+'</span>').join('');el.classList.add('show')}
+    setInterval(updateRollHistoryUI,500);
+    const _origRefresh=refreshBoard;
+    window.refreshBoard=function(){_origRefresh.apply(this,arguments);injectEndTurnCard()};
+    function injectEndTurnCard(){
+      const hand=document.getElementById('bbHand');if(!hand)return;
+      const orig=document.getElementById('bbEndDeploy');if(orig)orig.style.display='none';
+      let card=hand.querySelector('.end-turn-card');
+      const isPlayerDeploy=state.bb&&state.bb.whoseTurn==='ply'&&state.bb.phase==='deploy';
+      if(!card){card=document.createElement('button');card.className='bb-hand-card end-turn-card';card.innerHTML='<div class="icon">⏭</div><div class="label">END<br>TURN</div>';card.onclick=()=>{if(typeof endDeployPhase==='function')endDeployPhase()};hand.appendChild(card)}
+      card.style.display=isPlayerDeploy?'':'none';card.disabled=!isPlayerDeploy;
+    }
+    if(typeof BOSSES!=='undefined'&&Array.isArray(BOSSES)&&BOSSES.length>0){
+      const home=document.getElementById('home');
+      if(home&&!home.querySelector('.tb-story-btn')){const btn=document.createElement('button');btn.className='menu-btn tb-story-btn';btn.innerHTML='<span class="ico">⚔️</span><span class="lbl">1V1 CAMPAIGN<span class="sub">'+BOSSES.length+' boss duels</span></span><span class="arr">›</span>';btn.onclick=showTbStoryModal;home.appendChild(btn)}
+    }
+    function showTbStoryModal(){
+      const ov=document.createElement('div');ov.id='tbStoryModal';
+      ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9000;display:flex;flex-direction:column;align-items:center;padding:20px;padding-top:max(40px,calc(env(safe-area-inset-top) + 30px));overflow-y:auto';
+      ov.innerHTML='<div style="color:#ffcb05;font-family:Black Ops One,cursive;font-size:20px;margin-bottom:8px;letter-spacing:2px;text-align:center">⚔️ 1V1 CAMPAIGN</div><div style="color:rgba(255,255,255,.7);font-family:Black Ops One,cursive;font-size:11px;margin-bottom:16px;text-align:center;letter-spacing:.5px">Turn battle vs each boss\'s signature team</div>';
+      BOSSES.forEach(b=>{const card=document.createElement('button');card.style.cssText='width:100%;max-width:400px;margin-bottom:8px;padding:12px;background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--bdr);border-radius:10px;color:#fff;font-family:Black Ops One,cursive;cursor:pointer;display:flex;align-items:center;gap:10px;text-align:left;letter-spacing:.5px';card.innerHTML='<span style="font-size:1.8rem">'+(b.ico||'⚔')+'</span><div style="flex:1"><div style="font-size:13px;color:#ffcb05">'+b.n+'</div><div style="font-size:9px;opacity:.75;margin-top:2px">'+(b.desc||'Boss duel')+'</div></div><span style="color:#ffcb05;font-size:18px">›</span>';card.onclick=()=>{ov.remove();startStoryTb(b.id)};ov.appendChild(card)});
+      const close=document.createElement('button');close.textContent='✕ CLOSE';close.style.cssText='margin-top:14px;padding:10px 24px;background:rgba(255,80,80,.2);border:1px solid var(--red);color:#fff;font-family:Black Ops One,cursive;cursor:pointer;border-radius:8px;font-size:12px;letter-spacing:1px';close.onclick=()=>ov.remove();ov.appendChild(close);document.body.appendChild(ov);
+    }
+    window.startStoryTb=function(bossId){const boss=BOSSES.find(b=>b.id===bossId);if(!boss)return;state.pendingStoryTbBoss=boss;state.storyBoss=boss;if(typeof openSelect==='function')openSelect('tb',bossId)};
+    if(typeof startTurnBattle==='function'){
+      const _origStartTb=startTurnBattle;
+      window.startTurnBattle=function(){
+        const stashed=state.pendingStoryTbBoss;
+        _origStartTb.apply(this,arguments);
+        if(stashed){
+          state.storyBoss=stashed;state.pendingStoryTbBoss=null;
+          const lv=10;const teamIds=stashed.team||[];
+          const foes=teamIds.slice(0,3).map(id=>{const t=ROSTER.find(r=>r.id===id);return t&&typeof buildHero==='function'?buildHero(t,lv):null}).filter(Boolean);
+          if(foes.length>0){state.partyFoe=foes;state.foeActive=0;const tt=document.getElementById('tbTitle');if(tt)tt.textContent='⚔️ '+stashed.n;const tm=document.getElementById('tbMeta');if(tm)tm.textContent=stashed.desc||'Boss duel';if(typeof refreshTb==='function')refreshTb();if(typeof log==='function')log('<b>'+stashed.n+'</b> challenges you to a duel!')}
+        }
+      };
+    }
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
 </body>
 </html>

@@ -859,8 +859,15 @@ renderRoster();
 <!-- ============================================================ -->
 <!-- COMBAT ENHANCEMENT v2 - damage fix, crits, status, ult, items -->
 <!-- + AUTO-FULLSCREEN on first user tap                            -->
+<!-- + SAFE-AREA fix for iOS home indicator & status bar            -->
 <!-- ============================================================ -->
 <style>
+/* Safe-area / fullscreen fix — prevents white bar at bottom and content overlap with iPhone status bar */
+html{background:var(--bg,#06080F)!important}
+@supports(height:100dvh){html,body{height:100dvh!important}}
+.launcher-back{margin-top:max(0px,env(safe-area-inset-top))!important}
+.topbar{padding-top:max(14px,calc(10px + env(safe-area-inset-top)))!important;padding-left:max(14px,calc(8px + env(safe-area-inset-left)))!important;padding-right:max(14px,calc(8px + env(safe-area-inset-right)))!important}
+.start-bar,.tb-controls,.bb-bottom,.bag-actions{padding-bottom:max(14px,calc(8px + env(safe-area-inset-bottom)))!important}
 @keyframes ult-pulse{0%,100%{box-shadow:0 0 8px gold,inset 0 0 6px rgba(255,255,255,.3)}50%{box-shadow:0 0 22px gold,0 0 38px orange,inset 0 0 6px rgba(255,255,255,.3)}}
 .ult-btn{animation:ult-pulse 1s infinite;background:linear-gradient(135deg,#ffcb05,#ff6600)!important;border:2px solid gold!important;color:#000!important}
 .status-icons{position:absolute;top:6px;display:flex;gap:3px;z-index:5;flex-wrap:wrap;max-width:140px}

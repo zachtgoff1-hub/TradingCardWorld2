@@ -880,7 +880,15 @@ renderRoster();
 // ===== AUTO-FULLSCREEN on first tap =====
 (function(){
   const inStandalone=window.navigator.standalone||window.matchMedia('(display-mode: standalone)').matches||window.matchMedia('(display-mode: fullscreen)').matches;
-  if(inStandalone)return;
+  if(inStandalone){
+    document.addEventListener('click',function(e){
+      let t=e.target;while(t&&t.tagName!=='A')t=t.parentElement;
+      if(!t||!t.href)return;
+      if(t.target==='_blank'||t.href.startsWith('mailto:')||t.href.startsWith('tel:')||t.href.startsWith('javascript:'))return;
+      try{const u=new URL(t.href);if(u.origin===location.origin){e.preventDefault();location.href=t.href}}catch(err){}
+    });
+    return;
+  }
   const ua=navigator.userAgent;
   const isIOS=/iPhone|iPad|iPod/.test(ua)&&!window.MSStream;
   const isAndroidChrome=/Android/.test(ua)&&/Chrome/.test(ua);

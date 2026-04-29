@@ -1004,5 +1004,59 @@ html{background:var(--bg,#06080F)!important}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
 </script>
+
+<!-- BOARD MODE PATCH — tower-blocking + hand info button -->
+<style>
+.bb-hand-card .info-btn{position:absolute;top:2px;right:2px;width:18px;height:18px;border-radius:50%;background:rgba(0,0,0,.75);border:1px solid var(--gold);color:var(--gold);font-family:'Black Ops One',cursive;font-size:11px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:5;padding:0;line-height:1;font-weight:bold}
+.bb-hand-card .info-btn:hover{background:var(--gold);color:#000}
+</style>
+<script>
+(function(){
+  function init(){
+    if(typeof refreshBoard!=='function'||typeof towerPhase!=='function'||typeof state==='undefined'||typeof ROSTER==='undefined'){setTimeout(init,120);return}
+    window.towerPhase=async function(){
+      const bb=state.bb;
+      for(let lane=0;lane<2;lane++){
+        if(bb.towers.ply[lane]>0){const t=findClosestEnemyToTower('ply',lane);if(t){t.wounds++;bbLog(`Your Tower hit ${t.n}!`);if(typeof sfxTowerHit==='function')sfxTowerHit();await sleep(350)}}
+        if(bb.towers.foe[lane]>0){const t=findClosestEnemyToTower('foe',lane);if(t){const blocked=bb.statusEffects.some(s=>s.type==='tower-shield'&&s.lane===lane&&s.side==='ply');if(!blocked){t.wounds++;bbLog(`Foe Tower hit ${t.n}!`);if(typeof sfxTowerHit==='function')sfxTowerHit();await sleep(350)}else bbLog(`🛡 Tower shield blocked!`)}}
+      }
+      await cleanupAll();
+      for(let lane=0;lane<2;lane++){
+        for(const u of bb.neutral[lane].slice()){
+          if(u.wounds>=u.woundsMax)continue;
+          const ets=u.side==='ply'?'foe':'ply';
+          const enemiesInLane=bb.neutral[lane].filter(x=>x.side===ets&&x.wounds<x.woundsMax);
+          if(enemiesInLane.length>0){bbLog(`🛡 <b>${u.n}</b> blocked — ${enemiesInLane[0].n} stands in the way!`);await sleep(350);continue}
+          if(bb.towers[ets][lane]>0){
+            await new Promise(resolve=>{showDice('D6',null,n=>{if(typeof sfxDiceLand==='function')sfxDiceLand();const dmg=Math.max(1,Math.floor(n/2));bb.towers[ets][lane]=Math.max(0,bb.towers[ets][lane]-dmg);$('diceLabel').textContent=`${u.n} sieges Tower for ${dmg}w!`;$('diceContinue').style.display='block';bbLog(`<b>${u.n}</b> sieged ${ets==='foe'?'Foe':'Your'} Tower ${'AB'[lane]} ${dmg}w!`);if(typeof sfxTowerHit==='function')sfxTowerHit();$('diceContinue').onclick=()=>{closeDice();resolve()};setTimeout(()=>{if($('diceOverlay').classList.contains('on')){closeDice();resolve()}},1500)})});
+            await sleep(200);
+          } else if(bb.king[ets]>0){
+            await new Promise(resolve=>{showDice('D6',null,n=>{if(typeof sfxDiceLand==='function')sfxDiceLand();const dmg=Math.max(1,Math.floor(n/2));bb.king[ets]=Math.max(0,bb.king[ets]-dmg);$('diceLabel').textContent=`${u.n} hits KING for ${dmg}w!`;$('diceContinue').style.display='block';bbLog(`<b>${u.n}</b> hit King ${dmg}w!`);if(typeof sfxTowerHit==='function')sfxTowerHit();$('diceContinue').onclick=()=>{closeDice();resolve()};setTimeout(()=>{if($('diceOverlay').classList.contains('on')){closeDice();resolve()}},1500)})});
+            await sleep(200);
+          }
+        }
+      }
+      ['ply','foe'].forEach(s=>{
+        if(!bb.kingActive[s]&&(bb.towers[s][0]<=0||bb.towers[s][1]<=0)){bb.kingActive[s]=true;bbLog(`${s==='foe'?'Foe ':'Your '}King AWAKENED!`)}
+        if(bb.kingActive[s]){const e=s==='ply'?'foe':'ply';for(let lane=0;lane<2;lane++){const tg=bb.neutral[lane].find(u=>u.side===e&&u.wounds<u.woundsMax);if(tg){tg.wounds++;bbLog(`${s==='foe'?'Foe':'Your'} KING blasted ${tg.n}!`);break}}}
+      });
+      await cleanupAll();
+    };
+    const _origRefreshBoard=refreshBoard;
+    window.refreshBoard=function(){_origRefreshBoard.apply(this,arguments);injectHandInfoButtons()};
+    function injectHandInfoButtons(){
+      const handEl=document.getElementById('bbHand');if(!handEl)return;
+      handEl.querySelectorAll('.bb-hand-card').forEach((cardEl,idx)=>{
+        if(cardEl.querySelector('.info-btn'))return;
+        const ib=document.createElement('button');ib.className='info-btn';ib.textContent='i';ib.title='Card details';
+        ib.onclick=(e)=>{e.stopPropagation();e.preventDefault();const id=state.bb&&state.bb.hand?state.bb.hand[idx]:null;const card=id?ROSTER.find(r=>r.id===id):null;if(card&&typeof showCardDetail==='function')showCardDetail(card)};
+        cardEl.appendChild(ib);
+      });
+    }
+    injectHandInfoButtons();
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
 </body>
 </html>

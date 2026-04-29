@@ -2046,5 +2046,43 @@ html{background:var(--bg,#06080F)!important}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
 </script>
+
+<!-- ============================================================ -->
+<!-- v6 — spell sync: keep isSpell flag + custom spells alive      -->
+<!--      across dynamic ROSTER reloads (Clash mainly)             -->
+<!-- ============================================================ -->
+<script>
+(function(){
+  function init(){
+    if(typeof ROSTER==='undefined'||typeof refreshBoard!=='function'){setTimeout(init,150);return}
+    if(window._spellSyncInited)return;window._spellSyncInited=true;
+    const title=(document.title||'').toLowerCase();
+    const game=title.includes('pokemon')?'pokemon':title.includes('marvel')?'marvel':title.includes('smash')?'smash':'clash';
+    const SP={'fireball':'damage','lightning':'damage','arrows':'splash','tornado':'pull','rocket':'rocket','freeze':'freeze','earthquake':'splash','rage':'buff','log':'pull','snowball':'damage','zap':'damage','poison':'splash','heal spell':'heal','mirror':'damage','graveyard':'summon','goblin barrel':'summon','inferno cast':'damage','clone':'buff','heal':'heal'};
+    const SW={'fireball':3,'lightning':3,'arrows':1,'tornado':0,'rocket':5,'freeze':0,'earthquake':2,'rage':0,'log':1,'snowball':1,'zap':1,'poison':1,'heal spell':2,'mirror':2,'graveyard':0,'goblin barrel':0,'inferno cast':4,'clone':0,'heal':2};
+    const NS={
+      pokemon:[{id:'spl_thunder',n:'THUNDERBOLT',fb:'⚡',t:'electric',elixir:3,hp:80,atk:60,def:50,spd:99,spdIcon:'⚡',isSpell:true,spellType:'damage',spellW:3,moves:['Thunder']},{id:'spl_potion',n:'HYPER POTION',fb:'🧪',t:'normal',elixir:2,hp:80,atk:30,def:50,spd:60,spdIcon:'🧍',isSpell:true,spellType:'heal',spellW:2,moves:['Heal Pulse']},{id:'spl_roar',n:'DRAGON ROAR',fb:'🐉',t:'flying',elixir:1,hp:80,atk:30,def:30,spd:90,spdIcon:'⚡',isSpell:true,spellType:'pull',spellW:0,moves:['Push Back']},{id:'spl_quake',n:'EARTHQUAKE',fb:'🌋',t:'ground',elixir:4,hp:80,atk:60,def:50,spd:60,spdIcon:'🐢',isSpell:true,spellType:'splash',spellW:2,moves:['Quake']}],
+      marvel:[{id:'spl_repulsor',n:'STARK REPULSOR',fb:'💥',t:'tech',elixir:3,hp:80,atk:60,def:50,spd:99,spdIcon:'⚡',isSpell:true,spellType:'damage',spellW:3,moves:['Beam']},{id:'spl_web',n:'WEB SHOT',fb:'🕸️',t:'tech',elixir:2,hp:80,atk:30,def:50,spd:80,spdIcon:'⚡',isSpell:true,spellType:'freeze',spellW:0,moves:['Web Snare']},{id:'spl_heal',n:'HEALING FACTOR',fb:'💚',t:'mutant',elixir:2,hp:80,atk:30,def:50,spd:60,spdIcon:'🧍',isSpell:true,spellType:'heal',spellW:2,moves:['Heal']},{id:'spl_bomb',n:'PUMPKIN BOMB',fb:'🎃',t:'tech',elixir:4,hp:80,atk:60,def:50,spd:80,spdIcon:'🧍',isSpell:true,spellType:'splash',spellW:2,moves:['Bomb']}],
+      smash:[{id:'spl_smashball',n:'SMASH BALL',fb:'💎',t:'magic',elixir:4,hp:80,atk:80,def:50,spd:99,spdIcon:'⚡',isSpell:true,spellType:'damage',spellW:4,moves:['Final Smash']},{id:'spl_pokeball',n:'POKE BALL',fb:'🔴',t:'magic',elixir:2,hp:80,atk:30,def:50,spd:80,spdIcon:'⚡',isSpell:true,spellType:'splash',spellW:1,moves:['Random']},{id:'spl_heart',n:'HEART CONTAINER',fb:'❤️',t:'magic',elixir:2,hp:80,atk:30,def:50,spd:60,spdIcon:'🧍',isSpell:true,spellType:'heal',spellW:2,moves:['Heal']},{id:'spl_bumper',n:'BUMPER',fb:'🎾',t:'speedster',elixir:1,hp:80,atk:30,def:30,spd:90,spdIcon:'⚡',isSpell:true,spellType:'pull',spellW:0,moves:['Knockback']}]
+    };
+    function syncSpells(){
+      if(!Array.isArray(ROSTER))return;
+      ROSTER.forEach(c=>{
+        if(c.isSpell||!c.n)return;
+        const n=c.n.toLowerCase();
+        for(const k in SP){if(n.includes(k)){c.isSpell=true;c.spellType=SP[k];c.spellW=SW[k];break}}
+      });
+      if(game!=='clash'&&NS[game]){
+        NS[game].forEach(s=>{if(!ROSTER.find(c=>c.id===s.id))ROSTER.push(s)});
+      }
+    }
+    syncSpells();
+    const _origRefresh=refreshBoard;
+    window.refreshBoard=function(){syncSpells();_origRefresh.apply(this,arguments)};
+    setInterval(syncSpells,2000);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
 </body>
 </html>

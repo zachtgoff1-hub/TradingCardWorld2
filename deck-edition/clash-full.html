@@ -1985,5 +1985,66 @@ html{background:var(--bg,#06080F)!important}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
 </script>
+
+<!-- ============================================================ -->
+<!-- v5 — pre-game deck picker + reposition 1V1 campaign           -->
+<!-- ============================================================ -->
+<style>
+.dp-modal{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9000;display:flex;flex-direction:column;align-items:center;padding:20px;padding-top:max(40px,calc(env(safe-area-inset-top) + 30px));overflow-y:auto;font-family:'Black Ops One',cursive}
+.dp-deck{width:100%;max-width:400px;margin-bottom:8px;padding:12px;background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--gold,#ffcb05);border-radius:10px;color:#fff;font-family:'Black Ops One',cursive;cursor:pointer;text-align:left;letter-spacing:.5px}
+.dp-deck:active{transform:scale(.97)}
+.dp-deck .nm{font-size:13px;color:#ffcb05}
+.dp-deck .sm{font-size:9px;opacity:.75;margin-top:3px}
+.dp-new{width:100%;max-width:400px;margin-bottom:8px;padding:12px;background:linear-gradient(135deg,#16a34a,#15803d);border:1px solid #22c55e;border-radius:10px;color:#fff;font-family:'Black Ops One',cursive;cursor:pointer;font-size:13px;letter-spacing:1px}
+.dp-close{margin-top:6px;padding:8px 20px;background:rgba(255,80,80,.15);border:1px solid var(--red,#ee1515);color:#fff;font-family:'Black Ops One',cursive;cursor:pointer;border-radius:8px;font-size:11px;letter-spacing:1px}
+</style>
+<script>
+(function(){
+  function init(){
+    if(typeof openSelect!=='function'||typeof state==='undefined'){setTimeout(init,150);return}
+    if(window._deckPickerInited)return;window._deckPickerInited=true;
+    function reposition(){
+      const home=document.getElementById('home');if(!home)return;
+      const tbStoryBtn=home.querySelector('.tb-story-btn');if(!tbStoryBtn)return;
+      const qbbBtn=Array.from(home.querySelectorAll('button.menu-btn')).find(b=>!b.classList.contains('tb-story-btn')&&((b.getAttribute('onclick')||'').includes('quick-bb')||(b.textContent||'').includes('QUICK BOARD')));
+      if(qbbBtn&&qbbBtn.previousSibling!==tbStoryBtn){qbbBtn.parentNode.insertBefore(tbStoryBtn,qbbBtn)}
+    }
+    setTimeout(reposition,400);setInterval(reposition,2000);
+    const _origOpenSelect=openSelect;
+    window.openSelect=function(mode,bossId){
+      const decks=(typeof getDecks==='function')?(getDecks(mode)||[]):[];
+      const valid=[];decks.forEach((d,idx)=>{if(d&&d.members&&d.members.length>0)valid.push({deck:d,idx})});
+      if(valid.length===0)return _origOpenSelect.apply(this,arguments);
+      showDeckPicker(mode,bossId,valid,_origOpenSelect);
+    };
+    function showDeckPicker(mode,bossId,validDecks,origOpen){
+      const ov=document.createElement('div');ov.id='deckPickerModal';ov.className='dp-modal';
+      const modeLabel=mode==='tb'?'⚔️ TURN BATTLE':'🃏 BOARD BATTLE';
+      const bossInfo=bossId&&typeof BOSSES!=='undefined'?BOSSES.find(b=>b.id===bossId):null;
+      let html='<div style="color:#ffcb05;font-size:18px;letter-spacing:2px;margin-bottom:6px;text-align:center">📋 PICK YOUR DECK</div>';
+      html+='<div style="color:rgba(255,255,255,.7);font-size:11px;margin-bottom:14px;text-align:center;letter-spacing:1px">'+modeLabel+(bossInfo?' · vs '+bossInfo.n:'')+'</div>';
+      validDecks.forEach((item,i)=>{const d=item.deck;const summary=(typeof summarizeDeck==='function')?summarizeDeck(d.members):(d.members.length+' cards');html+='<button class="dp-deck" data-real-idx="'+item.idx+'"><div class="nm">'+(d.name||'Saved Deck '+(i+1))+'</div><div class="sm">'+summary+'</div></button>'});
+      html+='<button class="dp-new">🆕 BUILD NEW DECK</button>';
+      html+='<button class="dp-close">✕ CANCEL</button>';
+      ov.innerHTML=html;document.body.appendChild(ov);
+      ov.querySelectorAll('.dp-deck').forEach(b=>{
+        b.onclick=()=>{
+          const realIdx=parseInt(b.dataset.realIdx);
+          const allDecks=(typeof getDecks==='function')?getDecks(mode):[];
+          const deck=allDecks[realIdx];
+          if(!deck||!deck.members){ov.remove();return}
+          ov.remove();
+          origOpen.call(window,mode,bossId);
+          try{selectingTeam=deck.members.filter(id=>ROSTER.find(r=>r.id===id))}catch(e){}
+          setTimeout(()=>{if(typeof startBattle==='function')startBattle()},150);
+        };
+      });
+      ov.querySelector('.dp-new').onclick=()=>{ov.remove();origOpen.call(window,mode,bossId)};
+      ov.querySelector('.dp-close').onclick=()=>ov.remove();
+    }
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
 </body>
 </html>

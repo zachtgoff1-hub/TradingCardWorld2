@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Star Wars Arena">
+<meta name="theme-color" content="#000000">
+<link rel="manifest" href="../manifest.json">
+<title>Star Wars Arena — Full Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#000;--panel:#0a0a14;--panel2:#15151f;--bdr:rgba(255,255,255,.14);--soft:rgba(255,255,255,.78);--mut:rgba(255,255,255,.5);--gold:#FFE81F;--red:#E60000;--blue:#3B7DFF;--green:#3DDC84;--jedi:#3B82F6;--sith:#DC2626;--bounty:#F59E0B;--droid:#94A3B8;--rebel:#F97316;--empire:#71717A;--fs-base:16px;--fs-sm:13px;--fs-xs:11px;--fs-lg:18px;--fs-xl:22px;--fs-xxl:28px}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;font-size:var(--fs-base)}
+body{background:radial-gradient(ellipse at top,#0a0a2a 0%,var(--bg) 60%);color:#fff;font-family:'Share Tech Mono',monospace;user-select:none;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
+.screen{position:fixed;inset:0;display:none;flex-direction:column}.screen.on{display:flex}
+#home{align-items:center;justify-content:flex-start;padding:24px 20px;text-align:center;background:radial-gradient(circle at 50% 30%,rgba(255,232,31,.12),transparent 60%),var(--bg);overflow-y:auto}
+.launcher-back{align-self:flex-start;padding:10px 16px;background:rgba(255,255,255,.06);border:1px solid var(--bdr);border-radius:10px;color:#fff;font-family:'Black Ops One',cursive;font-size:var(--fs-sm);cursor:pointer;letter-spacing:1px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;margin-bottom:18px}
+.shield{width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,#3B82F6 0%,#1e3a8a 70%,#000 100%);border:6px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:60px;box-shadow:0 0 50px rgba(59,130,246,.6),inset 0 0 30px rgba(0,0,0,.6);margin:8px auto 18px;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.logo-main{font-family:'Black Ops One',cursive;font-size:var(--fs-xxl);background:linear-gradient(120deg,#fff,var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:5px;line-height:1;margin-bottom:6px}
+.logo-sub{font-family:'Black Ops One',cursive;font-size:var(--fs-xl);color:var(--gold);letter-spacing:6px;margin-bottom:8px;text-shadow:0 0 20px rgba(255,232,31,.5)}
+.logo-tag{font-size:var(--fs-xs);color:var(--mut);letter-spacing:4px;margin-bottom:24px}
+.menu-btn{display:flex;align-items:center;gap:14px;width:300px;max-width:92vw;min-height:64px;padding:14px 18px;margin-bottom:12px;background:linear-gradient(90deg,rgba(59,130,246,.18),rgba(255,232,31,.1));border:2px solid rgba(255,232,31,.3);border-radius:14px;color:#fff;font-family:'Black Ops One',cursive;font-size:var(--fs-base);letter-spacing:2px;cursor:pointer;text-align:left}
+.menu-btn:active{transform:scale(.97)}.menu-btn .ico{font-size:1.8rem;width:40px;text-align:center}.menu-btn .lbl{flex:1}
+.menu-btn .sub{display:block;font-family:'Share Tech Mono',monospace;font-size:var(--fs-xs);color:var(--soft);margin-top:3px}.menu-btn .arr{font-size:1.6rem;color:var(--gold)}
+.mode-pill{display:inline-block;padding:5px 14px;background:rgba(255,232,31,.15);border:1px solid var(--gold);border-radius:14px;font-family:'Black Ops One',cursive;font-size:var(--fs-xs);color:var(--gold);margin:14px 0 10px}
+.topbar{display:flex;align-items:center;padding:10px 14px;background:rgba(0,0,0,.95);border-bottom:1px solid var(--bdr);gap:8px;flex-shrink:0;min-height:54px}
+.topbar .back{padding:8px 14px;background:rgba(255,255,255,.08);border:1px solid var(--bdr);border-radius:10px;color:#fff;font-family:'Black Ops One',cursive;font-size:var(--fs-sm);cursor:pointer;min-height:36px}
+.topbar .ttl{flex:1;font-family:'Black Ops One',cursive;font-size:var(--fs-base);letter-spacing:2px;color:var(--gold);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.topbar .meta{font-size:var(--fs-xs);color:var(--soft);flex-shrink:0}
+.page-body{flex:1;overflow-y:auto;padding:14px}
+.roster-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding-bottom:30px}
+@media(min-width:600px){.roster-grid{grid-template-columns:repeat(3,1fr)}}
+.hero-card{background:linear-gradient(160deg,var(--panel),var(--panel2));border:2px solid var(--bdr);border-radius:14px;padding:10px;cursor:pointer;position:relative;min-height:170px}
+.hero-card:active{transform:scale(.98)}.hero-card.selected{border-color:var(--gold);box-shadow:0 0 18px rgba(255,232,31,.4)}
+.hero-card .pokeart{display:flex;align-items:center;justify-content:center;height:80px;margin-bottom:6px;background:radial-gradient(circle,rgba(255,255,255,.06),transparent);border-radius:10px}
+.hero-card .pokeart .emoji{font-size:3rem;filter:drop-shadow(0 2px 6px rgba(0,0,0,.5))}
+.hero-card .name{font-family:'Black Ops One',cursive;font-size:var(--fs-sm);text-align:center;margin-bottom:5px;line-height:1.1}
+.hero-card .type-row{display:flex;gap:3px;justify-content:center;flex-wrap:wrap;margin-bottom:6px}
+.type-chip{font-size:var(--fs-xs);padding:3px 8px;border-radius:10px;font-family:'Black Ops One',cursive;color:#000}
+.type-chip.jedi{background:var(--jedi);color:#fff}.type-chip.sith{background:var(--sith);color:#fff}.type-chip.bounty{background:var(--bounty)}.type-chip.droid{background:var(--droid)}.type-chip.rebel{background:var(--rebel);color:#fff}.type-chip.empire{background:var(--empire);color:#fff}
+.hero-card .stats{display:grid;grid-template-columns:1fr 1fr;gap:3px;font-size:var(--fs-xs);color:var(--soft)}
+.hero-card .stat{display:flex;justify-content:space-between;background:rgba(0,0,0,.3);padding:3px 6px;border-radius:5px}.hero-card .stat b{color:var(--gold)}
+.hero-card .elixir-badge{position:absolute;top:6px;left:6px;width:26px;height:26px;background:linear-gradient(135deg,#3B82F6,#1e3a8a);border-radius:50%;border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Black Ops One',cursive;font-size:var(--fs-sm);color:#fff;box-shadow:0 0 8px rgba(59,130,246,.5)}
+
+#tbattle{display:none;flex-direction:column;background:#000}#tbattle.on{display:flex}
+.tb-arena{flex:1;position:relative;background:linear-gradient(180deg,#000 0%,#0a0a3a 50%,#1a0a3a 100%);overflow:hidden;min-height:280px}
+.tb-arena .arena-fx{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(255,232,31,.15),transparent 50%);pointer-events:none}
+.foe-area{position:absolute;top:14px;right:14px;max-width:60%}.ply-area{position:absolute;bottom:14px;left:14px;max-width:60%}
+.hp-card{background:rgba(0,0,0,.7);border:1px solid var(--bdr);border-radius:12px;padding:10px 14px;min-width:200px}
+.hp-card .nm{font-family:'Black Ops One',cursive;font-size:var(--fs-base);display:flex;justify-content:space-between;gap:8px}
+.hp-card .lv{font-size:var(--fs-xs);color:var(--gold)}
+.hp-bar-wrap{display:flex;align-items:center;gap:8px;margin-top:6px}
+.hp-bar-wrap .lbl{font-size:var(--fs-xs);color:var(--gold);font-family:'Black Ops One',cursive}
+.hp-bar{flex:1;height:12px;background:rgba(0,0,0,.6);border:1px solid var(--bdr);border-radius:6px;overflow:hidden}
+.hp-fill{height:100%;background:linear-gradient(90deg,#3DDC84,#22c55e);border-radius:6px;transition:width .8s}
+.hp-fill.med{background:linear-gradient(90deg,#FFE81F,#f59e0b)}.hp-fill.low{background:linear-gradient(90deg,#E60000,#dc2626)}
+.hp-num{font-size:var(--fs-xs);color:var(--soft);text-align:right;margin-top:4px}
+.tb-sprite{position:absolute;width:140px;height:170px;display:flex;align-items:center;justify-content:center;transition:transform .2s,opacity .3s}
+.tb-sprite .emoji{font-size:5rem;filter:drop-shadow(0 6px 12px rgba(0,0,0,.6))}
+.foe-sprite{top:50px;right:30%;animation:sf 2.5s ease-in-out infinite}.ply-sprite{bottom:80px;left:30%;animation:sfp 2.5s ease-in-out infinite}
+@keyframes sf{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes sfp{0%,100%{transform:translateY(0) scaleX(-1)}50%{transform:translateY(-8px) scaleX(-1)}}
+.tb-sprite.shake{animation:shk .4s linear}.tb-sprite.ply-sprite.shake{animation:shkp .4s linear}
+@keyframes shk{0%,100%{transform:translateX(0)}25%{transform:translateX(-10px)}75%{transform:translateX(10px)}}
+@keyframes shkp{0%,100%{transform:translateX(0) scaleX(-1)}25%{transform:translateX(-10px) scaleX(-1)}75%{transform:translateX(10px) scaleX(-1)}}
+.tb-sprite.faint{opacity:0;transform:translateY(40px)}.tb-sprite.ply-sprite.faint{opacity:0;transform:translateY(40px) scaleX(-1)}
+.tb-controls{flex-shrink:0;background:#0a0e18;border-top:3px solid var(--gold)}
+.tb-log{padding:14px;min-height:80px;font-size:var(--fs-base);line-height:1.5;border-bottom:1px solid var(--bdr)}
+.tb-log .effect{color:var(--gold);font-weight:bold}.tb-log .crit{color:var(--red);font-weight:bold}
+.tb-menu{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px}
+.bbtn{padding:16px 8px;background:linear-gradient(160deg,var(--panel),var(--panel2));border:2px solid var(--bdr);border-radius:12px;color:#fff;font-family:'Black Ops One',cursive;font-size:var(--fs-base);letter-spacing:2px;cursor:pointer;min-height:54px}
+.bbtn:active{transform:scale(.96)}.bbtn:disabled{opacity:.4}
+.bbtn.fight{border-color:var(--red)}.bbtn.bag{border-color:var(--gold)}.bbtn.team{border-color:var(--blue)}.bbtn.run{border-color:var(--mut)}
+.move-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px}
+.move-btn{padding:12px 10px;border-radius:12px;border:2px solid var(--bdr);background:var(--panel);color:#fff;text-align:left;cursor:pointer;min-height:74px}
+.move-btn:active{transform:scale(.97)}.move-btn:disabled{opacity:.4}
+.move-btn .mn{font-family:'Black Ops One',cursive;font-size:var(--fs-sm);margin-bottom:5px}
+.move-btn .mt{display:flex;justify-content:space-between;font-size:var(--fs-xs);color:var(--soft);margin-top:3px}
+.move-btn .mt .pp{color:var(--gold)}
+.move-btn.jedi{border-color:var(--jedi)}.move-btn.sith{border-color:var(--sith)}.move-btn.bounty{border-color:var(--bounty)}.move-btn.droid{border-color:var(--droid)}.move-btn.rebel{border-color:var(--rebel)}.move-btn.empire{border-color:var(--empire)}
+.move-btn .matchup{display:inline-block;padding:1px 6px;border-radius:6px;font-size:.55rem;margin-top:4px;font-family:'Black Ops One',cursive}
+.move-btn .matchup.super{background:var(--green);color:#000}.move-btn .matchup.weak{background:var(--mut);color:#000}
+.back-row{padding:0 12px 12px}
+.back-btn{width:100%;padding:12px;background:rgba(255,255,255,.06);border:1px solid var(--bdr);border-radius:10px;color:var(--soft);font-family:'Black Ops One',cursive;font-size:var(--fs-sm);cursor:pointer;min-height:44px}
+.dmg-num{position:absolute;font-family:'Black Ops One',cursive;font-size:1.8rem;color:var(--red);text-shadow:0 0 8px #000,2px 2px 0 #000;animation:dmg-rise 1s ease-out forwards;pointer-events:none;z-index:10}
+.dmg-num.crit{color:var(--gold);font-size:2.2rem}.dmg-num.heal{color:var(--green)}
+@keyframes dmg-rise{0%{opacity:0;transform:translateY(0)}30%{opacity:1}100%{opacity:0;transform:translateY(-50px)}}
+.flash-fx{position:absolute;inset:0;pointer-events:none;opacity:0}.flash-fx.on{animation:flsh .4s}
+@keyframes flsh{0%{opacity:0}30%{opacity:.7;background:#fff}100%{opacity:0}}
+
+#bbattle{display:none;flex-direction:column;background:#000}#bbattle.on{display:flex}
+.bb-status{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(0,0,0,.7);border-bottom:1px solid var(--bdr);font-size:var(--fs-xs);gap:8px}
+.bb-status .turn{color:var(--gold);font-family:'Black Ops One',cursive}
+.bb-status .elixir{color:#3B82F6;font-family:'Black Ops One',cursive}.bb-status .elixir b{color:#fff;font-size:var(--fs-base)}
+.bb-status .ph{color:var(--soft)}
+.bb-board{flex:1;display:flex;flex-direction:column;gap:3px;padding:6px;background:linear-gradient(180deg,#1a0a3a 0%,#0a0a2a 50%,#1a0a0a 100%);overflow-y:auto}
+.bb-towers-row{display:grid;grid-template-columns:1fr 1fr;gap:6px}.bb-king-row{display:grid;grid-template-columns:1fr;gap:6px}
+.bb-king{padding:8px 12px;border-radius:10px;border:2px solid var(--gold);background:linear-gradient(135deg,rgba(255,232,31,.18),rgba(59,130,246,.18));text-align:center;font-family:'Black Ops One',cursive;font-size:var(--fs-sm);color:var(--gold)}
+.bb-king.dead{opacity:.3}.bb-king .hpbar{margin-top:4px;height:8px;background:rgba(0,0,0,.5);border-radius:4px;overflow:hidden}
+.bb-king .hpbar div{height:100%;background:var(--gold);border-radius:4px;transition:width .4s}
+.bb-king.foe{border-color:var(--red);color:var(--red)}.bb-king.foe .hpbar div{background:var(--red)}
+.bb-tower{padding:6px 8px;border-radius:10px;border:2px solid var(--gold);background:linear-gradient(135deg,rgba(255,232,31,.14),rgba(0,0,0,.4));text-align:center;font-family:'Black Ops One',cursive;font-size:var(--fs-xs);color:var(--gold)}
+.bb-tower.dead{opacity:.3;border-style:dashed}.bb-tower .hpbar{margin-top:4px;height:6px;background:rgba(0,0,0,.5);border-radius:3px;overflow:hidden}
+.bb-tower .hpbar div{height:100%;background:var(--gold);border-radius:3px;transition:width .4s}
+.bb-tower.foe{border-color:var(--red);color:var(--red)}.bb-tower.foe .hpbar div{background:var(--red)}
+.bb-zone{display:grid;grid-template-columns:1fr 1fr;gap:6px;min-height:62px}
+.bb-zone-cell{background:rgba(0,0,0,.4);border:1px dashed rgba(255,255,255,.15);border-radius:10px;padding:6px;display:flex;flex-wrap:wrap;gap:4px;align-content:flex-start;min-height:56px;position:relative;cursor:pointer}
+.bb-zone-cell.deploy{border-color:var(--gold);background:rgba(255,232,31,.08)}
+.bb-zone-cell.deploy.can{border-style:solid;box-shadow:0 0 10px rgba(255,232,31,.3)}
+.bb-zone-cell .zlbl{position:absolute;top:3px;left:6px;font-size:.55rem;color:var(--mut);font-family:'Black Ops One',cursive;pointer-events:none}
+.bb-zone.neutral{grid-template-columns:1fr;background:linear-gradient(90deg,rgba(255,232,31,.12),rgba(59,130,246,.12));border:2px solid rgba(255,232,31,.3);border-radius:10px;padding:6px}
+.bb-zone.neutral .bb-zone-cell{border:none;background:rgba(0,0,0,.3)}
+.bb-zone-cell.foe{border-color:rgba(230,0,0,.25);background:rgba(230,0,0,.06)}
+.bb-unit{display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 5px 5px;background:linear-gradient(160deg,var(--panel),var(--panel2));border:2px solid var(--bdr);border-radius:8px;min-width:50px;position:relative;cursor:pointer}
+.bb-unit.foe{border-color:var(--red)}.bb-unit.ply{border-color:var(--gold)}
+.bb-unit .uart{width:34px;height:34px;display:flex;align-items:center;justify-content:center}
+.bb-unit .uart .emoji{font-size:1.4rem}
+.bb-unit .uw{font-family:'Black Ops One',cursive;font-size:var(--fs-xs);color:var(--gold)}
+.bb-unit .uspd{position:absolute;top:-4px;right:-4px;background:rgba(0,0,0,.85);border-radius:5px;padding:1px 4px;font-size:.5rem}
+.bb-controls{flex-shrink:0;background:#0a0e18;border-top:3px solid var(--gold);padding:8px;display:flex;flex-direction:column;gap:6px}
+.bb-log{padding:8px 12px;font-size:var(--fs-sm);background:rgba(0,0,0,.5);border-radius:8px;min-height:36px}
+.bb-hand{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
+.bb-hand-card{flex-shrink:0;width:78px;background:linear-gradient(160deg,var(--panel),var(--panel2));border:2px solid var(--bdr);border-radius:10px;padding:6px;text-align:center;cursor:pointer;position:relative;min-height:108px}
+.bb-hand-card:active{transform:scale(.96)}
+.bb-hand-card.selected{border-color:var(--gold);box-shadow:0 0 12px rgba(255,232,31,.5);transform:translateY(-4px)}
+.bb-hand-card.disabled{opacity:.4}
+.bb-hand-card .uart{height:42px;display:flex;align-items:center;justify-content:center}
+.bb-hand-card .uart .emoji{font-size:1.7rem}
+.bb-hand-card .nm{font-family:'Black Ops One',cursive;font-size:var(--fs-xs);margin-top:3px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bb-hand-card .ec{position:absolute;top:2px;left:2px;width:22px;height:22px;background:linear-gradient(135deg,#3B82F6,#1e3a8a);border-radius:50%;border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Black Ops One',cursive;font-size:var(--fs-xs);color:#fff}
+.bb-hand-card .uw-mini{font-family:'Black Ops One',cursive;font-size:var(--fs-xs);color:var(--gold)}
+.bb-action-row{display:flex;gap:8px}
+.bb-action-row button{flex:1;padding:14px;border-radius:10px;font-family:'Black Ops One',cursive;font-size:var(--fs-sm);cursor:pointer;border:2px solid var(--bdr);background:var(--panel);color:#fff;min-height:50px}
+.bb-action-row button.primary{background:var(--gold);color:#000;border-color:var(--gold)}
+
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;z-index:9999;padding:16px}.modal.on{display:flex}
+.modal-box{background:linear-gradient(160deg,var(--panel),var(--panel2));border:2px solid var(--gold);border-radius:16px;padding:18px;max-width:420px;width:100%;max-height:92vh;overflow-y:auto}
+.modal-title{font-family:'Black Ops One',cursive;font-size:var(--fs-lg);color:var(--gold);text-align:center;margin-bottom:14px}
+.party-list{display:flex;flex-direction:column;gap:8px}
+.party-row{display:flex;align-items:center;gap:12px;padding:12px;background:rgba(0,0,0,.3);border:1px solid var(--bdr);border-radius:12px;cursor:pointer}
+.party-row.fainted{opacity:.45}.party-row.active-row{border-color:var(--gold)}
+.party-row .ico{width:48px;height:48px;display:flex;align-items:center;justify-content:center}
+.party-row .ico .emoji{font-size:2rem}
+.party-row .info{flex:1}.party-row .nm{font-family:'Black Ops One',cursive;font-size:var(--fs-sm);display:flex;justify-content:space-between}
+.party-row .lv{color:var(--gold);font-size:var(--fs-xs)}.party-row .hp-num{font-size:var(--fs-xs);text-align:right}
+
+.cd-art{display:flex;align-items:center;justify-content:center;height:200px;background:radial-gradient(circle,rgba(255,255,255,.06),transparent);border-radius:12px;margin-bottom:10px;overflow:hidden}
+.cd-art .emoji{font-size:5rem}
+.cd-name{font-family:'Black Ops One',cursive;font-size:var(--fs-xl);color:#fff;text-align:center;letter-spacing:2px;margin-bottom:6px}
+.cd-types{display:flex;gap:6px;justify-content:center;margin-bottom:14px}
+.cd-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:12px}
+.cd-stat{background:rgba(0,0,0,.4);border:1px solid var(--bdr);border-radius:8px;padding:8px;text-align:center}
+.cd-stat .v{font-family:'Black Ops One',cursive;font-size:var(--fs-base);color:var(--gold);display:block}
+.cd-stat .k{font-size:var(--fs-xs);color:var(--soft)}
+.cd-section{font-family:'Black Ops One',cursive;color:var(--gold);font-size:var(--fs-sm);margin:14px 0 6px}
+.cd-mu{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px;font-size:var(--fs-xs)}
+.cd-mu .row{display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:6px;background:rgba(0,0,0,.3)}
+.cd-mu .row.super{background:rgba(34,197,94,.15);color:#4ade80}.cd-mu .row.weak{background:rgba(239,68,68,.15);color:#f87171}
+.cd-moves-list{display:flex;flex-direction:column;gap:6px;margin-bottom:6px}
+.cd-move{padding:8px 10px;background:rgba(0,0,0,.4);border:1px solid var(--bdr);border-radius:8px}
+.cd-move .mn{font-family:'Black Ops One',cursive;font-size:var(--fs-sm);color:#fff;margin-bottom:3px}
+.cd-move .mt{font-size:var(--fs-xs);color:var(--soft);display:flex;justify-content:space-between}
+
+.eog-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.eog-stat{padding:10px;background:rgba(0,0,0,.3);border:1px solid var(--bdr);border-radius:10px;text-align:center}
+.eog-stat .k{font-size:var(--fs-xs);color:var(--soft);margin-bottom:4px}
+.eog-stat .v{font-family:'Black Ops One',cursive;font-size:var(--fs-lg);color:var(--gold)}
+
+.boss-list{display:flex;flex-direction:column;gap:10px;padding-bottom:30px}
+.boss-card{display:flex;align-items:center;gap:12px;padding:14px;background:linear-gradient(135deg,var(--panel),var(--panel2));border:2px solid var(--bdr);border-radius:14px;cursor:pointer}
+.boss-card.locked{opacity:.4;cursor:not-allowed}.boss-card.cleared{border-color:var(--green)}.boss-card.active-boss{border-color:var(--gold);box-shadow:0 0 16px rgba(255,232,31,.3)}
+.boss-card .num{font-family:'Black Ops One',cursive;font-size:1.6rem;color:var(--gold);width:30px;text-align:center}
+.boss-card .ico{font-size:2.4rem;width:50px;text-align:center}.boss-card .info{flex:1}
+.boss-card .nm{font-family:'Black Ops One',cursive;font-size:var(--fs-base);margin-bottom:3px}
+.boss-card .desc{font-size:var(--fs-xs);color:var(--soft)}.boss-card .badge{font-size:1.4rem}
+
+.profile-hero{text-align:center;padding:20px;background:linear-gradient(160deg,var(--panel),var(--panel2));border-radius:14px;border:1px solid var(--bdr);margin-bottom:14px}
+.profile-name{font-family:'Black Ops One',cursive;font-size:var(--fs-xl);color:var(--gold);background:transparent;border:1px solid var(--bdr);border-radius:8px;padding:6px 12px;text-align:center;max-width:240px}
+.profile-rank{font-size:var(--fs-xs);color:var(--soft);letter-spacing:2px;margin-top:8px}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding-bottom:30px}
+.stat-tile{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--bdr);border-radius:12px;padding:14px;text-align:center}
+.stat-tile .v{font-family:'Black Ops One',cursive;font-size:var(--fs-xl);color:var(--gold);display:block}
+.stat-tile .k{font-size:var(--fs-xs);color:var(--soft);margin-top:3px}
+
+.deck-tabs{display:flex;gap:6px;padding:10px;background:rgba(0,0,0,.5);border-bottom:1px solid var(--bdr)}
+.deck-tab{flex:1;padding:10px;background:rgba(255,255,255,.04);border:1px solid var(--bdr);border-radius:8px;color:var(--soft);font-family:'Black Ops One',cursive;font-size:var(--fs-xs);cursor:pointer}
+.deck-tab.on{background:var(--gold);color:#000;border-color:var(--gold)}
+.saved-deck{display:flex;align-items:center;gap:10px;padding:12px;background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--bdr);border-radius:12px;margin-bottom:10px}
+.saved-deck .info{flex:1;min-width:0}
+.saved-deck .nm{font-family:'Black Ops One',cursive;font-size:var(--fs-sm);color:var(--gold);margin-bottom:3px}
+.saved-deck .members{font-size:var(--fs-xs);color:var(--soft);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.saved-deck button{padding:8px 12px;background:rgba(255,255,255,.06);border:1px solid var(--bdr);border-radius:8px;color:#fff;font-family:'Black Ops One',cursive;font-size:var(--fs-xs);cursor:pointer}
+.saved-deck button.load{background:var(--gold);color:#000;border-color:var(--gold)}.saved-deck button.del{background:transparent;color:var(--red);border-color:var(--red)}
+
+.end-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:10000;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;overflow-y:auto}.end-overlay.on{display:flex}
+.end-title{font-family:'Black Ops One',cursive;font-size:2.8rem;letter-spacing:5px;margin-bottom:14px}.end-title.win{color:var(--gold)}.end-title.lose{color:var(--red)}
+.end-sub{color:var(--soft);font-size:var(--fs-base);margin-bottom:14px}
+.end-btn{padding:16px 32px;margin:6px;background:var(--gold);color:#000;border:none;border-radius:12px;font-family:'Black Ops One',cursive;font-size:var(--fs-base);cursor:pointer;min-height:54px}
+.end-btn.alt{background:rgba(255,255,255,.08);color:#fff;border:1px solid var(--bdr)}
+
+.select-bar{padding:14px;background:rgba(0,0,0,.4);text-align:center;border-bottom:1px solid var(--bdr)}
+.select-bar .ct{font-family:'Black Ops One',cursive;font-size:var(--fs-base);color:var(--gold)}.select-bar .ct b{color:#fff;font-size:var(--fs-lg)}
+.select-bar .save-btn{margin-top:8px;padding:6px 14px;background:rgba(255,232,31,.12);border:1px solid var(--gold);color:var(--gold);font-family:'Black Ops One',cursive;font-size:var(--fs-xs);border-radius:8px;cursor:pointer}
+.start-bar{padding:14px;background:rgba(0,0,0,.5);display:flex;gap:10px;border-top:1px solid var(--bdr)}
+.start-bar button{flex:1;padding:16px;border-radius:12px;font-family:'Black Ops One',cursive;font-size:var(--fs-base);cursor:pointer;border:none;min-height:54px}
+.start-bar .start-btn{background:var(--gold);color:#000}.start-bar .start-btn:disabled{opacity:.4}
+.start-bar .clear-btn{background:rgba(255,255,255,.08);color:#fff;border:1px solid var(--bdr);flex:0 0 90px}
+
+.tc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:12px 0}
+.tc-row{padding:10px;background:var(--panel);border:1px solid var(--bdr);border-radius:10px;font-size:var(--fs-xs);text-align:center}
+.tc-row .src{font-family:'Black Ops One',cursive;font-size:var(--fs-sm);margin-bottom:4px}
+.tc-row .arr{color:var(--gold);margin:4px 0}
+.section-h{font-family:'Black Ops One',cursive;color:var(--gold);font-size:var(--fs-base);margin:18px 0 10px}
+.txt-row{font-size:var(--fs-sm);color:var(--soft);line-height:1.7;margin-bottom:8px}
+</style>
+</head>
+<body>
+
+<div class="screen on" id="home">
+  <a class="launcher-back" href="../index.html" onclick="var t=this,x=new XMLHttpRequest();try{x.open('HEAD','../index.html',false);x.send();if(x.status>=400)t.href='../launcher.html';}catch(e){}">‹ HUB</a>
+  <div class="shield">⚔</div>
+  <div class="logo-main">STAR WARS</div><div class="logo-sub">ARENA</div><div class="logo-tag">FULL EDITION · TURN · BOARD · STORY</div>
+  <div class="mode-pill">⚔️ TURN BATTLE</div><button class="menu-btn" onclick="goScreen('quick-tb')"><span class="ico">🎮</span><span class="lbl">QUICK BATTLE<span class="sub">1v1 lightsaber duel</span></span><span class="arr">›</span></button>
+  <div class="mode-pill">🗺️ BOARD BATTLE</div><button class="menu-btn" onclick="goScreen('quick-bb')"><span class="ico">🃏</span><span class="lbl">QUICK BOARD<span class="sub">Lanes, towers, dice</span></span><span class="arr">›</span></button>
+  <div class="mode-pill">📖 STORY MODE</div><button class="menu-btn" onclick="goScreen('story')"><span class="ico">⚔️</span><span class="lbl">SITH GAUNTLET<span class="sub">5 dark side bosses</span></span><span class="arr">›</span></button>
+  <div style="height:8px"></div>
+  <button class="menu-btn" onclick="goScreen('decks')"><span class="ico">💾</span><span class="lbl">MY DECKS<span class="sub">Save and load decks</span></span><span class="arr">›</span></button>
+  <button class="menu-btn" onclick="goScreen('profile')"><span class="ico">👤</span><span class="lbl">PROFILE<span class="sub">Your stats &amp; rank</span></span><span class="arr">›</span></button>
+  <button class="menu-btn" onclick="goScreen('roster')"><span class="ico">📋</span><span class="lbl">CHARACTER ROSTER<span class="sub">View all characters</span></span><span class="arr">›</span></button>
+  <button class="menu-btn" onclick="goScreen('rules')"><span class="ico">📖</span><span class="lbl">HOW TO PLAY<span class="sub">All modes explained</span></span><span class="arr">›</span></button>
+</div>
+
+<div class="screen" id="roster"><div class="topbar"><button class="back" onclick="goScreen('home')">‹ BACK</button><div class="ttl">CHARACTER ROSTER</div><div class="meta" id="rosterMeta"></div></div><div class="page-body"><div class="roster-grid" id="rosterGrid"></div></div></div>
+<div class="screen" id="select"><div class="topbar"><button class="back" onclick="cancelSelect()">‹ BACK</button><div class="ttl" id="selTitle">PICK YOUR TEAM</div><div class="meta" id="selMeta"></div></div><div class="select-bar"><div class="ct">SQUAD: <b id="selCount">0</b> / <span id="selMax">6</span></div><button class="save-btn" onclick="saveCurrentDeck()">💾 SAVE AS DECK</button></div><div class="page-body"><div class="roster-grid" id="selectGrid"></div></div><div class="start-bar"><button class="clear-btn" onclick="clearSelect()">CLEAR</button><button class="start-btn" id="startBtn" onclick="startBattle()" disabled>▶ FIGHT</button></div></div>
+<div class="screen" id="decks"><div class="topbar"><button class="back" onclick="goScreen('home')">‹ BACK</button><div class="ttl">MY DECKS</div></div><div class="deck-tabs"><button class="deck-tab on" onclick="setDeckTab('tb')">⚔️ TURN BATTLE</button><button class="deck-tab" onclick="setDeckTab('bb')">🃏 BOARD BATTLE</button></div><div class="page-body"><div id="decksList"></div></div></div>
+<div class="screen" id="profile"><div class="topbar"><button class="back" onclick="goScreen('home')">‹ BACK</button><div class="ttl">PROFILE</div></div><div class="page-body"><div class="profile-hero"><input class="profile-name" id="profileName" maxlength="20" oninput="saveProfileName()"><div class="profile-rank" id="profileRank">⭐ PADAWAN</div></div><div class="stat-grid" id="statGrid"></div><button class="back-btn" onclick="resetStats()">🗑 RESET STATS</button></div></div>
+<div class="screen" id="story"><div class="topbar"><button class="back" onclick="goScreen('home')">‹ BACK</button><div class="ttl">SITH GAUNTLET</div><div class="meta" id="storyProgress">0/5</div></div><div class="page-body"><div class="boss-list" id="bossList"></div></div></div>
+<div class="screen" id="rules"><div class="topbar"><button class="back" onclick="goScreen('home')">‹ BACK</button><div class="ttl">HOW TO PLAY</div></div><div class="page-body">
+<div class="section-h">⚔️ TURN BATTLE</div><div class="txt-row">Pick a team. Tap moves to see super-effective matchups. Higher SPD goes first.</div>
+<div class="section-h">🗺️ BOARD BATTLE</div><div class="txt-row">Build a deck. Deploy with elixir, units advance, dice combat, towers fire back. Take 2 of 3 enemy towers.</div>
+<div class="section-h">📖 STORY MODE</div><div class="txt-row">Defeat 5 dark side lords with custom decks and unique modifiers.</div>
+<div class="section-h">🔄 TYPE CHART</div>
+<div class="tc-grid">
+<div class="tc-row"><div class="src" style="color:var(--jedi)">🟦 JEDI</div><div class="arr">→</div><div style="color:var(--sith)">SITH</div></div>
+<div class="tc-row"><div class="src" style="color:var(--sith)">🟥 SITH</div><div class="arr">→</div><div style="color:var(--rebel)">REBEL</div></div>
+<div class="tc-row"><div class="src" style="color:var(--rebel)">🟧 REBEL</div><div class="arr">→</div><div style="color:var(--empire)">EMPIRE</div></div>
+<div class="tc-row"><div class="src" style="color:var(--empire)">⬜ EMPIRE</div><div class="arr">→</div><div style="color:var(--bounty)">BOUNTY</div></div>
+<div class="tc-row"><div class="src" style="color:var(--bounty)">🟨 BOUNTY</div><div class="arr">→</div><div style="color:var(--droid)">DROID</div></div>
+<div class="tc-row"><div class="src" style="color:var(--droid)">🤖 DROID</div><div class="arr">→</div><div style="color:var(--jedi)">JEDI</div></div>
+</div><div style="height:30px"></div>
+</div></div>
+
+<div class="screen" id="tbattle">
+  <div class="topbar"><button class="back" onclick="quitBattle()">⬅ QUIT</button><div class="ttl" id="tbTitle">⚔️ DUEL</div><div class="meta" id="tbMeta">vs</div></div>
+  <div class="tb-arena"><div class="arena-fx"></div><div class="flash-fx" id="flashFx"></div>
+    <div class="foe-area"><div class="hp-card"><div class="nm"><span id="foeName">FOE</span><span class="lv" id="foeLv">Lv5</span></div><div class="hp-bar-wrap"><span class="lbl">HP</span><div class="hp-bar"><div class="hp-fill" id="foeHpFill" style="width:100%"></div></div></div><div class="hp-num" id="foeHpNum">100/100</div></div></div>
+    <div class="tb-sprite foe-sprite" id="foeSprite"><span class="emoji">🦹</span></div>
+    <div class="tb-sprite ply-sprite" id="plySprite"><span class="emoji">🦸</span></div>
+    <div class="ply-area"><div class="hp-card"><div class="nm"><span id="plyName">YOU</span><span class="lv" id="plyLv">Lv5</span></div><div class="hp-bar-wrap"><span class="lbl">HP</span><div class="hp-bar"><div class="hp-fill" id="plyHpFill" style="width:100%"></div></div></div><div class="hp-num" id="plyHpNum">100/100</div></div></div>
+  </div>
+  <div class="tb-controls">
+    <div class="tb-log" id="tbLog">A challenger emerges!</div>
+    <div id="tbMainMenu" class="tb-menu">
+      <button class="bbtn fight" onclick="showMoves()">⚔️ FIGHT</button>
+      <button class="bbtn team" onclick="showSwitch(false)">🔄 TEAM</button>
+      <button class="bbtn bag" onclick="useItem()">💼 BACTA</button>
+      <button class="bbtn run" onclick="tryRun()">🏃 RUN</button>
+    </div>
+    <div id="tbMoveMenu" style="display:none">
+      <div class="move-grid" id="moveGrid"></div>
+      <div class="back-row"><button class="back-btn" onclick="hideMoves()">‹ BACK</button></div>
+    </div>
+  </div>
+</div>
+
+<div class="screen" id="bbattle">
+  <div class="topbar"><button class="back" onclick="quitBoard()">⬅ QUIT</button><div class="ttl" id="bbTitle">🃏 BOARD BATTLE</div><div class="meta" id="bbMeta"></div></div>
+  <div class="bb-status"><div class="turn" id="bbTurn">TURN 1</div><div class="ph" id="bbPhase">Deploy</div><div class="elixir">⚡ <b id="bbElixir">5</b> / 10</div></div>
+  <div class="bb-board" id="bbBoard"></div>
+  <div class="bb-controls"><div class="bb-log" id="bbLog">Tap a card, then tap your back row to deploy.</div><div class="bb-hand" id="bbHand"></div><div class="bb-action-row"><button id="bbEndDeploy" class="primary" onclick="endDeployPhase()">▶ END TURN</button></div></div>
+</div>
+
+<div class="modal" id="switchModal"><div class="modal-box"><div class="modal-title" id="switchTitle">CHOOSE A CHARACTER</div><div class="party-list" id="partyList"></div><button class="back-btn" id="switchCancel" onclick="closeSwitch()" style="margin-top:14px">CANCEL</button></div></div>
+<div class="modal" id="cardModal"><div class="modal-box"><button class="back-btn" onclick="closeCardModal()" style="margin-bottom:10px">✕ CLOSE</button><div id="cardModalContent"></div></div></div>
+<div class="end-overlay" id="endOverlay"><div class="end-title" id="endTitle">VICTORY!</div><div class="end-sub" id="endSub">You won.</div><div class="eog-stats" id="eogStats"></div><button class="end-btn" id="endNext" onclick="endNext()">▶ AGAIN</button><button class="end-btn alt" onclick="endHome()">🏠 HOME</button></div>
+
+<script>
+const TYPES=['jedi','sith','bounty','droid','rebel','empire'];
+const TYPE_ICONS={jedi:'🟦',sith:'🟥',bounty:'🟨',droid:'🤖',rebel:'🟧',empire:'⬜'};
+const TYPE_NAMES={jedi:'JEDI',sith:'SITH',bounty:'BOUNTY',droid:'DROID',rebel:'REBEL',empire:'EMPIRE'};
+const TYPE_CHART={jedi:{sith:2,droid:0.5},sith:{rebel:2,jedi:0.5},rebel:{empire:2,sith:0.5},empire:{bounty:2,rebel:0.5},bounty:{droid:2,empire:0.5},droid:{jedi:2,bounty:0.5}};
+const MOVE_POOLS={
+  jedi:[{n:'Lightsaber Slash',p:55,pp:25,t:'jedi'},{n:'Force Push',p:45,pp:20,t:'jedi'},{n:'Mind Trick',p:50,pp:18,t:'jedi'},{n:'Force Heal',p:0,pp:6,t:'jedi',heal:55},{n:'Saber Throw',p:65,pp:15,t:'jedi'},{n:'Force Storm',p:90,pp:5,t:'jedi'}],
+  sith:[{n:'Force Lightning',p:75,pp:12,t:'sith'},{n:'Force Choke',p:60,pp:18,t:'sith'},{n:'Saber Crush',p:85,pp:8,t:'sith'},{n:'Dark Bolt',p:55,pp:22,t:'sith'},{n:'Sith Fury',p:100,pp:5,t:'sith'},{n:'Drain Life',p:50,pp:15,t:'sith',heal:30}],
+  rebel:[{n:'Blaster Shot',p:55,pp:22,t:'rebel'},{n:'Smuggler Run',p:50,pp:20,t:'rebel'},{n:'Wookiee Roar',p:70,pp:12,t:'rebel'},{n:'Ion Cannon',p:80,pp:8,t:'rebel'},{n:'Han Shot First',p:75,pp:10,t:'rebel'},{n:'Rebel Charge',p:65,pp:15,t:'rebel'}],
+  empire:[{n:'Stormtrooper Volley',p:45,pp:30,t:'empire'},{n:'TIE Strike',p:65,pp:15,t:'empire'},{n:'Death Star Beam',p:110,pp:5,t:'empire'},{n:'Imperial March',p:60,pp:18,t:'empire'},{n:'Carbonite Freeze',p:50,pp:12,t:'empire'},{n:'Walker Stomp',p:80,pp:8,t:'empire'}],
+  bounty:[{n:'Disruptor Blast',p:60,pp:18,t:'bounty'},{n:'Flame Thrower',p:75,pp:10,t:'bounty'},{n:'Wrist Rocket',p:85,pp:8,t:'bounty'},{n:'Tracking Beam',p:55,pp:20,t:'bounty'},{n:'Slave I Bomb',p:95,pp:5,t:'bounty'},{n:'Beskar Slam',p:65,pp:14,t:'bounty'}],
+  droid:[{n:'Astromech Spark',p:50,pp:25,t:'droid'},{n:'Servo Punch',p:60,pp:18,t:'droid'},{n:'Self Repair',p:0,pp:6,t:'droid',heal:50},{n:'Battle Droid Burst',p:70,pp:12,t:'droid'},{n:'Probe Scan',p:55,pp:20,t:'droid'},{n:'Magna Lance',p:80,pp:8,t:'droid'}],
+};
+const EFFECTS={
+  yoda:{deploy:'🟦 Force wisdom: heal King 1w'},
+  luke:{clash:'⚔️ X-wing: bonus 1w in lane'},
+  obi:{deploy:'🛡️ Hello there: blocks 1 tower hit'},
+  mace:{clash:'💜 Vaapad: bonus 1w'},
+  vader:{clash:'😤 Force choke: target sleeps next turn'},
+  palpatine:{clash:'⚡ Lightning: 1w to all foes in lane'},
+  maul:{clash:'🔴 Double saber: bonus 1w'},
+  kylo:{clash:'❌ Saber rage: bonus 1w'},
+  boba:{deploy:'🎯 Mark: target loses next combat'},
+  cad:{clash:'🤠 Outlaw: bonus 1w'},
+  ig88:{clash:'🤖 Assassin droid: bonus 1w'},
+  mando:{clash:'⚔ This is the way: bonus 1w'},
+  r2:{deploy:'🤖 Slice: heal King 1w'},
+  c3po:{deploy:'🤖 Translation: confuse target'},
+  bb8:{clash:'⚽ Roll: avoid damage next turn'},
+  k2so:{clash:'🤖 Stats: bonus 1w'},
+  leia:{deploy:'👸 Help me: heal Tower 1w in lane'},
+  han:{clash:'🚀 Falcon: bonus 1w'},
+  chewie:{clash:'🪀 Wookiee: bonus 1w'},
+  lando:{deploy:'🎩 Smooth: gain 1 elixir'},
+  storm:{clash:'⬜ Volley: 1w to random foe'},
+  tarkin:{clash:'🎩 Plan: bonus 1w'},
+  krennic:{clash:'🔬 Director: bonus 1w'},
+  snoke:{clash:'🟣 Praetorian: bonus 1w'},
+};
+let ROSTER=[
+  {id:'yoda',n:'Yoda',fb:'🟢',t:'jedi',elixir:5,hp:230,atk:90,def:78,spd:80,spdIcon:'🧍',moves:['Force Heal','Force Storm','Lightsaber Slash','Mind Trick']},
+  {id:'luke',n:'Luke Skywalker',fb:'⚔️',t:'jedi',elixir:5,hp:240,atk:88,def:75,spd:85,spdIcon:'⚡',moves:['Lightsaber Slash','Saber Throw','Force Push','Force Storm']},
+  {id:'obi',n:'Obi-Wan Kenobi',fb:'🟦',t:'jedi',elixir:4,hp:220,atk:82,def:80,spd:80,spdIcon:'🧍',moves:['Lightsaber Slash','Mind Trick','Force Push','Force Heal']},
+  {id:'mace',n:'Mace Windu',fb:'💜',t:'jedi',elixir:5,hp:230,atk:88,def:75,spd:82,spdIcon:'🧍',moves:['Lightsaber Slash','Force Push','Saber Throw','Force Storm']},
+  {id:'vader',n:'Darth Vader',fb:'🖤',t:'sith',elixir:7,hp:300,atk:95,def:88,spd:70,spdIcon:'🐢',moves:['Force Choke','Saber Crush','Force Lightning','Sith Fury']},
+  {id:'palpatine',n:'Palpatine',fb:'⚡',t:'sith',elixir:7,hp:270,atk:92,def:80,spd:75,spdIcon:'🧍',moves:['Force Lightning','Sith Fury','Dark Bolt','Drain Life']},
+  {id:'maul',n:'Darth Maul',fb:'🔴',t:'sith',elixir:5,hp:240,atk:90,def:75,spd:88,spdIcon:'⚡',moves:['Saber Crush','Sith Fury','Dark Bolt','Force Choke']},
+  {id:'kylo',n:'Kylo Ren',fb:'❌',t:'sith',elixir:5,hp:230,atk:85,def:75,spd:80,spdIcon:'🧍',moves:['Saber Crush','Force Choke','Dark Bolt','Force Lightning']},
+  {id:'boba',n:'Boba Fett',fb:'🎯',t:'bounty',elixir:5,hp:230,atk:85,def:78,spd:82,spdIcon:'🧍',moves:['Wrist Rocket','Flame Thrower','Disruptor Blast','Slave I Bomb']},
+  {id:'cad',n:'Cad Bane',fb:'🤠',t:'bounty',elixir:4,hp:210,atk:82,def:70,spd:88,spdIcon:'⚡',moves:['Disruptor Blast','Tracking Beam','Wrist Rocket','Beskar Slam']},
+  {id:'ig88',n:'IG-88',fb:'🤖',t:'bounty',elixir:5,hp:240,atk:88,def:78,spd:85,spdIcon:'⚡',moves:['Wrist Rocket','Disruptor Blast','Slave I Bomb','Tracking Beam']},
+  {id:'mando',n:'Mandalorian',fb:'⚔',t:'bounty',elixir:5,hp:230,atk:84,def:82,spd:80,spdIcon:'🧍',moves:['Beskar Slam','Wrist Rocket','Flame Thrower','Disruptor Blast']},
+  {id:'r2',n:'R2-D2',fb:'🔵',t:'droid',elixir:3,hp:180,atk:70,def:80,spd:75,spdIcon:'🧍',moves:['Astromech Spark','Self Repair','Probe Scan','Servo Punch']},
+  {id:'c3po',n:'C-3PO',fb:'🟡',t:'droid',elixir:2,hp:160,atk:55,def:75,spd:60,spdIcon:'🐢',moves:['Servo Punch','Probe Scan','Self Repair','Astromech Spark']},
+  {id:'bb8',n:'BB-8',fb:'⚽',t:'droid',elixir:3,hp:170,atk:70,def:75,spd:90,spdIcon:'⚡',moves:['Astromech Spark','Servo Punch','Probe Scan','Self Repair']},
+  {id:'k2so',n:'K-2SO',fb:'🤖',t:'droid',elixir:5,hp:240,atk:85,def:82,spd:75,spdIcon:'🧍',moves:['Magna Lance','Battle Droid Burst','Servo Punch','Probe Scan']},
+  {id:'leia',n:'Princess Leia',fb:'👸',t:'rebel',elixir:4,hp:210,atk:78,def:75,spd:82,spdIcon:'🧍',moves:['Blaster Shot','Rebel Charge','Smuggler Run','Wookiee Roar']},
+  {id:'han',n:'Han Solo',fb:'🚀',t:'rebel',elixir:5,hp:230,atk:85,def:75,spd:88,spdIcon:'⚡',moves:['Blaster Shot','Han Shot First','Smuggler Run','Ion Cannon']},
+  {id:'chewie',n:'Chewbacca',fb:'🪀',t:'rebel',elixir:5,hp:260,atk:88,def:80,spd:75,spdIcon:'🧍',moves:['Wookiee Roar','Rebel Charge','Blaster Shot','Ion Cannon']},
+  {id:'lando',n:'Lando',fb:'🎩',t:'rebel',elixir:4,hp:200,atk:80,def:72,spd:85,spdIcon:'⚡',moves:['Blaster Shot','Smuggler Run','Han Shot First','Rebel Charge']},
+  {id:'storm',n:'Stormtrooper',fb:'⬜',t:'empire',elixir:2,hp:160,atk:60,def:65,spd:70,spdIcon:'🧍',moves:['Stormtrooper Volley','Imperial March','Carbonite Freeze','TIE Strike']},
+  {id:'tarkin',n:'Grand Moff Tarkin',fb:'🎩',t:'empire',elixir:6,hp:240,atk:84,def:80,spd:72,spdIcon:'🐢',moves:['Death Star Beam','TIE Strike','Imperial March','Walker Stomp']},
+  {id:'krennic',n:'Director Krennic',fb:'🔬',t:'empire',elixir:5,hp:220,atk:82,def:78,spd:75,spdIcon:'🧍',moves:['Death Star Beam','TIE Strike','Imperial March','Stormtrooper Volley']},
+  {id:'snoke',n:'Snoke',fb:'🟣',t:'sith',elixir:6,hp:250,atk:90,def:78,spd:75,spdIcon:'🧍',moves:['Force Lightning','Dark Bolt','Sith Fury','Drain Life']},
+];
+const BOSSES=[
+  {id:'kylo',n:'Kylo Ren',ico:'❌',desc:'Master of the Knights of Ren',team:['kylo','snoke','storm'],bonus:'Foe gains 2 elixir per turn'},
+  {id:'maul',n:'Darth Maul',ico:'🔴',desc:'Sith Apprentice',team:['maul','snoke','ig88'],bonus:'Sith moves +25% damage'},
+  {id:'vader',n:'Darth Vader',ico:'🖤',desc:'Lord of the Sith',team:['vader','storm','tarkin'],bonus:'Foe King +2 HP'},
+  {id:'palpatine',n:'Emperor Palpatine',ico:'⚡',desc:'Dark Lord of the Sith',team:['palpatine','vader','snoke'],bonus:'Foe Towers +1 HP'},
+  {id:'snoke',n:'Supreme Leader Snoke',ico:'🟣',desc:'First Order Supreme Leader',team:['snoke','kylo','vader','palpatine'],bonus:'Foe King +4 HP'},
+];
+let state={team:[],partyTeam:[],partyFoe:[],active:0,foeActive:0,potions:3,busy:false,mode:'tb',bb:null,storyBoss:null};
+
+const STORE_KEY='starwars-arena-full';
+function loadStore(){try{return JSON.parse(localStorage.getItem(STORE_KEY))||{}}catch(e){return{}}}
+function saveStore(s){localStorage.setItem(STORE_KEY,JSON.stringify(s))}
+function getStats(){const s=loadStore();return s.stats||{tbWins:0,tbLosses:0,bbWins:0,bbLosses:0,storyCleared:0,totalDmg:0,totalTurns:0,favHero:null,heroUses:{}}}
+function setStats(stats){const s=loadStore();s.stats=stats;saveStore(s)}
+function getProfile(){const s=loadStore();return s.profile||{name:'Padawan'}}
+function setProfile(p){const s=loadStore();s.profile=p;saveStore(s)}
+function getDecks(mode){const s=loadStore();return (s.decks&&s.decks[mode])||[]}
+function setDecks(mode,decks){const s=loadStore();s.decks=s.decks||{};s.decks[mode]=decks;saveStore(s)}
+function getStoryProgress(){const s=loadStore();return s.story||{cleared:0}}
+function setStoryProgress(p){const s=loadStore();s.story=p;saveStore(s)}
+
+let audioCtx=null;
+function audio(){if(!audioCtx)audioCtx=new (window.AudioContext||window.webkitAudioContext)();return audioCtx}
+function tone(freq,dur,type='sine',vol=0.15){try{const ctx=audio();const osc=ctx.createOscillator();const gain=ctx.createGain();osc.connect(gain);gain.connect(ctx.destination);osc.type=type;osc.frequency.value=freq;gain.gain.setValueAtTime(vol,ctx.currentTime);gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+dur);osc.start(ctx.currentTime);osc.stop(ctx.currentTime+dur)}catch(e){}}
+function sfxClick(){tone(800,0.05,'square',0.1)}
+function sfxSelect(){tone(660,0.08,'sine',0.12)}
+function sfxDeploy(){tone(440,0.06);setTimeout(()=>tone(660,0.06),60);setTimeout(()=>tone(880,0.08),120)}
+function sfxHit(){tone(180,0.12,'sawtooth',0.18)}
+function sfxCrit(){tone(150,0.08,'sawtooth',0.2);setTimeout(()=>tone(80,0.2,'sawtooth',0.15),60)}
+function sfxHeal(){tone(523,0.08);setTimeout(()=>tone(659,0.08),80);setTimeout(()=>tone(784,0.12),160)}
+function sfxFaint(){tone(400,0.15,'triangle',0.15);setTimeout(()=>tone(200,0.25,'triangle',0.1),100)}
+function sfxVictory(){tone(523,0.15);setTimeout(()=>tone(659,0.15),150);setTimeout(()=>tone(784,0.15),300);setTimeout(()=>tone(1047,0.3),450)}
+function sfxDefeat(){tone(330,0.2,'triangle',0.15);setTimeout(()=>tone(247,0.2,'triangle',0.13),200);setTimeout(()=>tone(196,0.4,'triangle',0.1),400)}
+
+function $(id){return document.getElementById(id)}
+function goScreenInner(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));$(id).classList.add('on');if(id==='roster')renderRoster();if(id==='profile')renderProfile();if(id==='story')renderStory();if(id==='decks')renderDecks()}
+function goScreen(id){sfxClick();if(id==='quick-tb'){openSelect('tb');return}if(id==='quick-bb'){openSelect('bb');return}goScreenInner(id)}
+function artHTML(p){return `<span class="emoji">${p.fb||'❓'}</span>`}
+
+function buildHero(template,lv){lv=lv||5;const moves=(template.moves||[]).map(name=>{for(const t of TYPES){const m=MOVE_POOLS[t].find(x=>x.n===name);if(m)return{...m,ppMax:m.pp,ppNow:m.pp}}return{n:name,p:50,pp:20,ppMax:20,ppNow:20,t:template.t}});const scale=1+(lv-5)*0.04;return{id:template.id,n:template.n,fb:template.fb,t:template.t,lv,hpMax:Math.round(template.hp*scale),hp:Math.round(template.hp*scale),atk:Math.round(template.atk*scale),def:Math.round(template.def*scale),spd:template.spd,elixir:template.elixir||3,spdIcon:template.spdIcon||'🧍',wounds:0,woundsMax:Math.max(2,Math.min(7,Math.round(template.hp/40))),moves,fainted:false,effects:EFFECTS[template.id]||{},dmgDealt:0}}
+function rnd(a,b){return Math.random()*(b-a)+a}
+function effect(at,dt){const r=(TYPE_CHART[at]||{})[dt];return r==null?1:r}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
+
+function recordHeroUse(id){const stats=getStats();stats.heroUses=stats.heroUses||{};stats.heroUses[id]=(stats.heroUses[id]||0)+1;let max=0,fav=null;for(const k in stats.heroUses){if(stats.heroUses[k]>max){max=stats.heroUses[k];fav=k}}stats.favHero=fav;setStats(stats)}
+function recordWin(mode){const s=getStats();s[mode+'Wins']=(s[mode+'Wins']||0)+1;setStats(s)}
+function recordLoss(mode){const s=getStats();s[mode+'Losses']=(s[mode+'Losses']||0)+1;setStats(s)}
+function addDmg(n){const s=getStats();s.totalDmg=(s.totalDmg||0)+n;setStats(s)}
+function addTurns(n){const s=getStats();s.totalTurns=(s.totalTurns||0)+n;setStats(s)}
+
+function renderRoster(){$('rosterMeta').textContent=`${ROSTER.length} characters`;const grid=$('rosterGrid');grid.innerHTML='';ROSTER.forEach(h=>{const el=document.createElement('div');el.className='hero-card';el.onclick=()=>{sfxSelect();showCardDetail(h)};el.innerHTML=`<div class="elixir-badge">${h.elixir}</div><div class="pokeart">${artHTML(h)}</div><div class="name">${h.n}</div><div class="type-row"><span class="type-chip ${h.t}">${TYPE_ICONS[h.t]} ${TYPE_NAMES[h.t]}</span></div><div class="stats"><div class="stat"><span>HP</span><b>${h.hp}</b></div><div class="stat"><span>ATK</span><b>${h.atk}</b></div><div class="stat"><span>SPD</span><b>${h.spd}${h.spdIcon}</b></div><div class="stat"><span>WND</span><b>${Math.max(2,Math.min(7,Math.round(h.hp/40)))}</b></div></div>`;grid.appendChild(el)})}
+
+function showCardDetail(h){const eff=EFFECTS[h.id]||{};const beats=Object.keys(TYPE_CHART[h.t]||{}).filter(t=>TYPE_CHART[h.t][t]>1);const weakTo=TYPES.filter(t=>(TYPE_CHART[t]||{})[h.t]>1);const muSuper=beats.map(t=>`<div class="row super">${TYPE_ICONS[t]} ${TYPE_NAMES[t]} 2×</div>`).join('');const muWeak=weakTo.map(t=>`<div class="row weak">${TYPE_ICONS[t]} ${TYPE_NAMES[t]} → us 2×</div>`).join('');const movesHTML=(h.moves||[]).map(name=>{let m=null;for(const t of TYPES){const f=MOVE_POOLS[t].find(x=>x.n===name);if(f){m=f;break}}if(!m)return'';const tag=m.heal?`HEAL ${m.heal}`:`PWR ${m.p}`;return `<div class="cd-move"><div class="mn" style="color:var(--${m.t})">${m.n}</div><div class="mt"><span>${TYPE_ICONS[m.t]} ${TYPE_NAMES[m.t]}</span><span>${tag} · PP ${m.pp}</span></div></div>`}).join('');const wounds=Math.max(2,Math.min(7,Math.round(h.hp/40)));$('cardModalContent').innerHTML=`<div class="cd-art">${artHTML(h)}</div><div class="cd-name">${h.n}</div><div class="cd-types"><span class="type-chip ${h.t}">${TYPE_ICONS[h.t]} ${TYPE_NAMES[h.t]}</span></div><div class="cd-stats"><div class="cd-stat"><span class="v">${h.hp}</span><span class="k">HP</span></div><div class="cd-stat"><span class="v">${h.atk}</span><span class="k">ATK</span></div><div class="cd-stat"><span class="v">${h.def}</span><span class="k">DEF</span></div><div class="cd-stat"><span class="v">${h.spd}${h.spdIcon}</span><span class="k">SPD</span></div><div class="cd-stat"><span class="v">${h.elixir}⚡</span><span class="k">COST</span></div><div class="cd-stat"><span class="v">${wounds}w</span><span class="k">WOUNDS</span></div></div>${eff.deploy?`<div class="cd-section">⚡ ON DEPLOY</div><div style="padding:8px 12px;background:rgba(255,232,31,.08);border-left:3px solid var(--gold);border-radius:6px;font-size:13px;line-height:1.5;margin-bottom:6px">${eff.deploy}</div>`:''}${eff.clash?`<div class="cd-section">🎲 CLASH STRIKE</div><div style="padding:8px 12px;background:rgba(168,85,247,.08);border-left:3px solid #a855f7;border-radius:6px;font-size:13px;line-height:1.5;margin-bottom:6px">${eff.clash}</div>`:''}<div class="cd-section">⚔ TYPE MATCHUPS</div><div class="cd-mu">${muSuper||'<div class="row">No super-effective</div>'}${muWeak||'<div class="row">No weaknesses</div>'}</div><div class="cd-section">🥊 MOVES</div><div class="cd-moves-list">${movesHTML}</div>`;$('cardModal').classList.add('on')}
+function closeCardModal(){$('cardModal').classList.remove('on');sfxClick()}
+
+let selectMode='tb';let selectingTeam=[];
+function openSelect(mode,bossId){selectMode=mode;selectingTeam=[];if(mode==='tb'){$('selTitle').textContent='PICK YOUR TEAM';$('selMeta').textContent=bossId?`vs ${BOSSES.find(b=>b.id===bossId).n}`:'Turn Battle';$('selMax').textContent='6';$('startBtn').textContent='▶ FIGHT'}else{$('selTitle').textContent='BUILD YOUR DECK';$('selMeta').textContent=bossId?`vs ${BOSSES.find(b=>b.id===bossId).n}`:'Board Battle';$('selMax').textContent='12';$('startBtn').textContent='🃏 START'}goScreenInner('select');renderSelect()}
+function renderSelect(){const max=selectMode==='tb'?6:12;const grid=$('selectGrid');grid.innerHTML='';ROSTER.forEach(h=>{const sel=selectingTeam.includes(h.id);const el=document.createElement('div');el.className='hero-card'+(sel?' selected':'');el.onclick=()=>{sfxSelect();const i=selectingTeam.indexOf(h.id);if(i>=0)selectingTeam.splice(i,1);else if(selectingTeam.length<max)selectingTeam.push(h.id);renderSelect()};el.innerHTML=`<div class="elixir-badge">${h.elixir}</div><div class="pokeart">${artHTML(h)}</div><div class="name">${h.n}</div><div class="type-row"><span class="type-chip ${h.t}">${TYPE_ICONS[h.t]} ${TYPE_NAMES[h.t]}</span></div><div class="stats"><div class="stat"><span>HP</span><b>${h.hp}</b></div><div class="stat"><span>SPD</span><b>${h.spd}${h.spdIcon}</b></div></div>`;const info=document.createElement('button');info.textContent='i';info.style.cssText='position:absolute;top:6px;right:6px;width:26px;height:26px;border-radius:50%;background:rgba(0,0,0,.6);border:1px solid var(--bdr);color:var(--gold);font-family:Black Ops One,cursive;font-size:13px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:5';info.onclick=(ev)=>{ev.stopPropagation();showCardDetail(h)};el.appendChild(info);grid.appendChild(el)});$('selCount').textContent=selectingTeam.length;$('startBtn').disabled=selectingTeam.length===0}
+function clearSelect(){selectingTeam=[];renderSelect();sfxClick()}
+function cancelSelect(){if(state.storyBoss)goScreenInner('story');else goScreenInner('home')}
+function startBattle(){if(selectingTeam.length===0)return;sfxClick();selectingTeam.forEach(recordHeroUse);if(selectMode==='tb')startTurnBattle();else startBoardBattle()}
+
+let currentDeckTab='tb';
+function setDeckTab(tab){currentDeckTab=tab;document.querySelectorAll('.deck-tab').forEach(b=>b.classList.remove('on'));event.target.classList.add('on');renderDecks();sfxClick()}
+function saveCurrentDeck(){if(selectingTeam.length===0){alert('Select at least one character first.');return}const name=prompt('Deck name?','My '+(selectMode==='tb'?'Team':'Deck'));if(!name)return;const decks=getDecks(selectMode);if(decks.length>=5){if(!confirm('You have 5 decks. Replace oldest?'))return;decks.shift()}decks.push({name,members:selectingTeam.slice(),date:Date.now()});setDecks(selectMode,decks);alert('Deck saved!');sfxHeal()}
+function renderDecks(){const list=$('decksList');const decks=getDecks(currentDeckTab);if(decks.length===0){list.innerHTML='<div class="txt-row" style="text-align:center;padding:30px">No saved decks yet.</div>';return}list.innerHTML=decks.slice().reverse().map((d,idx)=>{const realIdx=decks.length-1-idx;const memberNames=d.members.map(id=>{const r=ROSTER.find(x=>x.id===id);return r?r.n:'?'}).join(', ');return `<div class="saved-deck"><div class="info"><div class="nm">${d.name}</div><div class="members">${d.members.length} cards: ${memberNames}</div></div><button class="load" onclick="loadDeck(${realIdx},'${currentDeckTab}')">LOAD</button><button class="del" onclick="deleteDeck(${realIdx},'${currentDeckTab}')">✕</button></div>`}).join('')}
+function loadDeck(idx,mode){const decks=getDecks(mode);const d=decks[idx];if(!d)return;selectMode=mode;selectingTeam=d.members.filter(id=>ROSTER.find(r=>r.id===id));openSelect(mode);selectingTeam=d.members.filter(id=>ROSTER.find(r=>r.id===id));renderSelect();sfxSelect()}
+function deleteDeck(idx,mode){if(!confirm('Delete this deck?'))return;const decks=getDecks(mode);decks.splice(idx,1);setDecks(mode,decks);renderDecks();sfxClick()}
+
+function renderProfile(){const p=getProfile(),s=getStats();$('profileName').value=p.name||'Padawan';const total=(s.tbWins||0)+(s.bbWins||0)+(s.storyCleared||0);let rank='⭐ PADAWAN';if(total>=5)rank='🥉 KNIGHT';if(total>=10)rank='🥈 MASTER';if(total>=20)rank='🥇 JEDI MASTER';if(total>=40)rank='💎 GRANDMASTER';if(total>=80)rank='👑 CHOSEN ONE';$('profileRank').textContent=rank;const fav=s.favHero?ROSTER.find(r=>r.id===s.favHero):null;const tiles=[{k:'TB WINS',v:s.tbWins||0},{k:'TB LOSSES',v:s.tbLosses||0},{k:'BOARD WINS',v:s.bbWins||0},{k:'BOARD LOSSES',v:s.bbLosses||0},{k:'BOSSES BEATEN',v:`${s.storyCleared||0} / ${BOSSES.length}`},{k:'TOTAL DAMAGE',v:s.totalDmg||0},{k:'TURNS PLAYED',v:s.totalTurns||0},{k:'FAVORITE',v:fav?fav.n:'—'}];$('statGrid').innerHTML=tiles.map(t=>`<div class="stat-tile"><span class="v">${t.v}</span><span class="k">${t.k}</span></div>`).join('')}
+function saveProfileName(){const p=getProfile();p.name=$('profileName').value;setProfile(p)}
+function resetStats(){if(!confirm('Reset all stats?'))return;setStats({tbWins:0,tbLosses:0,bbWins:0,bbLosses:0,storyCleared:0,totalDmg:0,totalTurns:0,favHero:null,heroUses:{}});setStoryProgress({cleared:0});renderProfile();sfxClick()}
+
+function renderStory(){const prog=getStoryProgress();$('storyProgress').textContent=`${prog.cleared}/${BOSSES.length}`;const list=$('bossList');list.innerHTML=BOSSES.map((b,i)=>{const locked=i>prog.cleared;const cleared=i<prog.cleared;const cls=locked?'locked':cleared?'cleared':'active-boss';return `<div class="boss-card ${cls}" onclick="${locked?'':`startStory('${b.id}')`}"><div class="num">${i+1}</div><div class="ico">${b.ico}</div><div class="info"><div class="nm">${b.n}</div><div class="desc">${b.desc} • ${b.team.length} characters • ${b.bonus}</div></div><div class="badge">${cleared?'✅':locked?'🔒':'⚔️'}</div></div>`}).join('')}
+function startStory(bossId){sfxClick();const boss=BOSSES.find(b=>b.id===bossId);state.storyBoss=boss;openSelect('bb',bossId)}
+
+let battleStartTime=0,battleTurns=0;
+function startTurnBattle(){const lv=10;state.partyTeam=selectingTeam.map(id=>buildHero(ROSTER.find(r=>r.id===id),lv));const pool=[...ROSTER].sort(()=>Math.random()-0.5).slice(0,3);state.partyFoe=pool.map(t=>buildHero(t,lv));state.active=0;state.foeActive=0;state.potions=3;state.busy=false;state.mode='tb';state.storyBoss=null;battleStartTime=Date.now();battleTurns=0;$('tbTitle').textContent='⚔️ DUEL';$('tbMeta').textContent='Random opponent';goScreenInner('tbattle');refreshTb();log(`A ${state.partyFoe[0].n} appeared!`);setTimeout(()=>log(`Go, ${state.partyTeam[0].n}!`),1300)}
+function refreshTb(){const ply=state.partyTeam[state.active],foe=state.partyFoe[state.foeActive];$('plyName').textContent=ply.n;$('plyLv').textContent=`Lv${ply.lv}`;$('plySprite').innerHTML=artHTML(ply);$('plyHpNum').textContent=`${ply.hp}/${ply.hpMax}`;setHp('ply',ply.hp/ply.hpMax);$('foeName').textContent=foe.n;$('foeLv').textContent=`Lv${foe.lv}`;$('foeSprite').innerHTML=artHTML(foe);$('foeHpNum').textContent=`${foe.hp}/${foe.hpMax}`;setHp('foe',foe.hp/foe.hpMax);$('plySprite').classList.remove('shake','faint');$('foeSprite').classList.remove('shake','faint');if(ply.hp<=0)$('plySprite').classList.add('faint');if(foe.hp<=0)$('foeSprite').classList.add('faint');renderMoves()}
+function setHp(side,frac){frac=Math.max(0,Math.min(1,frac));const fill=$(side+'HpFill');fill.style.width=(frac*100).toFixed(1)+'%';fill.classList.remove('med','low');if(frac<.25)fill.classList.add('low');else if(frac<.5)fill.classList.add('med')}
+function renderMoves(){const ply=state.partyTeam[state.active],foe=state.partyFoe[state.foeActive];const grid=$('moveGrid');grid.innerHTML='';ply.moves.forEach((m,i)=>{const eff=effect(m.t,foe.t),stab=m.t===ply.t;const tag=m.heal?`HEAL ${m.heal}`:`PWR ${m.p}${stab?' +S':''}`;let mu='';if(eff>1)mu='<span class="matchup super">SUPER ✓</span>';else if(eff<1&&eff>0)mu='<span class="matchup weak">WEAK ✗</span>';const b=document.createElement('button');b.className=`move-btn ${m.t}`;b.disabled=m.ppNow<=0||state.busy;b.onclick=()=>useMove(i);b.innerHTML=`<div class="mn">${m.n} ${mu}</div><div class="mt"><span>${TYPE_ICONS[m.t]} ${TYPE_NAMES[m.t]}</span><span>${tag}</span></div><div class="mt"><span class="pp">PP ${m.ppNow}/${m.ppMax}</span></div>`;grid.appendChild(b)})}
+function showMoves(){sfxClick();$('tbMainMenu').style.display='none';$('tbMoveMenu').style.display='block';renderMoves()}
+function hideMoves(){sfxClick();$('tbMainMenu').style.display='grid';$('tbMoveMenu').style.display='none'}
+function log(msg){$('tbLog').innerHTML=msg}
+
+async function useMove(idx){if(state.busy)return;state.busy=true;hideMoves();battleTurns++;const ply=state.partyTeam[state.active],foe=state.partyFoe[state.foeActive],move=ply.moves[idx];if(move.ppNow<=0){state.busy=false;return}move.ppNow--;const fmIdx=chooseFoeMove(),fm=foe.moves[fmIdx];const plyFirst=ply.spd>foe.spd||(ply.spd===foe.spd&&Math.random()<0.5);if(plyFirst){await runAction(ply,foe,move,'ply');if(foe.hp<=0){await onFoeFaint();return}await runAction(foe,ply,fm,'foe');foe.moves[fmIdx].ppNow=Math.max(0,foe.moves[fmIdx].ppNow-1);if(ply.hp<=0){await onPlyFaint();return}}else{await runAction(foe,ply,fm,'foe');foe.moves[fmIdx].ppNow=Math.max(0,foe.moves[fmIdx].ppNow-1);if(ply.hp<=0){await onPlyFaint();return}await runAction(ply,foe,move,'ply');if(foe.hp<=0){await onFoeFaint();return}}refreshTb();state.busy=false}
+function chooseFoeMove(){const foe=state.partyFoe[state.foeActive],ply=state.partyTeam[state.active];const scored=foe.moves.map((m,i)=>{if(m.ppNow<=0)return{i,score:-1};if(m.heal)return{i,score:foe.hp/foe.hpMax<.4?90:10};return{i,score:m.p*effect(m.t,ply.t)+Math.random()*5}});scored.sort((a,b)=>b.score-a.score);if(scored[1]&&scored[1].score>0&&Math.random()<0.25)return scored[1].i;return scored[0].i}
+async function runAction(att,def,move,side){log(`<b>${att.n}</b> used <span class="effect">${move.n}</span>!`);await sleep(700);if(move.heal){const heal=Math.min(move.heal,att.hpMax-att.hp);att.hp+=heal;log(`<b>${att.n}</b> healed <span class="effect">${heal}</span> HP!`);showDmg(side,heal,false,true);sfxHeal();setHp(side,att.hp/att.hpMax);$(side==='ply'?'plyHpNum':'foeHpNum').textContent=`${att.hp}/${att.hpMax}`;await sleep(800);return}const eff=effect(move.t,def.t),stab=move.t===att.t?1.25:1,crit=Math.random()<0.0625?1.5:1,variance=rnd(0.85,1);const base=((2*att.lv/5+2)*move.p*att.atk/Math.max(1,def.def))/35+2;let dmg=Math.max(1,Math.round(base*eff*stab*crit*variance));def.hp=Math.max(0,def.hp-dmg);att.dmgDealt=(att.dmgDealt||0)+dmg;const oS=side==='ply'?'foe':'ply';$('flashFx').classList.add('on');setTimeout(()=>$('flashFx').classList.remove('on'),400);$(oS==='ply'?'plySprite':'foeSprite').classList.add('shake');setTimeout(()=>$(oS==='ply'?'plySprite':'foeSprite').classList.remove('shake'),400);showDmg(oS,dmg,crit>1,false);if(crit>1)sfxCrit();else sfxHit();setHp(oS,def.hp/def.hpMax);$(oS==='ply'?'plyHpNum':'foeHpNum').textContent=`${def.hp}/${def.hpMax}`;let msg=`Dealt <b>${dmg}</b> damage`;if(crit>1)msg=`<span class="crit">A critical hit!</span> `+msg;if(eff>1)msg+=` — <span class="effect">It's super effective!</span>`;else if(eff<1&&eff>0)msg+=` — <span class="effect">It's not very effective…</span>`;log(msg);await sleep(900)}
+function showDmg(side,amt,crit,heal){const arena=document.querySelector('.tb-arena'),sp=$(side==='ply'?'plySprite':'foeSprite');const r=sp.getBoundingClientRect(),ar=arena.getBoundingClientRect();const el=document.createElement('div');el.className='dmg-num'+(crit?' crit':'')+(heal?' heal':'');el.textContent=(heal?'+':'-')+amt;el.style.left=(r.left-ar.left+r.width/2-20)+'px';el.style.top=(r.top-ar.top-10)+'px';arena.appendChild(el);setTimeout(()=>el.remove(),1100)}
+async function onFoeFaint(){const foe=state.partyFoe[state.foeActive];log(`<b>${foe.n}</b> fainted!`);$('foeSprite').classList.add('faint');sfxFaint();await sleep(1100);const next=state.partyFoe.findIndex(f=>f.hp>0);if(next<0)return await battleWon();state.foeActive=next;log(`Foe sent out <b>${state.partyFoe[next].n}</b>!`);refreshTb();state.busy=false}
+async function onPlyFaint(){const ply=state.partyTeam[state.active];log(`<b>${ply.n}</b> fainted!`);$('plySprite').classList.add('faint');sfxFaint();await sleep(1100);const alive=state.partyTeam.findIndex(p=>p.hp>0);if(alive<0)return await battleLost();showSwitch(true)}
+function showSwitch(forced){$('switchTitle').textContent=forced?'CHOOSE YOUR NEXT CHARACTER':'SWITCH CHARACTER';$('switchCancel').style.display=forced?'none':'block';const list=$('partyList');list.innerHTML='';state.partyTeam.forEach((p,i)=>{const isA=i===state.active,ko=p.hp<=0;const row=document.createElement('div');row.className='party-row'+(ko?' fainted':'')+(isA?' active-row':'');const frac=p.hp/p.hpMax,c=frac<.25?'low':frac<.5?'med':'';row.innerHTML=`<div class="ico">${artHTML(p)}</div><div class="info"><div class="nm"><span>${p.n}</span><span class="lv">Lv${p.lv}</span></div><div class="hp-bar"><div class="hp-fill ${c}" style="width:${frac*100}%"></div></div><div class="hp-num">${p.hp}/${p.hpMax}${isA?' • ACTIVE':''}${ko?' • FAINTED':''}</div></div>`;if(!ko&&!isA)row.onclick=()=>doSwitch(i,forced);list.appendChild(row)});$('switchModal').classList.add('on')}
+function closeSwitch(){$('switchModal').classList.remove('on');sfxClick()}
+async function doSwitch(idx,forced){closeSwitch();state.busy=true;const old=state.partyTeam[state.active];if(!forced)log(`Recall <b>${old.n}</b>!`);state.active=idx;const cur=state.partyTeam[idx];log(`Go, <b>${cur.n}</b>!`);await sleep(700);if(!forced){const foe=state.partyFoe[state.foeActive],fmIdx=chooseFoeMove(),fm=foe.moves[fmIdx];await runAction(foe,cur,fm,'foe');foe.moves[fmIdx].ppNow=Math.max(0,foe.moves[fmIdx].ppNow-1);if(cur.hp<=0){await onPlyFaint();return}}refreshTb();state.busy=false}
+async function useItem(){if(state.potions<=0||state.busy){log('No bacta!');return}state.busy=true;sfxClick();state.potions--;const ply=state.partyTeam[state.active];const heal=Math.min(50,ply.hpMax-ply.hp);ply.hp+=heal;log(`Used <b>BACTA</b>! Healed <span class="effect">${heal}</span> HP. (${state.potions} left)`);showDmg('ply',heal,false,true);sfxHeal();setHp('ply',ply.hp/ply.hpMax);$('plyHpNum').textContent=`${ply.hp}/${ply.hpMax}`;await sleep(800);const foe=state.partyFoe[state.foeActive],fmIdx=chooseFoeMove(),fm=foe.moves[fmIdx];await runAction(foe,ply,fm,'foe');foe.moves[fmIdx].ppNow=Math.max(0,foe.moves[fmIdx].ppNow-1);if(ply.hp<=0){await onPlyFaint();return}refreshTb();state.busy=false}
+async function tryRun(){if(state.busy||state.storyBoss)return;state.busy=true;sfxClick();log('Got away safely!');await sleep(1000);quitBattle()}
+async function battleWon(){addTurns(battleTurns);recordWin('tb');state.busy=false;sfxVictory();const dmg=state.partyTeam.reduce((s,p)=>s+(p.dmgDealt||0),0);addDmg(dmg);showEnd(true,'You defeated the foe!',[{k:'TURNS',v:battleTurns},{k:'DMG DEALT',v:dmg}])}
+async function battleLost(){addTurns(battleTurns);recordLoss('tb');state.busy=false;sfxDefeat();showEnd(false,'You were defeated.',[{k:'TURNS',v:battleTurns}])}
+function quitBattle(){if(state.busy)return;sfxClick();goScreenInner('home')}
+
+// Board battle (simplified)
+function startBoardBattle(){const boss=state.storyBoss;state.bb={turn:1,whoseTurn:'ply',phase:'deploy',elixir:5,foeElixir:5,hand:[],foeHand:[],deck:[],foeDeck:[],zones:{ply:[[[],[]],[[],[]]],foe:[[[],[]],[[],[]]]},neutral:[[],[]],towers:{ply:[5,5],foe:[boss?.bonus.includes('Towers +1 HP')?6:5,boss?.bonus.includes('Towers +1 HP')?6:5]},king:{ply:8,foe:boss?.bonus.includes('King +2 HP')?10:boss?.bonus.includes('King +4 HP')?12:8},kingActive:{ply:false,foe:false},selectedCard:null,deploysCount:0,dmgDealt:0,statusEffects:[],rollHistory:[],busy:false};const playerDeck=selectingTeam.length>0?selectingTeam:[];state.bb.deck=[...playerDeck];const foePool=boss?boss.team:ROSTER.map(r=>r.id);state.bb.foeDeck=[...foePool].sort(()=>Math.random()-0.5);drawCards('ply',4);drawCards('foe',4);if(boss?.bonus.includes('+2 elixir'))state.bb.foeElixir+=2;$('bbTitle').textContent=boss?'⚔️ '+boss.n.toUpperCase():'🃏 BOARD BATTLE';$('bbMeta').textContent=boss?boss.bonus:'';goScreenInner('bbattle');bbLog('Battle begins! Tap a card, then your back row to deploy.');refreshBoard()}
+function drawCards(side,n){const deck=side==='ply'?state.bb.deck:state.bb.foeDeck;const hand=side==='ply'?state.bb.hand:state.bb.foeHand;for(let i=0;i<n&&hand.length<6;i++){if(deck.length===0){const orig=side==='ply'?selectingTeam:(state.storyBoss?state.storyBoss.team:ROSTER.map(r=>r.id));deck.push(...[...orig].sort(()=>Math.random()-0.5))}hand.push(deck.shift())}}
+function buildUnit(card,side,lane){return{id:card.id,n:card.n,fb:card.fb,t:card.t,side,lane,wounds:0,woundsMax:Math.max(2,Math.min(7,Math.round(card.hp/40))),atk:card.atk,def:card.def,spd:card.spd,spdIcon:card.spdIcon}}
+function bbLog(m){$('bbLog').innerHTML=m}
+function refreshBoard(){const bb=state.bb;$('bbTurn').textContent=`TURN ${bb.turn} — ${bb.whoseTurn==='ply'?'YOUR':'FOE'} ${bb.phase.toUpperCase()}`;$('bbPhase').textContent={deploy:'Deploy',advance:'Advance',combat:'Combat',tower:'Towers',end:'End'}[bb.phase]||bb.phase;$('bbElixir').textContent=bb.elixir;const board=$('bbBoard');board.innerHTML='';const kingMaxF=state.storyBoss?.bonus.includes('King +2 HP')?10:state.storyBoss?.bonus.includes('King +4 HP')?12:8;const towerMaxF=state.storyBoss?.bonus.includes('Towers +1 HP')?6:5;const kF=document.createElement('div');kF.className='bb-king-row';kF.innerHTML=`<div class="bb-king foe ${bb.king.foe<=0?'dead':''}">👑 FOE ${bb.king.foe}/${kingMaxF}<div class="hpbar"><div style="width:${Math.max(0,bb.king.foe/kingMaxF*100)}%"></div></div></div>`;board.appendChild(kF);const tF=document.createElement('div');tF.className='bb-towers-row';tF.innerHTML=[0,1].map(l=>{const hp=bb.towers.foe[l];return `<div class="bb-tower foe ${hp<=0?'dead':''}">🏰 ${'AB'[l]} ${Math.max(0,hp)}/${towerMaxF}<div class="hpbar"><div style="width:${Math.max(0,hp)/towerMaxF*100}%"></div></div></div>`}).join('');board.appendChild(tF);board.appendChild(buildZoneRow('foe',0,'BACK'));board.appendChild(buildZoneRow('foe',1,'FRONT'));const nz=document.createElement('div');nz.className='bb-zone neutral';const nc=document.createElement('div');nc.className='bb-zone-cell';nc.innerHTML=`<div class="zlbl" style="position:relative;text-align:center;color:var(--gold)">⚔ NEUTRAL ZONE ⚔</div>`;[0,1].forEach(l=>{bb.neutral[l].forEach(u=>nc.appendChild(buildUnitEl(u,l)))});nz.appendChild(nc);board.appendChild(nz);board.appendChild(buildZoneRow('ply',1,'FRONT'));board.appendChild(buildZoneRow('ply',0,'BACK'));const tP=document.createElement('div');tP.className='bb-towers-row';tP.innerHTML=[0,1].map(l=>{const hp=bb.towers.ply[l];return `<div class="bb-tower ${hp<=0?'dead':''}">🏰 ${'AB'[l]} ${Math.max(0,hp)}/5<div class="hpbar"><div style="width:${Math.max(0,hp)/5*100}%"></div></div></div>`}).join('');board.appendChild(tP);const kP=document.createElement('div');kP.className='bb-king-row';kP.innerHTML=`<div class="bb-king ${bb.king.ply<=0?'dead':''}">👑 YOU ${bb.king.ply}/8<div class="hpbar"><div style="width:${Math.max(0,bb.king.ply/8*100)}%"></div></div></div>`;board.appendChild(kP);const hand=$('bbHand');hand.innerHTML='';bb.hand.forEach((id,idx)=>{const card=ROSTER.find(r=>r.id===id);const el=document.createElement('div');const canPlay=bb.elixir>=card.elixir&&bb.phase==='deploy'&&bb.whoseTurn==='ply';el.className='bb-hand-card'+(bb.selectedCard===idx?' selected':'')+(canPlay?'':' disabled');el.innerHTML=`<div class="ec">${card.elixir}</div><div class="uart">${artHTML(card)}</div><div class="nm">${card.n}</div><div class="uw-mini">${Math.max(2,Math.min(7,Math.round(card.hp/40)))}w ${card.spdIcon||'🧍'}</div>`;el.onclick=(e)=>{if(!canPlay){showCardDetail(card);return}sfxSelect();bb.selectedCard=bb.selectedCard===idx?null:idx;refreshBoard()};hand.appendChild(el)});$('bbEndDeploy').style.display=(bb.whoseTurn==='ply'&&bb.phase==='deploy')?'block':'none'}
+function buildZoneRow(side,row,label){const bb=state.bb;const zoneEl=document.createElement('div');zoneEl.className='bb-zone';[0,1].forEach(lane=>{const cell=document.createElement('div');const isPlyBack=side==='ply'&&row===0;const canDeploy=isPlyBack&&bb.whoseTurn==='ply'&&bb.phase==='deploy'&&bb.selectedCard!=null;cell.className='bb-zone-cell'+(side==='foe'?' foe':'')+(isPlyBack?' deploy':'')+(canDeploy?' can':'');const lbl=document.createElement('div');lbl.className='zlbl';lbl.textContent=`${side==='foe'?'FOE':'YOUR'} ${label} ${'AB'[lane]}`;cell.appendChild(lbl);bb.zones[side][row][lane].forEach(u=>cell.appendChild(buildUnitEl(u,lane)));if(canDeploy)cell.onclick=()=>deployToBack(lane);zoneEl.appendChild(cell)});return zoneEl}
+function buildUnitEl(unit,lane){const el=document.createElement('div');el.className='bb-unit '+(unit.side==='foe'?'foe':'ply');const wL=unit.woundsMax-unit.wounds;el.innerHTML=`<div class="uart">${artHTML(unit)}</div><div class="uw">${wL}/${unit.woundsMax}w</div><div class="uspd">${unit.spdIcon||'🧍'}</div>`;el.onclick=(e)=>{e.stopPropagation();const r=ROSTER.find(x=>x.id===unit.id)||unit;showCardDetail(r)};return el}
+async function deployToBack(lane){const bb=state.bb;if(bb.selectedCard==null)return;const id=bb.hand[bb.selectedCard],card=ROSTER.find(r=>r.id===id);if(bb.elixir<card.elixir){bbLog(`Not enough elixir!`);return}sfxDeploy();bb.elixir-=card.elixir;bb.hand.splice(bb.selectedCard,1);drawCards('ply',1);bb.deploysCount++;const unit=buildUnit(card,'ply',lane);bb.zones.ply[0][lane].push(unit);bb.selectedCard=null;bbLog(`Deployed <b>${card.n}</b> to your Back ${'AB'[lane]} (–${card.elixir}⚡).`);refreshBoard()}
+async function endDeployPhase(){const bb=state.bb;if(bb.busy)return;bb.busy=true;bb.phase='advance';bbLog('Units advance!');await sleep(600);for(let l=0;l<2;l++){bb.zones.ply[1][l].push(...bb.zones.ply[0][l]);bb.zones.ply[0][l]=[];bb.zones.foe[1][l].push(...bb.zones.foe[0][l]);bb.zones.foe[0][l]=[];const both=[...bb.zones.ply[1][l],...bb.zones.foe[1][l]];if(bb.zones.ply[1][l].length>0&&bb.zones.foe[1][l].length>0){bb.neutral[l].push(...both);bb.zones.ply[1][l]=[];bb.zones.foe[1][l]=[]}}refreshBoard();await sleep(800);bb.phase='combat';bbLog('Combat!');await sleep(600);for(let l=0;l<2;l++){const arr=bb.neutral[l];for(let i=0;i<arr.length;i++)for(let j=i+1;j<arr.length;j++){if(arr[i].side!==arr[j].side&&arr[i].wounds<arr[i].woundsMax&&arr[j].wounds<arr[j].woundsMax){const r1=Math.floor(Math.random()*20)+1,r2=Math.floor(Math.random()*20)+1;if(r1>r2){arr[j].wounds++;bb.dmgDealt+=arr[i].side==='ply'?1:0}else if(r2>r1){arr[i].wounds++;bb.dmgDealt+=arr[j].side==='ply'?1:0}}}for(let i=arr.length-1;i>=0;i--)if(arr[i].wounds>=arr[i].woundsMax)arr.splice(i,1)}refreshBoard();await sleep(800);bb.phase='tower';for(let l=0;l<2;l++){const allies=bb.neutral[l].filter(u=>u.side==='ply');const foes=bb.neutral[l].filter(u=>u.side==='foe');if(foes.length===0&&allies.length>0&&bb.towers.foe[l]>0){bb.towers.foe[l]--;bb.dmgDealt++;bbLog(`Tower ${'AB'[l]} hit!`)}if(allies.length===0&&foes.length>0&&bb.towers.ply[l]>0){bb.towers.ply[l]--;bbLog(`Your tower ${'AB'[l]} hit!`)}}if(bb.towers.foe.every(t=>t<=0))bb.king.foe=Math.max(0,bb.king.foe-1);if(bb.towers.ply.every(t=>t<=0))bb.king.ply=Math.max(0,bb.king.ply-1);refreshBoard();await sleep(700);if(checkBoardWin()){bb.busy=false;return}bb.phase='end';bb.turn++;bb.elixir=Math.min(10,bb.elixir+3);bb.foeElixir=Math.min(10,bb.foeElixir+(state.storyBoss?.bonus.includes('+2 elixir')?2:3));await foeDeployTurn();bb.phase='deploy';bb.busy=false;refreshBoard()}
+async function foeDeployTurn(){const bb=state.bb;bb.whoseTurn='foe';refreshBoard();await sleep(800);let attempts=0;while(bb.foeElixir>=2&&attempts<6){const playable=bb.foeHand.map((id,idx)=>{const c=ROSTER.find(r=>r.id===id);return c&&c.elixir<=bb.foeElixir?{id,idx,c}:null}).filter(Boolean);if(playable.length===0)break;const choice=playable[Math.floor(Math.random()*playable.length)];const lane=Math.floor(Math.random()*2);bb.foeElixir-=choice.c.elixir;bb.foeHand.splice(choice.idx,1);drawCards('foe',1);const unit=buildUnit(choice.c,'foe',lane);bb.zones.foe[0][lane].push(unit);bbLog(`Foe deployed <b>${choice.c.n}</b>.`);refreshBoard();await sleep(500);attempts++}bb.whoseTurn='ply';refreshBoard()}
+function checkBoardWin(){const bb=state.bb;if(bb.king.foe<=0){recordWin('bb');addDmg(bb.dmgDealt);if(state.storyBoss){const p=getStoryProgress();const idx=BOSSES.findIndex(b=>b.id===state.storyBoss.id);if(idx>=0&&idx===p.cleared){p.cleared++;setStoryProgress(p);const s=getStats();s.storyCleared=p.cleared;setStats(s)}}sfxVictory();showEnd(true,'You defeated their King!',[{k:'TURNS',v:bb.turn},{k:'DMG',v:bb.dmgDealt}]);return true}if(bb.king.ply<=0){recordLoss('bb');sfxDefeat();showEnd(false,'Your King has fallen.',[{k:'TURNS',v:bb.turn}]);return true}return false}
+function quitBoard(){if(state.bb&&state.bb.busy)return;sfxClick();goScreenInner('home')}
+
+function showEnd(win,sub,stats){const o=$('endOverlay');$('endTitle').textContent=win?'VICTORY!':'DEFEAT';$('endTitle').className='end-title '+(win?'win':'lose');$('endSub').textContent=sub;$('eogStats').innerHTML=stats.map(s=>`<div class="eog-stat"><div class="k">${s.k}</div><div class="v">${s.v}</div></div>`).join('');o.classList.add('on')}
+function endNext(){$('endOverlay').classList.remove('on');if(state.mode==='tb'||(state.bb&&!state.storyBoss))openSelect(state.mode||'tb');else goScreenInner('story')}
+function endHome(){$('endOverlay').classList.remove('on');state.storyBoss=null;goScreenInner('home')}
+</script>
+
+<!-- v6 — spell sync -->
+<script>
+(function(){function init(){if(typeof ROSTER==='undefined'||typeof refreshBoard!=='function'){setTimeout(init,150);return}if(window._spellSyncInited)return;window._spellSyncInited=true;const SP={'lightsaber spell':'damage','force push spell':'pull','force lightning spell':'damage','force heal spell':'heal'};const SW={'lightsaber spell':3,'force push spell':0,'force lightning spell':4,'force heal spell':2};const NS=[{id:'spl_saber',n:'LIGHTSABER',fb:'⚔',t:'jedi',elixir:3,hp:80,atk:60,def:50,spd:99,spdIcon:'⚡',isSpell:true,spellType:'damage',spellW:3,moves:['Saber Throw']},{id:'spl_push',n:'FORCE PUSH',fb:'💨',t:'jedi',elixir:1,hp:80,atk:30,def:30,spd:90,spdIcon:'⚡',isSpell:true,spellType:'pull',spellW:0,moves:['Push']},{id:'spl_lightning',n:'FORCE LIGHTNING',fb:'⚡',t:'sith',elixir:4,hp:80,atk:90,def:50,spd:99,spdIcon:'⚡',isSpell:true,spellType:'damage',spellW:4,moves:['Lightning']},{id:'spl_heal',n:'BACTA INFUSION',fb:'💚',t:'jedi',elixir:2,hp:80,atk:30,def:50,spd:60,spdIcon:'🧍',isSpell:true,spellType:'heal',spellW:2,moves:['Heal']}];function syncSpells(){if(!Array.isArray(ROSTER))return;NS.forEach(s=>{if(!ROSTER.find(c=>c.id===s.id))ROSTER.push(s)})}syncSpells();const _origRefresh=refreshBoard;window.refreshBoard=function(){syncSpells();_origRefresh.apply(this,arguments)};setInterval(syncSpells,2000)}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init()})();
+</script>
+
+<!-- v7 — fix spell targeting + spell card description + type fallbacks -->
+<style>
+.bb-hand-card.is-spell .uw-mini{background:rgba(124,58,237,.25)!important;border:1px solid #a855f7!important;border-radius:6px;padding:1px 3px;text-align:center}
+.bb-hand-card.is-spell{box-shadow:0 0 8px rgba(168,85,247,.5),inset 0 0 6px rgba(168,85,247,.2)}
+@keyframes spell-flash{0%{opacity:0;transform:scale(.5)}40%{opacity:1;transform:scale(1.2)}100%{opacity:0;transform:scale(1.5)}}
+</style>
+<script>
+(function(){
+  function init(){
+    if(typeof state==='undefined'||typeof refreshBoard!=='function'||typeof ROSTER==='undefined'){setTimeout(init,150);return}
+    if(window._v7Inited)return;window._v7Inited=true;
+    const SPELL_DESC={damage:'⚔ DEAL DMG',heal:'💚 HEAL ALLY',pull:'🌪 PUSH BACK',splash:'💥 LANE AOE',freeze:'🧊 FREEZE 2T',buff:'🔥 RAGE BUFF'};
+    function decorateSpellCards(){
+      document.querySelectorAll('#bbHand .bb-hand-card').forEach((cardEl,idx)=>{
+        const id=state.bb&&state.bb.hand?state.bb.hand[idx]:null;
+        const card=id?ROSTER.find(r=>r.id===id):null;
+        if(!card||!card.isSpell)return;
+        cardEl.classList.add('is-spell');
+        const uwMini=cardEl.querySelector('.uw-mini');
+        if(uwMini){
+          const desc=SPELL_DESC[card.spellType]||'✨ SPELL';
+          const w=card.spellW||0;
+          uwMini.innerHTML='<span style="color:#fbbf24;font-size:8px;font-weight:700">'+desc+(w>0?' '+w+'w':'')+'</span>';
+        }
+      });
+    }
+    const _origRefresh=refreshBoard;
+    window.refreshBoard=function(){_origRefresh.apply(this,arguments);decorateSpellCards()};
+    decorateSpellCards();
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+</body>
+</html>

@@ -161,6 +161,14 @@ body{
 .gcard.clash .ico{background:radial-gradient(circle,#FFB81C,#5a3a00);border-radius:24px;transform:rotate(-3deg)}
 .gcard.clash .nm{color:#FFB81C}
 
+.gcard.starwars{background:linear-gradient(135deg,#000000,#0a0a2a)}
+.gcard.starwars .ico{background:radial-gradient(circle,#3B82F6,#000);border-color:#FFE81F}
+.gcard.starwars .nm{color:#FFE81F;text-shadow:0 0 12px rgba(59,130,246,.6)}
+
+.gcard.nba{background:linear-gradient(135deg,#1a0e05,#3a2418)}
+.gcard.nba .ico{background:radial-gradient(circle,#F97316,#7c1d10);border-color:#FDB927}
+.gcard.nba .nm{color:#FDB927}
+
 .gcard.coming{
   background:linear-gradient(135deg,#0f0f0f,#1a1a1a);
   border:2px dashed var(--bdr);
@@ -224,9 +232,9 @@ body{
   .gcard .body{padding:18px 14px;min-height:110px}
 }
 
-/* === V4 LAYOUT: compact 2x2 grid, no scrolling === */
-html,body{height:100vh;height:100dvh;overflow:hidden}
-.wrap{padding:14px 12px 16px;max-width:520px;height:100%;display:flex;flex-direction:column;justify-content:space-between}
+/* === V5 LAYOUT: compact 2x3 grid (6 worlds), allow scroll if needed === */
+html,body{min-height:100vh;min-height:100dvh;overflow-x:hidden;overflow-y:auto}
+.wrap{padding:14px 12px 16px;max-width:520px;min-height:100%;display:flex;flex-direction:column;justify-content:space-between}
 .hero{padding:8px 12px 4px;margin-bottom:8px}
 .hero-icon{width:60px;height:60px;font-size:28px;margin-bottom:6px;border-width:3px}
 .hero-title{font-size:1.85rem;letter-spacing:4px;margin-bottom:2px}
@@ -353,25 +361,43 @@ html,body{height:100vh;height:100dvh;overflow:hidden}
       </div>
     </a>
 
-    <div class="gcard coming">
+    <a class="gcard starwars" href="./story-edition/starwars-full.html" data-game="starwars">
       <div class="body">
-        <div class="ico">🌌</div>
+        <div class="ico">⚔</div>
         <div class="text">
-          <div class="nm">MORE WORLDS COMING SOON</div>
-          <div class="sub">Star Wars · Avatar · Fortnite · ?</div>
+          <div class="nm">STAR WARS ARENA</div>
+          <div class="sub">Jedi vs. Sith — galactic showdown</div>
           <div class="modes">
-            <span class="mode">🔒 LOCKED</span>
+            <span class="mode">⚔️ TURN</span>
+            <span class="mode">🃏 BOARD</span>
+            <span class="mode">📖 STORY</span>
           </div>
         </div>
-        <div class="arrow">⏳</div>
+        <div class="arrow">›</div>
       </div>
-    </div>
+    </a>
+
+    <a class="gcard nba" href="./story-edition/nba-full.html" data-game="nba">
+      <div class="body">
+        <div class="ico">🏀</div>
+        <div class="text">
+          <div class="nm">NBA ARENA</div>
+          <div class="sub">Hoops legends — court battles</div>
+          <div class="modes">
+            <span class="mode">⚔️ 1V1</span>
+            <span class="mode">🏀 COURT</span>
+            <span class="mode">🏆 GOAT</span>
+          </div>
+        </div>
+        <div class="arrow">›</div>
+      </div>
+    </a>
   </div>
 
   <div class="foot">
     <div class="stats">
       <div class="stat"><span class="v" id="statPlays">0</span><span class="k">SESSIONS</span></div>
-      <div class="stat"><span class="v" id="statGames">4</span><span class="k">WORLDS</span></div>
+      <div class="stat"><span class="v" id="statGames">6</span><span class="k">WORLDS</span></div>
       <div class="stat"><span class="v" id="statLast">—</span><span class="k">LAST WORLD</span></div>
     </div>
     <div class="ver">ARENA HUB · v1.0 · LOCAL SAVE</div>
@@ -441,7 +467,9 @@ function showProfileModal(){
     {key:'pokemon-arena-full',name:'POKEMON',ico:'⚡',color:'#FFCB05'},
     {key:'marvel-arena-full',name:'MARVEL',ico:'🦸',color:'#EE1515'},
     {key:'smash-arena-full',name:'SUPER SMASH',ico:'⚔️',color:'#FFD700'},
-    {key:'clash-arena-full',name:'CLASH',ico:'👑',color:'#FFB81C'}
+    {key:'clash-arena-full',name:'CLASH',ico:'👑',color:'#FFB81C'},
+    {key:'starwars-arena-full',name:'STAR WARS',ico:'⚔',color:'#FFE81F'},
+    {key:'nba-arena-full',name:'NBA',ico:'🏀',color:'#FDB927'}
   ];
   let total={tbWins:0,tbLosses:0,bbWins:0,bbLosses:0,dmg:0,turns:0,story:0,name:''};
   const data=games.map(g=>{let st={},prof={};try{const s=JSON.parse(localStorage.getItem(g.key))||{};st=s.stats||{};prof=s.profile||{}}catch(e){}const tbW=st.tbWins||0,tbL=st.tbLosses||0,bbW=st.bbWins||0,bbL=st.bbLosses||0;total.tbWins+=tbW;total.tbLosses+=tbL;total.bbWins+=bbW;total.bbLosses+=bbL;total.dmg+=st.totalDmg||0;total.turns+=st.totalTurns||0;total.story+=st.storyCleared||0;if(prof.name&&!total.name)total.name=prof.name;return{...g,tbW,tbL,bbW,bbL,dmg:st.totalDmg||0,turns:st.totalTurns||0,story:st.storyCleared||0,name:prof.name||''}});

@@ -8,6 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Clash Arena">
 <meta name="theme-color" content="#1a0820">
+<link rel="manifest" href="../manifest.json">
 <title>Clash Arena — Full Edition</title>
 <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
@@ -880,7 +881,20 @@ renderRoster();
 // ===== AUTO-FULLSCREEN on first tap =====
 (function(){
   const inStandalone=window.navigator.standalone||window.matchMedia('(display-mode: standalone)').matches||window.matchMedia('(display-mode: fullscreen)').matches;
-  if(inStandalone)return;
+  if(inStandalone){
+    document.addEventListener('click',function(e){
+      let t=e.target;while(t&&t.tagName!=='A')t=t.parentElement;
+      if(!t)return;
+      const href=t.getAttribute('href');
+      if(!href||href.startsWith('#')||href.startsWith('mailto:')||href.startsWith('tel:')||href.startsWith('javascript:'))return;
+      if(t.target==='_blank')return;
+      try{const u=new URL(t.href);if(u.origin!==location.origin)return}catch(_){return}
+      e.preventDefault();
+      const dest=t.href;
+      setTimeout(function(){window.location.href=dest},0);
+    },true);
+    return;
+  }
   const ua=navigator.userAgent;
   const isIOS=/iPhone|iPad|iPod/.test(ua)&&!window.MSStream;
   const isAndroidChrome=/Android/.test(ua)&&/Chrome/.test(ua);

@@ -8,6 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Arena Hub">
 <meta name="theme-color" content="#06080F">
+<link rel="manifest" href="./manifest.json">
 <title>ARENA HUB — Pick a World</title>
 <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
@@ -387,7 +388,24 @@ if('serviceWorker' in navigator){ /* no-op for static hosting */ }
 //  - Uses beforeinstallprompt for one-tap install on Android Chrome
 (function(){
   const inStandalone=window.navigator.standalone||window.matchMedia('(display-mode: standalone)').matches||window.matchMedia('(display-mode: fullscreen)').matches;
-  if(inStandalone)return;
+  if(inStandalone){
+    // CAPTURE-phase handler — runs before browser's default link action AND before any
+    // bubble-phase handlers. setTimeout defers navigation so other listeners (analytics)
+    // get a chance to run first. This is the most reliable way to keep iOS PWAs in
+    // standalone mode when navigating between pages.
+    document.addEventListener('click',function(e){
+      let t=e.target;while(t&&t.tagName!=='A')t=t.parentElement;
+      if(!t)return;
+      const href=t.getAttribute('href');
+      if(!href||href.startsWith('#')||href.startsWith('mailto:')||href.startsWith('tel:')||href.startsWith('javascript:'))return;
+      if(t.target==='_blank')return;
+      try{const u=new URL(t.href);if(u.origin!==location.origin)return}catch(_){return}
+      e.preventDefault();
+      const dest=t.href;
+      setTimeout(function(){window.location.href=dest},0);
+    },true);
+    return;
+  }
   const ua=navigator.userAgent;
   const isIOS=/iPhone|iPad|iPod/.test(ua)&&!window.MSStream;
   const isAndroidChrome=/Android/.test(ua)&&/Chrome/.test(ua);

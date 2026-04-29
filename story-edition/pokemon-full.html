@@ -917,9 +917,32 @@ renderRoster();
 </style>
 <script>
 (function(){
-  function tryFs(){const el=document.documentElement;const req=el.requestFullscreen||el.webkitRequestFullscreen||el.mozRequestFullScreen||el.msRequestFullscreen;if(!document.fullscreenElement&&!document.webkitFullscreenElement&&req){try{const p=req.call(el);if(p&&p.catch)p.catch(()=>{})}catch(e){}}}
-  let armed=true;function once(){if(!armed)return;armed=false;tryFs();document.removeEventListener('click',once);document.removeEventListener('touchstart',once)}
-  document.addEventListener('click',once,{passive:true});document.addEventListener('touchstart',once,{passive:true});
+  const inStandalone=window.navigator.standalone||window.matchMedia('(display-mode: standalone)').matches||window.matchMedia('(display-mode: fullscreen)').matches;
+  if(inStandalone)return;
+  const ua=navigator.userAgent;
+  const isIOS=/iPhone|iPad|iPod/.test(ua)&&!window.MSStream;
+  const isAndroidChrome=/Android/.test(ua)&&/Chrome/.test(ua);
+  let bipe=null;
+  window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();bipe=e;maybeShowBanner()});
+  function tryFs(){const el=document.documentElement;const req=el.requestFullscreen||el.webkitRequestFullscreen||el.mozRequestFullScreen||el.msRequestFullscreen;if(!document.fullscreenElement&&!document.webkitFullscreenElement&&req){try{const p=req.call(el);if(p&&p.catch)p.catch(()=>maybeShowBanner())}catch(e){maybeShowBanner()}}}
+  function tap(){if(isIOS)maybeShowBanner();else{tryFs();setTimeout(maybeShowBanner,1800)}}
+  document.addEventListener('click',tap,{once:true,passive:true});
+  document.addEventListener('touchstart',tap,{once:true,passive:true});
+  if(isIOS)setTimeout(maybeShowBanner,1800);
+  function maybeShowBanner(){
+    if(localStorage.getItem('pwaPromptDismissed_v1'))return;
+    if(document.getElementById('pwaBanner'))return;
+    const b=document.createElement('div');b.id='pwaBanner';
+    b.style.cssText='position:fixed;left:8px;right:8px;bottom:max(8px,env(safe-area-inset-bottom));background:linear-gradient(135deg,#1f1830,#0a0a18);border:2px solid #ffcb05;border-radius:14px;padding:12px 14px;color:#fff;font-family:\'Black Ops One\',cursive;z-index:99999;box-shadow:0 8px 32px rgba(0,0,0,.6)';
+    let inst='';
+    if(isIOS)inst='<div style="font-size:10px;opacity:.9;margin-top:5px;line-height:1.45">iPhone Safari blocks fullscreen by default. Tap <b style="color:#ffcb05">⬆ Share</b> at the bottom of the screen → <b style="color:#ffcb05">Add to Home Screen</b> to play with NO browser bars.</div>';
+    else if(isAndroidChrome){if(bipe)inst='<button id="pwaInstall" style="margin-top:8px;padding:8px 14px;background:#ffcb05;color:#000;border:none;border-radius:8px;font-family:Black Ops One,cursive;font-size:11px;cursor:pointer;letter-spacing:1px">⬇ INSTALL APP</button>';else inst='<div style="font-size:10px;opacity:.9;margin-top:5px;line-height:1.45">Tap <b style="color:#ffcb05">⋮ menu</b> → <b style="color:#ffcb05">Install app</b> or <b style="color:#ffcb05">Add to Home screen</b> for fullscreen play.</div>'}
+    else inst='<div style="font-size:10px;opacity:.9;margin-top:5px;line-height:1.45">Add this page to your Home Screen for true fullscreen play.</div>';
+    b.innerHTML='<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px"><div style="flex:1;min-width:0"><div style="color:#ffcb05;font-size:12px;letter-spacing:1.5px">📱 GO FULLSCREEN</div>'+inst+'</div><button id="pwaClose" style="background:transparent;border:1px solid rgba(255,255,255,.5);color:#fff;border-radius:6px;width:28px;height:28px;font-size:14px;cursor:pointer;flex-shrink:0;font-family:inherit">✕</button></div>';
+    document.body.appendChild(b);
+    document.getElementById('pwaClose').onclick=()=>{b.remove();try{localStorage.setItem('pwaPromptDismissed_v1','1')}catch(e){}};
+    const ib=document.getElementById('pwaInstall');if(ib&&bipe)ib.onclick=async()=>{try{bipe.prompt();await bipe.userChoice;b.remove()}catch(e){}};
+  }
 })();
 
 (function(){

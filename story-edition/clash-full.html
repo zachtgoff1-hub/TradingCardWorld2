@@ -2084,5 +2084,139 @@ html{background:var(--bg,#06080F)!important}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
 </script>
+<!-- v7 — fix spell targeting + spell card description + type fallbacks -->
+<style>
+.bb-hand-card.is-spell .uw-mini{background:rgba(124,58,237,.25)!important;border:1px solid #a855f7!important;border-radius:6px;padding:1px 3px;text-align:center}
+.bb-hand-card.is-spell{box-shadow:0 0 8px rgba(168,85,247,.5),inset 0 0 6px rgba(168,85,247,.2)}
+@keyframes spell-flash{0%{opacity:0;transform:scale(.5)}40%{opacity:1;transform:scale(1.2)}100%{opacity:0;transform:scale(1.5)}}
+</style>
+<script>
+(function(){
+  function init(){
+    if(typeof state==='undefined'||typeof refreshBoard!=='function'||typeof ROSTER==='undefined'){setTimeout(init,150);return}
+    if(window._v7Inited)return;window._v7Inited=true;
+    const FBI={electric:'⚡',normal:'⭐',flying:'🪶',ground:'🌋',fire:'🔥',water:'💧',grass:'🌿',ice:'❄️',psychic:'🔮',dark:'🌑',rock:'🪨',ghost:'👻',dragon:'🐉',steel:'⚙️',poison:'☠️',fairy:'🧚',fighting:'💪',bug:'🐛',tech:'🔧',mutant:'🧬',cosmic:'✨',soldier:'🪖',magic:'🔮',speedster:'💨',symbiote:'🖤',mystic:'🔮',brawler:'👊',sword:'⚔️',zoner:'🏹',trickster:'🎭',knight:'🛡️',archer:'🏹',mage:'🔮',beast:'🐺',air:'🦅',building:'🏛️'};
+    const FBN={electric:'ELECTRIC',normal:'NORMAL',flying:'FLYING',ground:'GROUND',fire:'FIRE',water:'WATER',grass:'GRASS',ice:'ICE',psychic:'PSYCHIC',dark:'DARK',rock:'ROCK',ghost:'GHOST',dragon:'DRAGON',steel:'STEEL',poison:'POISON',fairy:'FAIRY',fighting:'FIGHT',bug:'BUG',tech:'TECH',mutant:'MUTANT',cosmic:'COSMIC',soldier:'SOLDIER',magic:'MAGIC',speedster:'SPEED',symbiote:'SYMBIOTE',mystic:'MYSTIC',brawler:'BRAWLER',sword:'SWORD',zoner:'ZONER',trickster:'TRICK',knight:'KNIGHT',archer:'ARCHER',mage:'MAGE',beast:'BEAST',air:'AIR',building:'BUILDING'};
+    if(typeof TYPE_ICONS!=='undefined'){for(const k in FBI)if(!TYPE_ICONS[k])TYPE_ICONS[k]=FBI[k]}
+    if(typeof TYPE_NAMES!=='undefined'){for(const k in FBN)if(!TYPE_NAMES[k])TYPE_NAMES[k]=FBN[k]}
+    const SPELL_DESC={damage:'⚔ DEAL DMG',rocket:'🚀 BIG DMG',lightning:'⚡ CHAIN DMG',splash:'💥 LANE AOE',freeze:'🧊 FREEZE 2T',pull:'🌪 PUSH BACK',heal:'💚 HEAL ALLY',buff:'🔥 RAGE BUFF',summon:'💀 SUMMON'};
+    let unitMap=[];
+    function rebuildUnitMap(){
+      unitMap.length=0;const bb=state.bb;if(!bb||!bb.zones||!bb.neutral)return;
+      [0,1].forEach(l=>(bb.zones.foe[0][l]||[]).forEach(u=>unitMap.push({u,lane:l})));
+      [0,1].forEach(l=>(bb.zones.foe[1][l]||[]).forEach(u=>unitMap.push({u,lane:l})));
+      [0,1].forEach(l=>(bb.neutral[l]||[]).forEach(u=>unitMap.push({u,lane:l})));
+      [0,1].forEach(l=>(bb.zones.ply[1][l]||[]).forEach(u=>unitMap.push({u,lane:l})));
+      [0,1].forEach(l=>(bb.zones.ply[0][l]||[]).forEach(u=>unitMap.push({u,lane:l})));
+      document.querySelectorAll('#bbBoard .bb-unit').forEach((el,i)=>{el.dataset.unitIdx=i});
+    }
+    function findClickedTarget(el){
+      const bb=state.bb;
+      if(el.classList.contains('bb-king'))return{type:'king',side:el.classList.contains('foe')?'foe':'ply'};
+      if(el.classList.contains('bb-tower')){const row=el.parentElement;const idx=Array.from(row.children).indexOf(el);return{type:'tower',lane:idx,side:el.classList.contains('foe')?'foe':'ply'}}
+      if(el.classList.contains('bb-unit')){const i=parseInt(el.dataset.unitIdx);if(!isNaN(i)&&unitMap[i])return{type:'unit',unit:unitMap[i].u,lane:unitMap[i].lane,side:unitMap[i].u.side}}
+      return null;
+    }
+    function flashAt(el,type){
+      const colors={damage:'rgba(220,38,38,.85)',lightning:'rgba(255,215,0,.95)',rocket:'rgba(220,38,38,.95)',splash:'rgba(245,101,39,.85)',freeze:'rgba(34,211,238,.85)',pull:'rgba(168,85,247,.85)',heal:'rgba(34,197,94,.85)',buff:'rgba(255,215,0,.7)',summon:'rgba(120,120,120,.7)'};
+      const fx=document.createElement('div');const r=el.getBoundingClientRect();
+      fx.style.cssText='position:fixed;left:'+r.left+'px;top:'+r.top+'px;width:'+r.width+'px;height:'+r.height+'px;pointer-events:none;z-index:9999;animation:spell-flash 0.7s ease-out forwards;border-radius:14px;background:radial-gradient(circle,'+(colors[type]||colors.damage)+',transparent 60%)';
+      document.body.appendChild(fx);setTimeout(()=>{if(fx.parentNode)fx.remove()},750);
+    }
+    function removeDeadUnit(unit){
+      const bb=state.bb;const arrs=[bb.neutral[0],bb.neutral[1],bb.zones.foe[0][0],bb.zones.foe[0][1],bb.zones.foe[1][0],bb.zones.foe[1][1],bb.zones.ply[0][0],bb.zones.ply[0][1],bb.zones.ply[1][0],bb.zones.ply[1][1]];
+      arrs.forEach(arr=>{if(!arr)return;const i=arr.indexOf(unit);if(i>=0)arr.splice(i,1)});
+    }
+    async function applyEffect(card,tgt){
+      const bb=state.bb;const w=card.spellW||2;const log=typeof bbLog==='function'?bbLog:()=>{};
+      switch(card.spellType){
+        case 'damage':case 'rocket':case 'lightning':
+          if(tgt.type==='unit'){tgt.unit.wounds=Math.min(tgt.unit.woundsMax,tgt.unit.wounds+w);bb.dmgDealt=(bb.dmgDealt||0)+w;log('🔥 '+w+'w to '+tgt.unit.n);if(tgt.unit.wounds>=tgt.unit.woundsMax){log('☠ '+tgt.unit.n+' KO!');removeDeadUnit(tgt.unit)}}
+          else if(tgt.type==='tower'){bb.towers[tgt.side][tgt.lane]=Math.max(0,bb.towers[tgt.side][tgt.lane]-w);bb.dmgDealt=(bb.dmgDealt||0)+w;log('💥 Tower hit '+w+'!')}
+          else if(tgt.type==='king'){bb.king[tgt.side]=Math.max(0,bb.king[tgt.side]-w);bb.dmgDealt=(bb.dmgDealt||0)+w;log('💥 KING '+w+'!')}
+          break;
+        case 'splash':
+          if(tgt.type==='unit'){
+            const lane=tgt.lane;const targets=[];
+            (bb.neutral[lane]||[]).forEach(u=>{if(u.side==='foe')targets.push(u)});
+            (bb.zones.foe[0][lane]||[]).forEach(u=>targets.push(u));
+            (bb.zones.foe[1][lane]||[]).forEach(u=>targets.push(u));
+            targets.forEach(u=>{if(u.wounds<u.woundsMax){u.wounds=Math.min(u.woundsMax,u.wounds+w);bb.dmgDealt=(bb.dmgDealt||0)+w}});
+            log('💥 Lane '+'AB'[lane]+' splash '+w+'w!');
+            targets.forEach(u=>{if(u.wounds>=u.woundsMax)removeDeadUnit(u)});
+          }else if(tgt.type==='tower'){bb.towers[tgt.side][tgt.lane]=Math.max(0,bb.towers[tgt.side][tgt.lane]-w);log('💥 Tower splash')}
+          break;
+        case 'freeze':
+          if(tgt.type==='unit'){if(!bb.statusEffects)bb.statusEffects=[];bb.statusEffects.push({type:'frozen',target:tgt.unit,ttl:2});log('🧊 '+tgt.unit.n+' frozen 2T!')}
+          break;
+        case 'pull':
+          if(tgt.type==='unit'){let moved=false;for(let l=0;l<2;l++){const i=(bb.neutral[l]||[]).indexOf(tgt.unit);if(i>=0){bb.neutral[l].splice(i,1);bb.zones.foe[1][l].push(tgt.unit);log('🌪 '+tgt.unit.n+' pushed!');moved=true;break}}if(!moved)log('🌪 '+tgt.unit.n+' staggered!')}
+          break;
+        case 'heal':
+          if(tgt.type==='unit'){tgt.unit.wounds=Math.max(0,tgt.unit.wounds-w);log('💚 '+tgt.unit.n+' healed '+w+'w!')}
+          else if(tgt.type==='tower'){bb.towers.ply[tgt.lane]=Math.min(5,bb.towers.ply[tgt.lane]+w);log('💚 Tower healed!')}
+          else if(tgt.type==='king'){bb.king.ply=Math.min(8,bb.king.ply+w);log('💚 King healed!')}
+          break;
+        case 'buff':
+          if(tgt.type==='unit'){if(!bb.statusEffects)bb.statusEffects=[];bb.statusEffects.push({type:'rage',target:tgt.unit,ttl:2});log('🔥 '+tgt.unit.n+' RAGE!')}
+          break;
+        case 'summon':
+          {const lane=tgt.lane||0;if(typeof buildUnit==='function'){const skel=buildUnit({id:'sum_'+Date.now(),n:'Summon',fb:'💀',t:'beast',hp:80,atk:50,def:40,spd:80,elixir:0,spdIcon:'⚡',moves:[]},'ply',lane);bb.zones.ply[1][lane].push(skel);log('💀 Summoned ally!')}}
+          break;
+      }
+      if(typeof sleep==='function')await sleep(400);
+    }
+    async function myCastSpell(card,el,idx){
+      const bb=state.bb;if(bb.busy)return;
+      if(bb.elixir<card.elixir){if(typeof bbLog==='function')bbLog('⚡ Need '+card.elixir+' elixir');return}
+      bb.busy=true;bb.elixir-=card.elixir;
+      bb.hand.splice(idx,1);bb.selectedCard=null;
+      bb.deploysCount=(bb.deploysCount||0)+1;
+      if(typeof bbLog==='function')bbLog('✨ <b>'+card.n+'</b> cast!');
+      if(typeof sfxDeploy==='function')sfxDeploy();
+      try{flashAt(el,card.spellType)}catch(e){}
+      const tgt=findClickedTarget(el);
+      if(tgt)await applyEffect(card,tgt);
+      const tip=document.getElementById('spellTip');if(tip)tip.remove();
+      bb.busy=false;
+      if(typeof drawCards==='function')drawCards('ply',1);
+      if(typeof checkBoardWin==='function'&&checkBoardWin())return;
+      refreshBoard();
+    }
+    function decorateSpellCards(){
+      document.querySelectorAll('#bbHand .bb-hand-card').forEach((cardEl,idx)=>{
+        const id=state.bb&&state.bb.hand?state.bb.hand[idx]:null;
+        const card=id?ROSTER.find(r=>r.id===id):null;
+        if(!card||!card.isSpell)return;
+        cardEl.classList.add('is-spell');
+        const uwMini=cardEl.querySelector('.uw-mini');
+        if(uwMini){
+          const desc=SPELL_DESC[card.spellType]||'✨ SPELL';
+          const w=card.spellW||0;
+          const wText=w>0?(' '+w+'w'):'';
+          uwMini.innerHTML='<span style="color:#fbbf24;font-size:8px;letter-spacing:.3px;font-weight:700">'+desc+wText+'</span>';
+        }
+      });
+    }
+    const _origRefresh=refreshBoard;
+    window.refreshBoard=function(){
+      _origRefresh.apply(this,arguments);
+      rebuildUnitMap();
+      decorateSpellCards();
+      const idx=state.bb&&state.bb.selectedCard;
+      if(idx!=null&&state.bb&&state.bb.hand){
+        const card=ROSTER.find(r=>r.id===state.bb.hand[idx]);
+        if(card&&card.isSpell){
+          document.querySelectorAll('.spell-target').forEach(el=>{
+            el.onclick=(e)=>{e.stopPropagation();myCastSpell(card,el,idx)};
+          });
+        }
+      }
+    };
+    rebuildUnitMap();decorateSpellCards();
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
 </body>
 </html>

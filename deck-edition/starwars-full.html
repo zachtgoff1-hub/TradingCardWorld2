@@ -217,7 +217,9 @@ body{background:radial-gradient(ellipse at top,#0a0a2a 0%,var(--bg) 60%);color:#
 .tc-row .arr{color:var(--gold);margin:4px 0}
 .section-h{font-family:'Black Ops One',cursive;color:var(--gold);font-size:var(--fs-base);margin:18px 0 10px}
 .txt-row{font-size:var(--fs-sm);color:var(--soft);line-height:1.7;margin-bottom:8px}
+.card-art-svg svg{width:100%;height:100%;display:block}
 </style>
+<script src="./assets/starwars/cards.js"></script>
 </head>
 <body>
 
@@ -391,7 +393,54 @@ function sfxDefeat(){tone(330,0.2,'triangle',0.15);setTimeout(()=>tone(247,0.2,'
 function $(id){return document.getElementById(id)}
 function goScreenInner(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));$(id).classList.add('on');if(id==='roster')renderRoster();if(id==='profile')renderProfile();if(id==='story')renderStory();if(id==='decks')renderDecks()}
 function goScreen(id){sfxClick();if(id==='quick-tb'){openSelect('tb');return}if(id==='quick-bb'){openSelect('bb');return}goScreenInner(id)}
-function artHTML(p){return `<span class="emoji">${p.fb||'❓'}</span>`}
+/* === STAR WARS card art === Tries: 1) real PNG/JPG override in assets/starwars/<id>.(png|jpg)
+   2) generated SVG from assets/starwars/cards.js  3) emoji fallback */
+window.STARWARS_OVERRIDES = window.STARWARS_OVERRIDES || {};
+/* Pre-populate from ../star_wars_chars/ folder (set when copied next to the deployed HTML by Setup-GitHub-Folder.bat) */
+Object.assign(window.STARWARS_OVERRIDES, {
+  yoda: '../star_wars_chars/004_Yoda.jpg',
+  luke: '../star_wars_chars/003_Luke_Skywalker.jpg',
+  obi: '../star_wars_chars/001_Obi-Wan_Kenobi.jpg',
+  mace: '../star_wars_chars/016_Mace_Windu.jpg',
+  vader: '../star_wars_chars/005_Darth_Vader.jpg',
+  palpatine: '../star_wars_chars/012_Emperor_Palpatine.jpg',
+  maul: '../star_wars_chars/007_Darth_Maul.png',
+  kylo: '../star_wars_chars/052_Kylo_Ren.jpg',
+  boba: '../star_wars_chars/013_Boba_Fett.jpg',
+  cad: '../star_wars_chars/031_Cad_Bane.jpg',
+  ig88: '../star_wars_chars/126_IG_88.jpg',
+  r2: '../star_wars_chars/006_R2-D2.jpg',
+  c3po: '../star_wars_chars/011_C-3PO.jpg',
+  bb8: '../star_wars_chars/054_BB-8.jpg',
+  leia: '../star_wars_chars/009_Princess_Leia.jpg',
+  han: '../star_wars_chars/002_Han_Solo.jpg',
+  chewie: '../star_wars_chars/008_Chewbacca.jpg',
+  lando: '../star_wars_chars/015_Lando_Calrissian.jpg',
+  tarkin: '../star_wars_chars/037_Grand_Moff_Tarkin.jpg'
+});
+function artHTML(p){
+  if(!p) return '<span class="emoji">❓</span>';
+  var id = p.id||'';
+  if(window.STARWARS_OVERRIDES[id]){
+    return '<img class="card-art" src="'+window.STARWARS_OVERRIDES[id]+'" alt="'+(p.n||id)+'" style="width:100%;height:100%;object-fit:cover;border-radius:inherit"/>';
+  }
+  if(window.STARWARS_CARDS && window.STARWARS_CARDS[id]){
+    return '<div class="card-art-svg" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;border-radius:inherit;overflow:hidden">'+window.STARWARS_CARDS[id].svg+'</div>';
+  }
+  return '<span class="emoji">'+(p.fb||'❓')+'</span>';
+}
+(function autoLoadStarwarsImages(){
+  if(!window.STARWARS_CARDS) return;
+  var ids = Object.keys(window.STARWARS_CARDS);
+  ids.forEach(function(id){
+    ['png','jpg','jpeg','webp'].forEach(function(ext){
+      var url = './assets/starwars/'+id+'.'+ext;
+      var img = new Image();
+      img.onload = function(){ window.STARWARS_OVERRIDES[id] = url; };
+      img.src = url;
+    });
+  });
+})();
 
 function buildHero(template,lv){lv=lv||5;const moves=(template.moves||[]).map(name=>{for(const t of TYPES){const m=MOVE_POOLS[t].find(x=>x.n===name);if(m)return{...m,ppMax:m.pp,ppNow:m.pp}}return{n:name,p:50,pp:20,ppMax:20,ppNow:20,t:template.t}});const scale=1+(lv-5)*0.04;return{id:template.id,n:template.n,fb:template.fb,t:template.t,lv,hpMax:Math.round(template.hp*scale),hp:Math.round(template.hp*scale),atk:Math.round(template.atk*scale),def:Math.round(template.def*scale),spd:template.spd,elixir:template.elixir||3,spdIcon:template.spdIcon||'🧍',wounds:0,woundsMax:Math.max(2,Math.min(7,Math.round(template.hp/40))),moves,fainted:false,effects:EFFECTS[template.id]||{},dmgDealt:0}}
 function rnd(a,b){return Math.random()*(b-a)+a}

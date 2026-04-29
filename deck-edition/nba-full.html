@@ -217,7 +217,9 @@ body{background:radial-gradient(ellipse at top,#3a2418 0%,var(--bg) 60%);color:#
 .tc-row .arr{color:var(--gold);margin:4px 0}
 .section-h{font-family:'Black Ops One',cursive;color:var(--gold);font-size:var(--fs-base);margin:18px 0 10px}
 .txt-row{font-size:var(--fs-sm);color:var(--soft);line-height:1.7;margin-bottom:8px}
+.card-art-svg svg{width:100%;height:100%;display:block}
 </style>
+<script src="./assets/nba/cards.js"></script>
 </head>
 <body>
 
@@ -391,7 +393,50 @@ function sfxDefeat(){tone(330,0.2,'triangle',0.15);setTimeout(()=>tone(247,0.2,'
 function $(id){return document.getElementById(id)}
 function goScreenInner(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));$(id).classList.add('on');if(id==='roster')renderRoster();if(id==='profile')renderProfile();if(id==='story')renderStory();if(id==='decks')renderDecks()}
 function goScreen(id){sfxClick();if(id==='quick-tb'){openSelect('tb');return}if(id==='quick-bb'){openSelect('bb');return}goScreenInner(id)}
-function artHTML(p){return `<span class="emoji">${p.fb||'❓'}</span>`}
+/* === NBA card art === Tries: 1) real PNG/JPG override in assets/nba/<id>.(png|jpg)
+   2) generated SVG from assets/nba/cards.js  3) emoji fallback */
+window.NBA_OVERRIDES = window.NBA_OVERRIDES || {};
+/* Pre-populate from ../ringer_nba/ folder (set when copied next to the deployed HTML by Setup-GitHub-Folder.bat) */
+Object.assign(window.NBA_OVERRIDES, {
+  curry: '../ringer_nba/011_Stephen_Curry.png',
+  doncic: '../ringer_nba/004_Luka_Doncic.png',
+  trae: '../ringer_nba/062_Trae_Young.png',
+  lebron: '../ringer_nba/021_LeBron_James.png',
+  giannis: '../ringer_nba/007_Giannis_Antetokounmpo.png',
+  durant: '../ringer_nba/013_Kevin_Durant.png',
+  tatum: '../ringer_nba/024_Jayson_Tatum.png',
+  embiid: '../ringer_nba/054_Joel_Embiid.png',
+  jokic: '../ringer_nba/002_Nikola_Jokic.png',
+  wemby: '../ringer_nba/003_Victor_Wembanyama.png',
+  booker: '../ringer_nba/015_Devin_Booker.png',
+  harden: '../ringer_nba/020_James_Harden.png',
+  zion: '../ringer_nba/050_Zion_Williamson.png',
+  ant: '../ringer_nba/006_Anthony_Edwards.png',
+  banchero: '../ringer_nba/031_Paolo_Banchero.png'
+});
+function artHTML(p){
+  if(!p) return '<span class="emoji">❓</span>';
+  var id = p.id||'';
+  if(window.NBA_OVERRIDES[id]){
+    return '<img class="card-art" src="'+window.NBA_OVERRIDES[id]+'" alt="'+(p.n||id)+'" style="width:100%;height:100%;object-fit:cover;border-radius:inherit"/>';
+  }
+  if(window.NBA_CARDS && window.NBA_CARDS[id]){
+    return '<div class="card-art-svg" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;border-radius:inherit;overflow:hidden">'+window.NBA_CARDS[id].svg+'</div>';
+  }
+  return '<span class="emoji">'+(p.fb||'❓')+'</span>';
+}
+(function autoLoadNbaImages(){
+  if(!window.NBA_CARDS) return;
+  var ids = Object.keys(window.NBA_CARDS);
+  ids.forEach(function(id){
+    ['png','jpg','jpeg','webp'].forEach(function(ext){
+      var url = './assets/nba/'+id+'.'+ext;
+      var img = new Image();
+      img.onload = function(){ window.NBA_OVERRIDES[id] = url; };
+      img.src = url;
+    });
+  });
+})();
 
 function buildHero(template,lv){lv=lv||5;const moves=(template.moves||[]).map(name=>{for(const t of TYPES){const m=MOVE_POOLS[t].find(x=>x.n===name);if(m)return{...m,ppMax:m.pp,ppNow:m.pp}}return{n:name,p:50,pp:20,ppMax:20,ppNow:20,t:template.t}});const scale=1+(lv-5)*0.04;return{id:template.id,n:template.n,fb:template.fb,t:template.t,lv,hpMax:Math.round(template.hp*scale),hp:Math.round(template.hp*scale),atk:Math.round(template.atk*scale),def:Math.round(template.def*scale),spd:template.spd,elixir:template.elixir||3,spdIcon:template.spdIcon||'🧍',wounds:0,woundsMax:Math.max(2,Math.min(7,Math.round(template.hp/40))),moves,fainted:false,effects:EFFECTS[template.id]||{},dmgDealt:0}}
 function rnd(a,b){return Math.random()*(b-a)+a}

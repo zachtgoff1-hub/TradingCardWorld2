@@ -331,37 +331,114 @@ const EFFECTS={
   banchero:{clash:'🌟 Rookie of year: bonus 1w'},
 };
 let ROSTER=[
-  {id:'curry',n:'Steph Curry',fb:'🎯',t:'guard',elixir:5,hp:230,atk:88,def:70,spd:90,spdIcon:'⚡',moves:['Step Back 3','Logo Three','Pull Up J','Crossover']},
-  {id:'doncic',n:'Luka Dončić',fb:'🪄',t:'guard',elixir:6,hp:250,atk:88,def:75,spd:80,spdIcon:'🧍',moves:['Step Back 3','Floater','Pull Up J','Behind Back']},
-  {id:'trae',n:'Trae Young',fb:'🟢',t:'guard',elixir:5,hp:220,atk:84,def:65,spd:88,spdIcon:'⚡',moves:['Logo Three','Floater','Step Back 3','Crossover']},
-  {id:'kyrie',n:'Kyrie Irving',fb:'🪄',t:'guard',elixir:5,hp:225,atk:85,def:70,spd:92,spdIcon:'⚡',moves:['Crossover','Pull Up J','Behind Back','Step Back 3']},
-  {id:'lebron',n:'LeBron James',fb:'👑',t:'forward',elixir:7,hp:290,atk:92,def:85,spd:80,spdIcon:'🧍',moves:['Slam Dunk','Drive Lane','Eurostep','Posterize']},
-  {id:'giannis',n:'Giannis',fb:'🇬🇷',t:'forward',elixir:7,hp:300,atk:95,def:88,spd:78,spdIcon:'🧍',moves:['Posterize','Slam Dunk','Drive Lane','Eurostep']},
-  {id:'durant',n:'Kevin Durant',fb:'🐍',t:'forward',elixir:6,hp:240,atk:92,def:75,spd:82,spdIcon:'🧍',moves:['Fadeaway','Slam Dunk','Drive Lane','Hook Shot']},
-  {id:'tatum',n:'Jayson Tatum',fb:'🍀',t:'forward',elixir:5,hp:240,atk:86,def:78,spd:82,spdIcon:'🧍',moves:['Fadeaway','Drive Lane','Eurostep','Slam Dunk']},
-  {id:'embiid',n:'Joel Embiid',fb:'😤',t:'center',elixir:6,hp:280,atk:90,def:88,spd:70,spdIcon:'🐢',moves:['Skyhook','Putback Slam','Block Shot','Boards']},
-  {id:'jokic',n:'Nikola Jokić',fb:'🐎',t:'center',elixir:7,hp:280,atk:88,def:88,spd:65,spdIcon:'🐢',moves:['Skyhook','Tip In','Rim Protect','Boards']},
-  {id:'davis',n:'Anthony Davis',fb:'🛡',t:'center',elixir:6,hp:260,atk:88,def:90,spd:75,spdIcon:'🧍',moves:['Block Shot','Skyhook','Putback Slam','Boards']},
-  {id:'wemby',n:'Wembanyama',fb:'👽',t:'center',elixir:6,hp:240,atk:92,def:85,spd:78,spdIcon:'🧍',moves:['Block Shot','Skyhook','Putback Slam','Tip In']},
-  {id:'booker',n:'Devin Booker',fb:'☀️',t:'star',elixir:5,hp:230,atk:86,def:72,spd:85,spdIcon:'⚡',moves:['Signature Move','Mamba Mentality','Clutch Three','Killer Instinct']},
-  {id:'lillard',n:'Damian Lillard',fb:'⏰',t:'star',elixir:6,hp:240,atk:88,def:72,spd:85,spdIcon:'⚡',moves:['Clutch Three','Take Over','Signature Move','Highlight']},
-  {id:'butler',n:'Jimmy Butler',fb:'🤘',t:'star',elixir:6,hp:250,atk:88,def:80,spd:80,spdIcon:'🧍',moves:['Take Over','Killer Instinct','Signature Move','Highlight']},
-  {id:'harden',n:'James Harden',fb:'🧔',t:'star',elixir:5,hp:235,atk:84,def:72,spd:80,spdIcon:'🧍',moves:['Signature Move','Highlight','Killer Instinct','Take Over']},
-  {id:'jordan',n:'Michael Jordan',fb:'🏆',t:'legend',elixir:8,hp:320,atk:100,def:90,spd:90,spdIcon:'⚡',moves:['GOAT Move','Championship','MVP Mode','Hall of Fame']},
-  {id:'kobe',n:'Kobe Bryant',fb:'🐍',t:'legend',elixir:7,hp:280,atk:95,def:82,spd:85,spdIcon:'⚡',moves:['Hall of Fame','Championship','MVP Mode','Old School']},
-  {id:'magic',n:'Magic Johnson',fb:'✨',t:'legend',elixir:6,hp:270,atk:88,def:80,spd:82,spdIcon:'🧍',moves:['MVP Mode','Hall of Fame','Banner Raised','Old School']},
-  {id:'bird',n:'Larry Bird',fb:'🦅',t:'legend',elixir:6,hp:260,atk:90,def:78,spd:78,spdIcon:'🧍',moves:['Old School','Banner Raised','Hall of Fame','MVP Mode']},
-  {id:'ja',n:'Ja Morant',fb:'⚡',t:'rookie',elixir:5,hp:220,atk:85,def:70,spd:95,spdIcon:'⚡',moves:['Athletic Slam','Sophomore Surge','Hustle Play','Future Star']},
-  {id:'zion',n:'Zion Williamson',fb:'💥',t:'rookie',elixir:6,hp:260,atk:90,def:78,spd:78,spdIcon:'🧍',moves:['Athletic Slam','Sophomore Surge','Future Star','Hustle Play']},
-  {id:'ant',n:'Anthony Edwards',fb:'🐜',t:'rookie',elixir:5,hp:230,atk:86,def:72,spd:88,spdIcon:'⚡',moves:['Athletic Slam','Sophomore Surge','Future Star','Energy Burst']},
-  {id:'banchero',n:'Paolo Banchero',fb:'🌟',t:'rookie',elixir:5,hp:245,atk:84,def:78,spd:78,spdIcon:'🧍',moves:['Sophomore Surge','Future Star','Hustle Play','Athletic Slam']},
+  {id:'shai',n:'Shai Gilgeous-Alexander',fb:'🏀',t:'legend',elixir:5,hp:299,atk:100,def:90,spd:95,spdIcon:'⚡',moves:['GOAT Move','Hall of Fame','Championship','MVP Mode']},
+  {id:'jokic',n:'Nikola Jokic',fb:'🏀',t:'legend',elixir:5,hp:297,atk:99,def:89,spd:94,spdIcon:'⚡',moves:['GOAT Move','Hall of Fame','Championship','MVP Mode']},
+  {id:'wemby',n:'Victor Wembanyama',fb:'🏀',t:'legend',elixir:5,hp:296,atk:99,def:89,spd:94,spdIcon:'⚡',moves:['GOAT Move','Hall of Fame','Championship','MVP Mode']},
+  {id:'doncic',n:'Luka Doncic',fb:'🏀',t:'legend',elixir:5,hp:294,atk:98,def:89,spd:94,spdIcon:'⚡',moves:['GOAT Move','Hall of Fame','Championship','MVP Mode']},
+  {id:'kawhi',n:'Kawhi Leonard',fb:'🏀',t:'legend',elixir:5,hp:293,atk:98,def:88,spd:94,spdIcon:'⚡',moves:['GOAT Move','Hall of Fame','Championship','MVP Mode']},
+  {id:'ant',n:'Anthony Edwards',fb:'🏀',t:'star',elixir:5,hp:292,atk:98,def:88,spd:93,spdIcon:'⚡',moves:['Signature Move','Killer Instinct','Take Over','Clutch Three']},
+  {id:'giannis',n:'Giannis Antetokounmpo',fb:'🏀',t:'star',elixir:5,hp:290,atk:97,def:88,spd:93,spdIcon:'⚡',moves:['Signature Move','Killer Instinct','Take Over','Clutch Three']},
+  {id:'cunningham',n:'Cade Cunningham',fb:'🏀',t:'star',elixir:5,hp:289,atk:97,def:87,spd:93,spdIcon:'⚡',moves:['Signature Move','Killer Instinct','Take Over','Clutch Three']},
+  {id:'mitchell',n:'Donovan Mitchell',fb:'🏀',t:'star',elixir:5,hp:287,atk:96,def:87,spd:92,spdIcon:'⚡',moves:['Signature Move','Killer Instinct','Take Over','Clutch Three']},
+  {id:'brown',n:'Jaylen Brown',fb:'🏀',t:'star',elixir:5,hp:286,atk:96,def:87,spd:92,spdIcon:'⚡',moves:['Signature Move','Killer Instinct','Take Over','Clutch Three']},
+  {id:'curry',n:'Stephen Curry',fb:'🏀',t:'star',elixir:5,hp:285,atk:96,def:86,spd:92,spdIcon:'⚡',moves:['Signature Move','Killer Instinct','Take Over','Clutch Three']},
+  {id:'brunson',n:'Jalen Brunson',fb:'🏀',t:'star',elixir:5,hp:283,atk:95,def:86,spd:91,spdIcon:'⚡',moves:['Signature Move','Killer Instinct','Take Over','Clutch Three']},
+  {id:'durant',n:'Kevin Durant',fb:'🏀',t:'star',elixir:5,hp:282,atk:95,def:85,spd:91,spdIcon:'⚡',moves:['Signature Move','Killer Instinct','Take Over','Clutch Three']},
+  {id:'maxey',n:'Tyrese Maxey',fb:'🏀',t:'star',elixir:5,hp:280,atk:94,def:85,spd:91,spdIcon:'⚡',moves:['Signature Move','Killer Instinct','Take Over','Clutch Three']},
+  {id:'booker',n:'Devin Booker',fb:'🏀',t:'star',elixir:5,hp:279,atk:94,def:85,spd:91,spdIcon:'⚡',moves:['Signature Move','Killer Instinct','Take Over','Clutch Three']},
+  {id:'murray',n:'Jamal Murray',fb:'🏀',t:'star',elixir:5,hp:278,atk:94,def:84,spd:90,spdIcon:'⚡',moves:['Signature Move','Killer Instinct','Take Over','Clutch Three']},
+  {id:'johnson',n:'Jalen Johnson',fb:'🏀',t:'star',elixir:5,hp:276,atk:93,def:84,spd:90,spdIcon:'⚡',moves:['Signature Move','Killer Instinct','Take Over','Clutch Three']},
+  {id:'holmgren',n:'Chet Holmgren',fb:'🏀',t:'star',elixir:5,hp:275,atk:93,def:84,spd:90,spdIcon:'⚡',moves:['Signature Move','Killer Instinct','Take Over','Clutch Three']},
+  {id:'barnes',n:'Scottie Barnes',fb:'🏀',t:'star',elixir:5,hp:273,atk:92,def:83,spd:89,spdIcon:'⚡',moves:['Signature Move','Killer Instinct','Take Over','Clutch Three']},
+  {id:'harden',n:'James Harden',fb:'🏀',t:'star',elixir:5,hp:272,atk:92,def:83,spd:89,spdIcon:'⚡',moves:['Signature Move','Killer Instinct','Take Over','Clutch Three']},
+  {id:'lebron',n:'LeBron James',fb:'🏀',t:'star',elixir:5,hp:271,atk:92,def:83,spd:89,spdIcon:'⚡',moves:['Signature Move','Killer Instinct','Take Over','Clutch Three']},
+  {id:'mobley',n:'Evan Mobley',fb:'🏀',t:'star',elixir:5,hp:269,atk:91,def:82,spd:88,spdIcon:'⚡',moves:['Signature Move','Killer Instinct','Take Over','Clutch Three']},
+  {id:'avdija',n:'Deni Avdija',fb:'🏀',t:'star',elixir:5,hp:268,atk:91,def:82,spd:88,spdIcon:'⚡',moves:['Signature Move','Killer Instinct','Take Over','Clutch Three']},
+  {id:'tatum',n:'Jayson Tatum',fb:'🏀',t:'star',elixir:5,hp:266,atk:90,def:82,spd:88,spdIcon:'⚡',moves:['Signature Move','Killer Instinct','Take Over','Clutch Three']},
+  {id:'duren',n:'Jalen Duren',fb:'🏀',t:'star',elixir:5,hp:265,atk:90,def:81,spd:88,spdIcon:'⚡',moves:['Signature Move','Killer Instinct','Take Over','Clutch Three']},
+  {id:'adebayo',n:'Bam Adebayo',fb:'🏀',t:'forward',elixir:5,hp:264,atk:90,def:81,spd:87,spdIcon:'⚡',moves:['Slam Dunk','Drive Lane','Eurostep','Posterize']},
+  {id:'siakam',n:'Pascal Siakam',fb:'🏀',t:'forward',elixir:5,hp:262,atk:89,def:81,spd:87,spdIcon:'⚡',moves:['Slam Dunk','Drive Lane','Eurostep','Posterize']},
+  {id:'sengun',n:'Alperen Sengun',fb:'🏀',t:'forward',elixir:5,hp:261,atk:89,def:81,spd:87,spdIcon:'⚡',moves:['Slam Dunk','Drive Lane','Eurostep','Posterize']},
+  {id:'towns',n:'Karl-Anthony Towns',fb:'🏀',t:'forward',elixir:5,hp:259,atk:89,def:80,spd:86,spdIcon:'⚡',moves:['Slam Dunk','Drive Lane','Eurostep','Posterize']},
+  {id:'castle',n:'Stephon Castle',fb:'🏀',t:'forward',elixir:5,hp:258,atk:88,def:80,spd:86,spdIcon:'⚡',moves:['Slam Dunk','Drive Lane','Eurostep','Posterize']},
+  {id:'banchero',n:'Paolo Banchero',fb:'🏀',t:'forward',elixir:5,hp:257,atk:88,def:80,spd:86,spdIcon:'⚡',moves:['Slam Dunk','Drive Lane','Eurostep','Posterize']},
+  {id:'ball',n:'LaMelo Ball',fb:'🏀',t:'forward',elixir:4,hp:255,atk:87,def:79,spd:85,spdIcon:'⚡',moves:['Slam Dunk','Drive Lane','Eurostep','Posterize']},
+  {id:'white',n:'Derrick White',fb:'🏀',t:'forward',elixir:4,hp:254,atk:87,def:79,spd:85,spdIcon:'⚡',moves:['Slam Dunk','Drive Lane','Eurostep','Posterize']},
+  {id:'reaves',n:'Austin Reaves',fb:'🏀',t:'forward',elixir:4,hp:252,atk:86,def:78,spd:85,spdIcon:'⚡',moves:['Slam Dunk','Drive Lane','Eurostep','Posterize']},
+  {id:'williams',n:'Jalen Williams',fb:'🏀',t:'forward',elixir:4,hp:251,atk:86,def:78,spd:85,spdIcon:'⚡',moves:['Slam Dunk','Drive Lane','Eurostep','Posterize']},
+  {id:'markkanen',n:'Lauri Markkanen',fb:'🏀',t:'forward',elixir:4,hp:250,atk:86,def:78,spd:84,spdIcon:'🧍',moves:['Slam Dunk','Drive Lane','Eurostep','Posterize']},
+  {id:'thompson',n:'Amen Thompson',fb:'🏀',t:'forward',elixir:4,hp:248,atk:85,def:77,spd:84,spdIcon:'🧍',moves:['Slam Dunk','Drive Lane','Eurostep','Posterize']},
+  {id:'fox',n:"De'Aaron Fox",fb:'🏀',t:'forward',elixir:4,hp:247,atk:85,def:77,spd:84,spdIcon:'🧍',moves:['Slam Dunk','Drive Lane','Eurostep','Posterize']},
+  {id:'gordon',n:'Aaron Gordon',fb:'🏀',t:'forward',elixir:4,hp:245,atk:84,def:76,spd:83,spdIcon:'🧍',moves:['Slam Dunk','Drive Lane','Eurostep','Posterize']},
+  {id:'anunoby',n:'OG Anunoby',fb:'🏀',t:'forward',elixir:4,hp:244,atk:84,def:76,spd:83,spdIcon:'🧍',moves:['Slam Dunk','Drive Lane','Eurostep','Posterize']},
+  {id:'knueppel',n:'Kon Knueppel',fb:'🏀',t:'forward',elixir:4,hp:243,atk:84,def:76,spd:83,spdIcon:'🧍',moves:['Slam Dunk','Drive Lane','Eurostep','Posterize']},
+  {id:'flagg',n:'Cooper Flagg',fb:'🏀',t:'forward',elixir:4,hp:241,atk:83,def:75,spd:82,spdIcon:'🧍',moves:['Slam Dunk','Drive Lane','Eurostep','Posterize']},
+  {id:'wagner',n:'Franz Wagner',fb:'🏀',t:'forward',elixir:4,hp:240,atk:83,def:75,spd:82,spdIcon:'🧍',moves:['Slam Dunk','Drive Lane','Eurostep','Posterize']},
+  {id:'gobert',n:'Rudy Gobert',fb:'🏀',t:'forward',elixir:4,hp:238,atk:82,def:74,spd:82,spdIcon:'🧍',moves:['Slam Dunk','Drive Lane','Eurostep','Posterize']},
+  {id:'bane',n:'Desmond Bane',fb:'🏀',t:'forward',elixir:4,hp:237,atk:82,def:74,spd:82,spdIcon:'🧍',moves:['Slam Dunk','Drive Lane','Eurostep','Posterize']},
+  {id:'randle',n:'Julius Randle',fb:'🏀',t:'forward',elixir:4,hp:236,atk:82,def:74,spd:81,spdIcon:'🧍',moves:['Slam Dunk','Drive Lane','Eurostep','Posterize']},
+  {id:'murphyiii',n:'Trey Murphy III',fb:'🏀',t:'forward',elixir:4,hp:234,atk:81,def:73,spd:81,spdIcon:'🧍',moves:['Slam Dunk','Drive Lane','Eurostep','Posterize']},
+  {id:'ingram',n:'Brandon Ingram',fb:'🏀',t:'forward',elixir:4,hp:233,atk:81,def:73,spd:81,spdIcon:'🧍',moves:['Slam Dunk','Drive Lane','Eurostep','Posterize']},
+  {id:'walker',n:'Nickeil Alexander-Walker',fb:'🏀',t:'forward',elixir:4,hp:231,atk:80,def:73,spd:80,spdIcon:'🧍',moves:['Slam Dunk','Drive Lane','Eurostep','Posterize']},
+  {id:'williamson',n:'Zion Williamson',fb:'🏀',t:'forward',elixir:4,hp:230,atk:80,def:73,spd:80,spdIcon:'🧍',moves:['Slam Dunk','Drive Lane','Eurostep','Posterize']},
+  {id:'miller',n:'Brandon Miller',fb:'🏀',t:'guard',elixir:4,hp:229,atk:80,def:72,spd:80,spdIcon:'🧍',moves:['Step Back 3','Logo Three','Pull Up J','Crossover']},
+  {id:'garland',n:'Darius Garland',fb:'🏀',t:'guard',elixir:4,hp:227,atk:79,def:72,spd:79,spdIcon:'🧍',moves:['Step Back 3','Logo Three','Pull Up J','Crossover']},
+  {id:'george',n:'Keyonte George',fb:'🏀',t:'guard',elixir:4,hp:226,atk:79,def:71,spd:79,spdIcon:'🧍',moves:['Step Back 3','Logo Three','Pull Up J','Crossover']},
+  {id:'embiid',n:'Joel Embiid',fb:'🏀',t:'guard',elixir:4,hp:224,atk:78,def:71,spd:79,spdIcon:'🧍',moves:['Step Back 3','Logo Three','Pull Up J','Crossover']},
+  {id:'porterjr',n:'Michael Porter Jr',fb:'🏀',t:'guard',elixir:4,hp:223,atk:78,def:71,spd:78,spdIcon:'🧍',moves:['Step Back 3','Logo Three','Pull Up J','Crossover']},
+  {id:'powell',n:'Norm Powell',fb:'🏀',t:'guard',elixir:4,hp:222,atk:78,def:70,spd:78,spdIcon:'🧍',moves:['Step Back 3','Logo Three','Pull Up J','Crossover']},
+  {id:'allen',n:'Jarrett Allen',fb:'🏀',t:'guard',elixir:4,hp:220,atk:77,def:70,spd:78,spdIcon:'🧍',moves:['Step Back 3','Logo Three','Pull Up J','Crossover']},
+  {id:'mcdaniels',n:'Jaden McDaniels',fb:'🏀',t:'guard',elixir:4,hp:219,atk:77,def:70,spd:78,spdIcon:'🧍',moves:['Step Back 3','Logo Three','Pull Up J','Crossover']},
+  {id:'brooks',n:'Dillon Brooks',fb:'🏀',t:'guard',elixir:4,hp:217,atk:76,def:69,spd:77,spdIcon:'🧍',moves:['Step Back 3','Logo Three','Pull Up J','Crossover']},
+  {id:'herro',n:'Tyler Herro',fb:'🏀',t:'guard',elixir:4,hp:216,atk:76,def:69,spd:77,spdIcon:'🧍',moves:['Step Back 3','Logo Three','Pull Up J','Crossover']},
+  {id:'athompson',n:'Ausar Thompson',fb:'🏀',t:'guard',elixir:4,hp:215,atk:76,def:69,spd:77,spdIcon:'🧍',moves:['Step Back 3','Logo Three','Pull Up J','Crossover']},
+  {id:'trae',n:'Trae Young',fb:'🏀',t:'guard',elixir:4,hp:213,atk:75,def:68,spd:76,spdIcon:'🧍',moves:['Step Back 3','Logo Three','Pull Up J','Crossover']},
+  {id:'nembhard',n:'Andrew Nembhard',fb:'🏀',t:'guard',elixir:4,hp:212,atk:75,def:68,spd:76,spdIcon:'🧍',moves:['Step Back 3','Logo Three','Pull Up J','Crossover']},
+  {id:'giddey',n:'Josh Giddey',fb:'🏀',t:'guard',elixir:4,hp:210,atk:74,def:68,spd:76,spdIcon:'🧍',moves:['Step Back 3','Logo Three','Pull Up J','Crossover']},
+  {id:'bridges',n:'Mikal Bridges',fb:'🏀',t:'guard',elixir:4,hp:209,atk:74,def:67,spd:76,spdIcon:'🧍',moves:['Step Back 3','Logo Three','Pull Up J','Crossover']},
+  {id:'watson',n:'Peyton Watson',fb:'🏀',t:'guard',elixir:4,hp:208,atk:74,def:67,spd:75,spdIcon:'🧍',moves:['Step Back 3','Logo Three','Pull Up J','Crossover']},
+  {id:'hartenstein',n:'Isaiah Hartenstein',fb:'🏀',t:'guard',elixir:4,hp:206,atk:73,def:67,spd:75,spdIcon:'🧍',moves:['Step Back 3','Logo Three','Pull Up J','Crossover']},
+  {id:'daniels',n:'Dyson Daniels',fb:'🏀',t:'guard',elixir:4,hp:205,atk:73,def:66,spd:75,spdIcon:'🧍',moves:['Step Back 3','Logo Three','Pull Up J','Crossover']},
+  {id:'caruso',n:'Alex Caruso',fb:'🏀',t:'guard',elixir:4,hp:203,atk:72,def:66,spd:74,spdIcon:'🧍',moves:['Step Back 3','Logo Three','Pull Up J','Crossover']},
+  {id:'holiday',n:'Jrue Holiday',fb:'🏀',t:'guard',elixir:4,hp:202,atk:72,def:66,spd:74,spdIcon:'🧍',moves:['Step Back 3','Logo Three','Pull Up J','Crossover']},
+  {id:'pritchard',n:'Payton Pritchard',fb:'🏀',t:'guard',elixir:4,hp:201,atk:72,def:65,spd:74,spdIcon:'🧍',moves:['Step Back 3','Logo Three','Pull Up J','Crossover']},
+  {id:'reid',n:'Naz Reid',fb:'🏀',t:'guard',elixir:4,hp:199,atk:71,def:65,spd:73,spdIcon:'🧍',moves:['Step Back 3','Logo Three','Pull Up J','Crossover']},
+  {id:'suggs',n:'Jalen Suggs',fb:'🏀',t:'guard',elixir:4,hp:198,atk:71,def:65,spd:73,spdIcon:'🐢',moves:['Step Back 3','Logo Three','Pull Up J','Crossover']},
+  {id:'wallace',n:'Cason Wallace',fb:'🏀',t:'guard',elixir:4,hp:196,atk:70,def:64,spd:73,spdIcon:'🧍',moves:['Step Back 3','Logo Three','Pull Up J','Crossover']},
+  {id:'clingan',n:'Donovan Clingan',fb:'🏀',t:'guard',elixir:4,hp:195,atk:70,def:64,spd:73,spdIcon:'🧍',moves:['Step Back 3','Logo Three','Pull Up J','Crossover']},
+  {id:'jaquezjr',n:'Jaime Jaquez Jr',fb:'🏀',t:'center',elixir:4,hp:194,atk:70,def:63,spd:72,spdIcon:'🧍',moves:['Block Shot','Skyhook','Putback Slam','Boards']},
+  {id:'barrett',n:'RJ Barrett',fb:'🏀',t:'center',elixir:4,hp:192,atk:69,def:63,spd:72,spdIcon:'🧍',moves:['Block Shot','Skyhook','Putback Slam','Boards']},
+  {id:'vassell',n:'Devin Vassell',fb:'🏀',t:'center',elixir:4,hp:191,atk:69,def:63,spd:72,spdIcon:'🧍',moves:['Block Shot','Skyhook','Putback Slam','Boards']},
+  {id:'amitchell',n:'Ajay Mitchell',fb:'🏀',t:'center',elixir:3,hp:189,atk:68,def:62,spd:71,spdIcon:'🧍',moves:['Block Shot','Skyhook','Putback Slam','Boards']},
+  {id:'okongwu',n:'Onyeka Okongwu',fb:'🏀',t:'center',elixir:3,hp:188,atk:68,def:62,spd:71,spdIcon:'🧍',moves:['Block Shot','Skyhook','Putback Slam','Boards']},
+  {id:'hart',n:'Josh Hart',fb:'🏀',t:'center',elixir:3,hp:187,atk:68,def:62,spd:71,spdIcon:'🧍',moves:['Block Shot','Skyhook','Putback Slam','Boards']},
+  {id:'cjohnson',n:'Cam Johnson',fb:'🏀',t:'center',elixir:3,hp:185,atk:67,def:61,spd:70,spdIcon:'🧍',moves:['Block Shot','Skyhook','Putback Slam','Boards']},
+  {id:'dmurray',n:'Dejounte Murray',fb:'🏀',t:'center',elixir:3,hp:184,atk:67,def:61,spd:70,spdIcon:'🧍',moves:['Block Shot','Skyhook','Putback Slam','Boards']},
+  {id:'rollins',n:'Ryan Rollins',fb:'🏀',t:'center',elixir:3,hp:183,atk:67,def:61,spd:70,spdIcon:'🧍',moves:['Block Shot','Skyhook','Putback Slam','Boards']},
+  {id:'dort',n:'Lu Dort',fb:'🏀',t:'center',elixir:3,hp:181,atk:66,def:60,spd:70,spdIcon:'🧍',moves:['Block Shot','Skyhook','Putback Slam','Boards']},
+  {id:'pgeorge',n:'Paul George',fb:'🏀',t:'center',elixir:3,hp:180,atk:66,def:60,spd:69,spdIcon:'🧍',moves:['Block Shot','Skyhook','Putback Slam','Boards']},
+  {id:'diabate',n:'Moussa Diabate',fb:'🏀',t:'center',elixir:3,hp:178,atk:65,def:60,spd:69,spdIcon:'🧍',moves:['Block Shot','Skyhook','Putback Slam','Boards']},
+  {id:'sarr',n:'Alex Sarr',fb:'🏀',t:'center',elixir:3,hp:177,atk:65,def:59,spd:69,spdIcon:'🧍',moves:['Block Shot','Skyhook','Putback Slam','Boards']},
+  {id:'kjohnson',n:'Keldon Johnson',fb:'🏀',t:'center',elixir:3,hp:176,atk:64,def:59,spd:68,spdIcon:'🧍',moves:['Block Shot','Skyhook','Putback Slam','Boards']},
+  {id:'camara',n:'Toumani Camara',fb:'🏀',t:'center',elixir:3,hp:174,atk:64,def:58,spd:68,spdIcon:'🧍',moves:['Block Shot','Skyhook','Putback Slam','Boards']},
+  {id:'green',n:'Draymond Green',fb:'🏀',t:'rookie',elixir:3,hp:173,atk:64,def:58,spd:68,spdIcon:'🧍',moves:['Athletic Slam','Future Star','Hustle Play','Sophomore Surge']},
+  {id:'cwhite',n:'Coby White',fb:'🏀',t:'rookie',elixir:3,hp:171,atk:63,def:58,spd:67,spdIcon:'🧍',moves:['Athletic Slam','Future Star','Hustle Play','Sophomore Surge']},
+  {id:'divincenzo',n:'Donte DiVincenzo',fb:'🏀',t:'rookie',elixir:3,hp:170,atk:63,def:57,spd:67,spdIcon:'🧍',moves:['Athletic Slam','Future Star','Hustle Play','Sophomore Surge']},
+  {id:'edgecombe',n:'VJ Edgecombe',fb:'🏀',t:'rookie',elixir:3,hp:169,atk:62,def:57,spd:67,spdIcon:'🧍',moves:['Athletic Slam','Future Star','Hustle Play','Sophomore Surge']},
+  {id:'queta',n:'Neemias Queta',fb:'🏀',t:'rookie',elixir:3,hp:167,atk:62,def:57,spd:67,spdIcon:'🧍',moves:['Athletic Slam','Future Star','Hustle Play','Sophomore Surge']},
+  {id:'dosunmu',n:'Ayo Dosunmu',fb:'🏀',t:'rookie',elixir:3,hp:166,atk:62,def:56,spd:66,spdIcon:'🧍',moves:['Athletic Slam','Future Star','Hustle Play','Sophomore Surge']},
+  {id:'sheppard',n:'Reed Sheppard',fb:'🏀',t:'rookie',elixir:3,hp:164,atk:61,def:56,spd:66,spdIcon:'🧍',moves:['Athletic Slam','Future Star','Hustle Play','Sophomore Surge']},
+  {id:'mccollum',n:'CJ McCollum',fb:'🏀',t:'rookie',elixir:3,hp:163,atk:61,def:56,spd:66,spdIcon:'🧍',moves:['Athletic Slam','Future Star','Hustle Play','Sophomore Surge']},
+  {id:'harper',n:'Dylan Harper',fb:'🏀',t:'rookie',elixir:3,hp:162,atk:60,def:55,spd:65,spdIcon:'🐢',moves:['Athletic Slam','Future Star','Hustle Play','Sophomore Surge']},
+  {id:'quickley',n:'Immanuel Quickley',fb:'🏀',t:'rookie',elixir:3,hp:160,atk:60,def:55,spd:65,spdIcon:'🐢',moves:['Athletic Slam','Future Star','Hustle Play','Sophomore Surge']},
+  {id:'lball',n:'Lonzo Ball',fb:'🏀',t:'rookie',elixir:3,hp:160,atk:60,def:55,spd:65,spdIcon:'🐢',moves:['Athletic Slam','Future Star','Hustle Play','Sophomore Surge']},
 ];
 const BOSSES=[
   {id:'curry',n:'Stephen Curry',ico:'🎯',desc:'The Baby-faced Assassin',team:['curry','trae','doncic'],bonus:'Foe gains 2 elixir per turn'},
   {id:'giannis',n:'Giannis',ico:'🇬🇷',desc:'The Greek Freak',team:['giannis','durant','wemby'],bonus:'Foe deals +1w on clash'},
-  {id:'lebron',n:'LeBron James',ico:'👑',desc:'The King',team:['lebron','davis','jokic'],bonus:'Foe King +2 HP'},
-  {id:'jokic',n:'Nikola Jokić',ico:'🐎',desc:'The Joker',team:['jokic','embiid','wemby'],bonus:'Foe Towers +1 HP'},
-  {id:'jordan',n:'Michael Jordan',ico:'🏆',desc:'His Airness · The GOAT',team:['jordan','kobe','magic','bird'],bonus:'Foe King +4 HP'},
+  {id:'lebron',n:'LeBron James',ico:'👑',desc:'The King',team:['lebron','tatum','jokic'],bonus:'Foe King +2 HP'},
+  {id:'jokic',n:'Nikola Jokic',ico:'🐎',desc:'The Joker',team:['jokic','embiid','wemby'],bonus:'Foe Towers +1 HP'},
+  {id:'shai',n:'Shai Gilgeous-Alexander',ico:'🏆',desc:'MVP',team:['shai','kawhi','wemby','doncic'],bonus:'Foe King +4 HP'},
 ];
 let state={team:[],partyTeam:[],partyFoe:[],active:0,foeActive:0,potions:3,busy:false,mode:'tb',bb:null,storyBoss:null};
 
@@ -398,21 +475,107 @@ function goScreen(id){sfxClick();if(id==='quick-tb'){openSelect('tb');return}if(
 window.NBA_OVERRIDES = window.NBA_OVERRIDES || {};
 /* Pre-populate from ../ringer_nba/ folder (set when copied next to the deployed HTML by Setup-GitHub-Folder.bat) */
 Object.assign(window.NBA_OVERRIDES, {
-  curry: '../ringer_nba/011_Stephen_Curry.png',
-  doncic: '../ringer_nba/004_Luka_Doncic.png',
-  trae: '../ringer_nba/062_Trae_Young.png',
-  lebron: '../ringer_nba/021_LeBron_James.png',
-  giannis: '../ringer_nba/007_Giannis_Antetokounmpo.png',
-  durant: '../ringer_nba/013_Kevin_Durant.png',
-  tatum: '../ringer_nba/024_Jayson_Tatum.png',
-  embiid: '../ringer_nba/054_Joel_Embiid.png',
+  shai: '../ringer_nba/001_Shai_Gilgeous-Alexander.png',
   jokic: '../ringer_nba/002_Nikola_Jokic.png',
   wemby: '../ringer_nba/003_Victor_Wembanyama.png',
-  booker: '../ringer_nba/015_Devin_Booker.png',
-  harden: '../ringer_nba/020_James_Harden.png',
-  zion: '../ringer_nba/050_Zion_Williamson.png',
+  doncic: '../ringer_nba/004_Luka_Doncic.png',
+  kawhi: '../ringer_nba/005_Kawhi_Leonard.png',
   ant: '../ringer_nba/006_Anthony_Edwards.png',
-  banchero: '../ringer_nba/031_Paolo_Banchero.png'
+  giannis: '../ringer_nba/007_Giannis_Antetokounmpo.png',
+  cunningham: '../ringer_nba/008_Cade_Cunningham.png',
+  mitchell: '../ringer_nba/009_Donovan_Mitchell.png',
+  brown: '../ringer_nba/010_Jaylen_Brown.png',
+  curry: '../ringer_nba/011_Stephen_Curry.png',
+  brunson: '../ringer_nba/012_Jalen_Brunson.png',
+  durant: '../ringer_nba/013_Kevin_Durant.png',
+  maxey: '../ringer_nba/014_Tyrese_Maxey.png',
+  booker: '../ringer_nba/015_Devin_Booker.png',
+  murray: '../ringer_nba/016_Jamal_Murray.png',
+  johnson: '../ringer_nba/017_Jalen_Johnson.png',
+  holmgren: '../ringer_nba/018_Chet_Holmgren.png',
+  barnes: '../ringer_nba/019_Scottie_Barnes.png',
+  harden: '../ringer_nba/020_James_Harden.png',
+  lebron: '../ringer_nba/021_LeBron_James.png',
+  mobley: '../ringer_nba/022_Evan_Mobley.png',
+  avdija: '../ringer_nba/023_Deni_Avdija.png',
+  tatum: '../ringer_nba/024_Jayson_Tatum.png',
+  duren: '../ringer_nba/025_Jalen_Duren.png',
+  adebayo: '../ringer_nba/026_Bam_Adebayo.png',
+  siakam: '../ringer_nba/027_Pascal_Siakam.png',
+  sengun: '../ringer_nba/028_Alperen_Sengun.png',
+  towns: '../ringer_nba/029_Karl-Anthony_Towns.png',
+  castle: '../ringer_nba/030_Stephon_Castle.png',
+  banchero: '../ringer_nba/031_Paolo_Banchero.png',
+  ball: '../ringer_nba/032_LaMelo_Ball.png',
+  white: '../ringer_nba/033_Derrick_White.png',
+  reaves: '../ringer_nba/034_Austin_Reaves.png',
+  williams: '../ringer_nba/035_Jalen_Williams.png',
+  markkanen: '../ringer_nba/036_Lauri_Markkanen.png',
+  thompson: '../ringer_nba/037_Amen_Thompson.png',
+  fox: '../ringer_nba/038_DeAaron_Fox.png',
+  gordon: '../ringer_nba/039_Aaron_Gordon.png',
+  anunoby: '../ringer_nba/040_OG_Anunoby.png',
+  knueppel: '../ringer_nba/041_Kon_Knueppel.png',
+  flagg: '../ringer_nba/042_Cooper_Flagg.png',
+  wagner: '../ringer_nba/043_Franz_Wagner.png',
+  gobert: '../ringer_nba/044_Rudy_Gobert.png',
+  bane: '../ringer_nba/045_Desmond_Bane.png',
+  randle: '../ringer_nba/046_Julius_Randle.png',
+  murphyiii: '../ringer_nba/047_Trey_Murphy_III.png',
+  ingram: '../ringer_nba/048_Brandon_Ingram.png',
+  walker: '../ringer_nba/049_Nickeil_Alexander-Walker.png',
+  williamson: '../ringer_nba/050_Zion_Williamson.png',
+  miller: '../ringer_nba/051_Brandon_Miller.png',
+  garland: '../ringer_nba/052_Darius_Garland.png',
+  george: '../ringer_nba/053_Keyonte_George.png',
+  embiid: '../ringer_nba/054_Joel_Embiid.png',
+  porterjr: '../ringer_nba/055_Michael_Porter_Jr.png',
+  powell: '../ringer_nba/056_Norm_Powell.png',
+  allen: '../ringer_nba/057_Jarrett_Allen.png',
+  mcdaniels: '../ringer_nba/058_Jaden_McDaniels.png',
+  brooks: '../ringer_nba/059_Dillon_Brooks.png',
+  herro: '../ringer_nba/060_Tyler_Herro.png',
+  athompson: '../ringer_nba/061_Ausar_Thompson.png',
+  trae: '../ringer_nba/062_Trae_Young.png',
+  nembhard: '../ringer_nba/063_Andrew_Nembhard.png',
+  giddey: '../ringer_nba/064_Josh_Giddey.png',
+  bridges: '../ringer_nba/065_Mikal_Bridges.png',
+  watson: '../ringer_nba/066_Peyton_Watson.png',
+  hartenstein: '../ringer_nba/067_Isaiah_Hartenstein.png',
+  daniels: '../ringer_nba/068_Dyson_Daniels.png',
+  caruso: '../ringer_nba/069_Alex_Caruso.png',
+  holiday: '../ringer_nba/070_Jrue_Holiday.png',
+  pritchard: '../ringer_nba/071_Payton_Pritchard.png',
+  reid: '../ringer_nba/072_Naz_Reid.png',
+  suggs: '../ringer_nba/073_Jalen_Suggs.png',
+  wallace: '../ringer_nba/074_Cason_Wallace.png',
+  clingan: '../ringer_nba/075_Donovan_Clingan.png',
+  jaquezjr: '../ringer_nba/076_Jaime_Jaquez_Jr.png',
+  barrett: '../ringer_nba/077_RJ_Barrett.png',
+  vassell: '../ringer_nba/078_Devin_Vassell.png',
+  amitchell: '../ringer_nba/079_Ajay_Mitchell.png',
+  okongwu: '../ringer_nba/080_Onyeka_Okongwu.png',
+  hart: '../ringer_nba/081_Josh_Hart.png',
+  cjohnson: '../ringer_nba/082_Cam_Johnson.png',
+  dmurray: '../ringer_nba/083_Dejounte_Murray.png',
+  rollins: '../ringer_nba/084_Ryan_Rollins.png',
+  dort: '../ringer_nba/085_Lu_Dort.png',
+  pgeorge: '../ringer_nba/086_Paul_George.png',
+  diabate: '../ringer_nba/087_Moussa_Diabate.png',
+  sarr: '../ringer_nba/088_Alex_Sarr.png',
+  kjohnson: '../ringer_nba/089_Keldon_Johnson.png',
+  camara: '../ringer_nba/090_Toumani_Camara.png',
+  green: '../ringer_nba/091_Draymond_Green.png',
+  cwhite: '../ringer_nba/092_Coby_White.png',
+  divincenzo: '../ringer_nba/093_Donte_DiVincenzo.png',
+  edgecombe: '../ringer_nba/094_VJ_Edgecombe.png',
+  queta: '../ringer_nba/095_Neemias_Queta.png',
+  dosunmu: '../ringer_nba/096_Ayo_Dosunmu.png',
+  sheppard: '../ringer_nba/097_Reed_Sheppard.png',
+  mccollum: '../ringer_nba/098_CJ_McCollum.png',
+  harper: '../ringer_nba/099_Dylan_Harper.png',
+  quickley: '../ringer_nba/100_Immanuel_Quickley.png',
+  lball: '../ringer_nba/101_Lonzo_Ball.png'
 });
 function artHTML(p){
   if(!p) return '<span class="emoji">❓</span>';
@@ -554,6 +717,730 @@ function endHome(){$('endOverlay').classList.remove('on');state.storyBoss=null;g
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
+</script>
+
+<!-- ============================================================ -->
+<!-- DECK BUILDER ENHANCEMENT — visual preview, randomizer, slots  -->
+<!-- ============================================================ -->
+<style>
+.deck-preview-wrap{background:rgba(0,0,0,.35);border-bottom:1px solid var(--bdr)}
+.deck-preview{display:flex;gap:6px;padding:8px 12px;overflow-x:auto;min-height:78px;scrollbar-width:thin}
+.deck-preview .empty{color:var(--soft);font-size:11px;font-family:'Black Ops One',cursive;align-self:center;width:100%;text-align:center;opacity:.7;padding:18px 4px}
+.deck-preview .pick{flex:0 0 auto;width:60px;border:1px solid var(--bdr);border-radius:8px;background:rgba(255,255,255,.04);padding:4px;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;position:relative;transition:transform .12s}
+.deck-preview .pick:hover{background:rgba(255,80,80,.18);border-color:var(--red);transform:translateY(-2px)}
+.deck-preview .pick:hover .x{display:flex}
+.deck-preview .pick .x{display:none;position:absolute;inset:0;align-items:center;justify-content:center;font-size:20px;color:#fff;background:rgba(220,38,38,.8);border-radius:8px;font-family:'Black Ops One',cursive}
+.deck-preview .pick .pa{width:50px;height:50px;display:flex;align-items:center;justify-content:center;background:#0a0a18;border-radius:6px;overflow:hidden}
+.deck-preview .pick .pa img{width:100%;height:100%;object-fit:contain}
+.deck-preview .pick .pa .emoji{font-size:26px}
+.deck-preview .pick .nm{font-family:'Black Ops One',cursive;font-size:8px;color:#fff;text-align:center;line-height:1.05;max-width:56px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.deck-preview .pick .ex{position:absolute;top:-3px;left:-3px;background:#7c3aed;color:#fff;font-family:'Black Ops One',cursive;font-size:9px;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid #000}
+.deck-stats{display:flex;gap:10px;padding:6px 12px;background:rgba(0,0,0,.5);font-size:9px;font-family:'Black Ops One',cursive;color:var(--soft);flex-wrap:wrap;border-top:1px solid var(--bdr)}
+.deck-stats div{white-space:nowrap}
+.deck-stats b{color:var(--gold);font-weight:normal}
+.rnd-btn{margin-top:6px;padding:6px 14px;background:linear-gradient(160deg,#7c3aed,#3b82f6);border:1px solid #6366f1;border-radius:8px;color:#fff;font-family:'Black Ops One',cursive;font-size:11px;cursor:pointer;letter-spacing:1px}
+.rnd-btn:hover{filter:brightness(1.15)}
+.slot-row{display:flex;gap:8px;align-items:center;padding:10px 12px;background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--bdr);border-radius:12px;margin-bottom:10px;flex-wrap:wrap}
+.slot-row .lbl{font-family:'Black Ops One',cursive;font-size:10px;color:var(--gold);min-width:46px}
+.slot-row .info{flex:1;min-width:160px}
+.slot-row .nm-input{width:100%;background:rgba(0,0,0,.35);border:1px solid var(--bdr);color:#fff;padding:6px 8px;border-radius:6px;font-family:'Black Ops One',cursive;font-size:11px;letter-spacing:.5px}
+.slot-row .summary{font-size:10px;color:var(--soft);margin-top:4px;font-family:'Black Ops One',cursive;letter-spacing:.3px}
+.slot-row .empty-msg{flex:1;color:var(--soft);font-size:11px;font-style:italic;opacity:.7;font-family:'Black Ops One',cursive;letter-spacing:.3px}
+.slot-row .slot-btn{padding:6px 10px;background:rgba(255,255,255,.06);border:1px solid var(--bdr);border-radius:6px;color:#fff;font-family:'Black Ops One',cursive;font-size:10px;cursor:pointer;letter-spacing:.5px}
+.slot-row .slot-btn.save{background:linear-gradient(160deg,#16a34a,#15803d);border-color:#15803d}
+.slot-row .slot-btn.load{background:var(--gold);color:#000;border-color:var(--gold)}
+.slot-row .slot-btn.del{color:var(--red);border-color:var(--red);background:transparent}
+.slot-row .slot-btn:hover{filter:brightness(1.1)}
+</style>
+<script>
+(function(){
+  function init(){
+    if(typeof renderSelect!=='function'||typeof selectingTeam==='undefined'||typeof ROSTER==='undefined'){setTimeout(init,80);return}
+    if(!document.getElementById('deckPreview')){
+      const grid=document.getElementById('selectGrid');
+      if(grid){
+        const wrap=document.createElement('div');
+        wrap.className='deck-preview-wrap';
+        wrap.innerHTML='<div class="deck-preview" id="deckPreview"></div><div class="deck-stats" id="deckStats"></div>';
+        grid.parentNode.insertBefore(wrap,grid);
+      }
+    }
+    const selectBar=document.querySelector('#select .select-bar');
+    if(selectBar&&!document.getElementById('rndBtn')){
+      const btn=document.createElement('button');
+      btn.id='rndBtn';btn.className='rnd-btn';btn.innerHTML='🎲 RANDOMIZE';btn.onclick=randomizeDeck;
+      selectBar.appendChild(btn);
+    }
+    const _origRender=renderSelect;
+    window.renderSelect=function(){_origRender.apply(this,arguments);updateDeckPreview()};
+    window.saveCurrentDeck=function(){
+      if(!selectingTeam||selectingTeam.length===0){alert('Pick at least one card first.');return}
+      currentDeckTab=selectMode;
+      goScreenInner('decks');
+      const tabs=document.querySelectorAll('.deck-tab');
+      tabs.forEach(b=>b.classList.remove('on'));
+      const want=selectMode==='tb'?'turn':'board';
+      const targetTab=Array.from(tabs).find(b=>b.textContent.toLowerCase().includes(want));
+      if(targetTab)targetTab.classList.add('on');
+      renderDecks();
+    };
+    window.renderDecks=function(){
+      const list=document.getElementById('decksList');
+      if(!list)return;
+      const decks=getDecks(currentDeckTab);
+      const hasCurrent=selectingTeam&&selectingTeam.length>0&&selectMode===currentDeckTab;
+      const slots=[0,1,2];
+      let html='';
+      if(hasCurrent){
+        const summary=summarizeDeck(selectingTeam);
+        html+='<div class="slot-row" style="border-color:var(--gold);background:linear-gradient(160deg,rgba(255,203,5,.1),rgba(255,203,5,.04))"><div class="lbl">CURRENT</div><div class="info"><div style="font-family:Black Ops One,cursive;font-size:11px;color:var(--gold)">Building now</div><div class="summary">'+summary+'</div></div></div>';
+      }
+      html+=slots.map(i=>{
+        const d=decks[i];
+        if(d&&d.members&&d.members.length){
+          const summary=summarizeDeck(d.members);
+          const nameEsc=(d.name||'').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+          let buttons='<button class="slot-btn load" onclick="loadSlot('+i+')">▶ LOAD</button>';
+          if(hasCurrent)buttons+='<button class="slot-btn save" onclick="saveSlot('+i+')">💾 OVERWRITE</button>';
+          buttons+='<button class="slot-btn del" onclick="clearSlot('+i+')">✕</button>';
+          return '<div class="slot-row"><div class="lbl">SLOT '+(i+1)+'</div><div class="info"><input class="nm-input" value="'+nameEsc+'" onchange="renameSlot('+i+',this.value)"><div class="summary">'+summary+'</div></div>'+buttons+'</div>';
+        } else {
+          if(hasCurrent){
+            return '<div class="slot-row"><div class="lbl">SLOT '+(i+1)+'</div><div class="empty-msg">Empty — click SAVE to fill this slot</div><button class="slot-btn save" onclick="saveSlot('+i+')">💾 SAVE HERE</button></div>';
+          } else {
+            return '<div class="slot-row"><div class="lbl">SLOT '+(i+1)+'</div><div class="empty-msg">Empty — build a deck first</div></div>';
+          }
+        }
+      }).join('');
+      list.innerHTML=html;
+    };
+    if(document.querySelector('#decks.on'))renderDecks();
+    if(document.querySelector('#select.on'))updateDeckPreview();
+  }
+  function updateDeckPreview(){
+    const preview=document.getElementById('deckPreview');
+    if(!preview)return;
+    const maxEl=document.getElementById('selMax');
+    const max=maxEl?(parseInt(maxEl.textContent)||6):6;
+    if(!selectingTeam||selectingTeam.length===0){
+      preview.innerHTML='<div class="empty">No cards selected — pick from the roster below or hit 🎲 RANDOMIZE</div>';
+      const stats=document.getElementById('deckStats');if(stats)stats.innerHTML='';
+      return;
+    }
+    preview.innerHTML=selectingTeam.map((id,idx)=>{
+      const r=ROSTER.find(x=>x.id===id);
+      if(!r)return '';
+      const art=(typeof artHTML==='function')?artHTML(r):('<span class="emoji">'+(r.fb||'?')+'</span>');
+      const elixBadge=(r.elixir!=null)?('<div class="ex">'+r.elixir+'</div>'):'';
+      const safeName=(r.n||'').replace(/</g,'&lt;');
+      return '<div class="pick" onclick="removeFromDeck('+idx+')" title="Click to remove">'+elixBadge+'<div class="pa">'+art+'</div><div class="nm">'+safeName+'</div><div class="x">REMOVE</div></div>';
+    }).join('');
+    const stats=document.getElementById('deckStats');
+    if(stats){
+      const cards=selectingTeam.map(id=>ROSTER.find(x=>x.id===id)).filter(Boolean);
+      const totalHP=cards.reduce((a,c)=>a+(c.hp||0),0);
+      const totalATK=cards.reduce((a,c)=>a+(c.atk||0),0);
+      const elixCards=cards.filter(c=>c.elixir!=null);
+      const elixSum=elixCards.reduce((a,c)=>a+c.elixir,0);
+      const avgElix=elixCards.length?(elixSum/elixCards.length).toFixed(1):'—';
+      const types={};cards.forEach(c=>{const k=c.t||'?';types[k]=(types[k]||0)+1});
+      const typeStr=Object.entries(types).sort((a,b)=>b[1]-a[1]).map(e=>e[0]+':'+e[1]).join(' · ');
+      stats.innerHTML='<div>HP <b>'+totalHP+'</b></div><div>ATK <b>'+totalATK+'</b></div><div>AVG ELIX <b>'+avgElix+'</b></div><div>TYPES <b>'+(typeStr||'—')+'</b></div><div style="margin-left:auto">PICKED <b>'+selectingTeam.length+'/'+max+'</b></div>';
+    }
+  }
+  window.removeFromDeck=function(idx){selectingTeam.splice(idx,1);renderSelect();if(typeof sfxClick==='function')sfxClick()};
+  window.randomizeDeck=function(){
+    if(!ROSTER||ROSTER.length===0)return;
+    const maxEl=document.getElementById('selMax');
+    const max=maxEl?(parseInt(maxEl.textContent)||6):6;
+    const pool=ROSTER.slice().sort(()=>Math.random()-0.5);
+    selectingTeam=pool.slice(0,Math.min(max,pool.length)).map(r=>r.id);
+    renderSelect();
+    if(typeof sfxSelect==='function')sfxSelect();
+  };
+  window.summarizeDeck=function(members){
+    const cards=members.map(id=>ROSTER.find(x=>x.id===id)).filter(Boolean);
+    if(cards.length===0)return 'Empty deck';
+    const elixCards=cards.filter(c=>c.elixir!=null);
+    const elix=elixCards.reduce((a,c)=>a+c.elixir,0);
+    const avg=elixCards.length?(elix/elixCards.length).toFixed(1):'—';
+    const types={};cards.forEach(c=>{const k=c.t||'?';types[k]=(types[k]||0)+1});
+    const top=Object.entries(types).sort((a,b)=>b[1]-a[1]).slice(0,2).map(e=>e[0]).join('+');
+    return cards.length+' cards · avg '+avg+' elixir · '+(top||'mixed');
+  };
+  function defaultDeckName(mode,i){return (mode==='tb'?'Turn Deck ':'Board Deck ')+(i+1)}
+  window.saveSlot=function(i){
+    const decks=getDecks(currentDeckTab);
+    while(decks.length<=i)decks.push(null);
+    const existing=decks[i];
+    decks[i]={name:(existing&&existing.name)||defaultDeckName(currentDeckTab,i),members:selectingTeam.slice(),date:Date.now()};
+    setDecks(currentDeckTab,decks);
+    renderDecks();
+    if(typeof sfxHeal==='function')sfxHeal();
+  };
+  window.loadSlot=function(i){
+    const decks=getDecks(currentDeckTab);
+    const d=decks[i];if(!d||!d.members)return;
+    selectMode=currentDeckTab;
+    openSelect(currentDeckTab);
+    selectingTeam=d.members.filter(id=>ROSTER.find(r=>r.id===id));
+    renderSelect();
+    if(typeof sfxSelect==='function')sfxSelect();
+  };
+  window.clearSlot=function(i){
+    if(!confirm('Clear slot '+(i+1)+'?'))return;
+    const decks=getDecks(currentDeckTab);
+    decks[i]=null;
+    setDecks(currentDeckTab,decks);
+    renderDecks();
+    if(typeof sfxClick==='function')sfxClick();
+  };
+  window.renameSlot=function(i,name){
+    const decks=getDecks(currentDeckTab);
+    if(decks[i]){decks[i].name=(name||'').trim()||defaultDeckName(currentDeckTab,i);setDecks(currentDeckTab,decks)}
+  };
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+
+<!-- ============================================================ -->
+<!-- COMBAT ENHANCEMENT v2 + SAFE-AREA fix                         -->
+<!-- ============================================================ -->
+<style>
+html{background:var(--bg,#06080F)!important}
+@supports(height:100dvh){html,body{height:100dvh!important}}
+.launcher-back{margin-top:max(0px,env(safe-area-inset-top))!important}
+.topbar{padding-top:max(14px,calc(10px + env(safe-area-inset-top)))!important;padding-left:max(14px,calc(8px + env(safe-area-inset-left)))!important;padding-right:max(14px,calc(8px + env(safe-area-inset-right)))!important}
+.start-bar,.tb-controls,.bb-bottom,.bag-actions{padding-bottom:max(14px,calc(8px + env(safe-area-inset-bottom)))!important}
+@keyframes ult-pulse{0%,100%{box-shadow:0 0 8px gold,inset 0 0 6px rgba(255,255,255,.3)}50%{box-shadow:0 0 22px gold,0 0 38px orange,inset 0 0 6px rgba(255,255,255,.3)}}
+.ult-btn{animation:ult-pulse 1s infinite;background:linear-gradient(135deg,#ffcb05,#ff6600)!important;border:2px solid gold!important;color:#000!important}
+.status-icons{position:absolute;top:6px;display:flex;gap:3px;z-index:5;flex-wrap:wrap;max-width:140px}
+.status-icons .se{background:rgba(0,0,0,.75);padding:2px 6px;border-radius:8px;font-size:9px;font-family:'Black Ops One',cursive;color:#fff;border:1px solid rgba(255,255,255,.2);white-space:nowrap}
+.ult-meter{position:absolute;bottom:6px;font-size:9px;color:#fff;background:rgba(0,0,0,.7);padding:2px 6px;border-radius:8px;font-family:'Black Ops One',cursive;border:1px solid rgba(255,203,5,.3);min-width:54px;text-align:center}
+.ult-meter.full{background:linear-gradient(135deg,gold,orange);color:#000;border-color:gold;animation:ult-pulse 1s infinite}
+.bag-overlay{position:absolute;inset:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;z-index:200;padding:20px}
+.bag-card{background:linear-gradient(160deg,#1f1830,#0a0a18);border:2px solid var(--gold);border-radius:14px;padding:18px;max-width:340px;width:100%;font-family:'Black Ops One',cursive;box-shadow:0 12px 40px rgba(0,0,0,.7)}
+.bag-card .ti{color:var(--gold);font-size:15px;margin-bottom:14px;text-align:center;letter-spacing:1px}
+.bag-item{width:100%;display:flex;align-items:center;gap:10px;padding:10px;margin-bottom:8px;background:rgba(255,203,5,.1);border:1px solid var(--bdr);border-radius:8px;color:#fff;font-family:'Black Ops One',cursive;font-size:11px;cursor:pointer;text-align:left}
+.bag-item:disabled{opacity:.4;cursor:not-allowed;background:rgba(255,255,255,.04)}
+.bag-item:not(:disabled):hover{filter:brightness(1.15)}
+.bag-item .desc{font-size:9px;opacity:.7;margin-top:2px;font-family:'Share Tech Mono',monospace;letter-spacing:.3px}
+.bag-item .ct{color:var(--gold);font-size:13px}
+.bag-close{width:100%;padding:8px;margin-top:6px;background:rgba(255,80,80,.15);border:1px solid var(--red);border-radius:8px;color:#fff;font-family:'Black Ops One',cursive;font-size:11px;cursor:pointer}
+</style>
+<script>
+(function(){
+  const inStandalone=window.navigator.standalone||window.matchMedia('(display-mode: standalone)').matches||window.matchMedia('(display-mode: fullscreen)').matches;
+  if(inStandalone){
+    document.addEventListener('click',function(e){
+      let t=e.target;while(t&&t.tagName!=='A')t=t.parentElement;
+      if(!t)return;
+      const href=t.getAttribute('href');
+      if(!href||href.startsWith('#')||href.startsWith('mailto:')||href.startsWith('tel:')||href.startsWith('javascript:'))return;
+      if(t.target==='_blank')return;
+      try{const u=new URL(t.href);if(u.origin!==location.origin)return}catch(_){return}
+      e.preventDefault();
+      const dest=t.href;
+      setTimeout(function(){window.location.href=dest},0);
+    },true);
+    return;
+  }
+  const ua=navigator.userAgent;
+  const isIOS=/iPhone|iPad|iPod/.test(ua)&&!window.MSStream;
+  const isAndroidChrome=/Android/.test(ua)&&/Chrome/.test(ua);
+  let bipe=null;
+  window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();bipe=e;maybeShowBanner()});
+  function tryFs(){const el=document.documentElement;const req=el.requestFullscreen||el.webkitRequestFullscreen||el.mozRequestFullScreen||el.msRequestFullscreen;if(!document.fullscreenElement&&!document.webkitFullscreenElement&&req){try{const p=req.call(el);if(p&&p.catch)p.catch(()=>maybeShowBanner())}catch(e){maybeShowBanner()}}}
+  function tap(){if(isIOS)maybeShowBanner();else{tryFs();setTimeout(maybeShowBanner,1800)}}
+  document.addEventListener('click',tap,{once:true,passive:true});
+  document.addEventListener('touchstart',tap,{once:true,passive:true});
+  if(isIOS)setTimeout(maybeShowBanner,1800);
+  function maybeShowBanner(){
+    if(localStorage.getItem('pwaPromptDismissed_v1'))return;
+    if(document.getElementById('pwaBanner'))return;
+    const b=document.createElement('div');b.id='pwaBanner';
+    b.style.cssText='position:fixed;left:8px;right:8px;bottom:max(8px,env(safe-area-inset-bottom));background:linear-gradient(135deg,#1f1830,#0a0a18);border:2px solid #ffcb05;border-radius:14px;padding:12px 14px;color:#fff;font-family:\'Black Ops One\',cursive;z-index:99999;box-shadow:0 8px 32px rgba(0,0,0,.6)';
+    let inst='';
+    if(isIOS)inst='<div style="font-size:10px;opacity:.9;margin-top:5px;line-height:1.45">iPhone Safari blocks fullscreen by default. Tap <b style="color:#ffcb05">⬆ Share</b> at the bottom of the screen → <b style="color:#ffcb05">Add to Home Screen</b> to play with NO browser bars.</div>';
+    else if(isAndroidChrome){if(bipe)inst='<button id="pwaInstall" style="margin-top:8px;padding:8px 14px;background:#ffcb05;color:#000;border:none;border-radius:8px;font-family:Black Ops One,cursive;font-size:11px;cursor:pointer;letter-spacing:1px">⬇ INSTALL APP</button>';else inst='<div style="font-size:10px;opacity:.9;margin-top:5px;line-height:1.45">Tap <b style="color:#ffcb05">⋮ menu</b> → <b style="color:#ffcb05">Install app</b> or <b style="color:#ffcb05">Add to Home screen</b> for fullscreen play.</div>'}
+    else inst='<div style="font-size:10px;opacity:.9;margin-top:5px;line-height:1.45">Add this page to your Home Screen for true fullscreen play.</div>';
+    b.innerHTML='<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px"><div style="flex:1;min-width:0"><div style="color:#ffcb05;font-size:12px;letter-spacing:1.5px">📱 GO FULLSCREEN</div>'+inst+'</div><button id="pwaClose" style="background:transparent;border:1px solid rgba(255,255,255,.5);color:#fff;border-radius:6px;width:28px;height:28px;font-size:14px;cursor:pointer;flex-shrink:0;font-family:inherit">✕</button></div>';
+    document.body.appendChild(b);
+    document.getElementById('pwaClose').onclick=()=>{b.remove();try{localStorage.setItem('pwaPromptDismissed_v1','1')}catch(e){}};
+    const ib=document.getElementById('pwaInstall');if(ib&&bipe)ib.onclick=async()=>{try{bipe.prompt();await bipe.userChoice;b.remove()}catch(e){}};
+  }
+})();
+
+(function(){
+  function init(){
+    if(typeof startTurnBattle!=='function'||typeof state==='undefined'||typeof runAction!=='function'||typeof useMove!=='function'){setTimeout(init,120);return}
+    const _origStartTb=startTurnBattle;
+    window.startTurnBattle=function(){_origStartTb.apply(this,arguments);patchHeroes();ensureCombatUI()};
+    function patchHeroes(){
+      if(!state.partyTeam)return;
+      const fix=(h)=>{h.lv=50;h.atk=Math.round((h.atk||60)*1.25);h.hpMax=Math.round((h.hpMax||100)*1.15);h.hp=h.hpMax;h.ult=0;h.ultMax=100;h.statusEffects=[]};
+      state.partyTeam.forEach(fix);state.partyFoe.forEach(fix);
+      state.tbBag={potion:3,energy:2,shield:2,antidote:2};
+      if(typeof refreshTb==='function')refreshTb();
+    }
+    function ensureCombatUI(){
+      const arena=document.querySelector('.tb-arena');if(!arena)return;
+      if(!document.getElementById('statusPly')){
+        const ui=document.createElement('div');
+        ui.innerHTML='<div id="statusPly" class="status-icons" style="left:8px"></div><div id="statusFoe" class="status-icons" style="right:8px"></div><div id="ultPly" class="ult-meter" style="left:8px">⚡ 0%</div><div id="ultFoe" class="ult-meter" style="right:8px">⚡ 0%</div>';
+        while(ui.firstChild)arena.appendChild(ui.firstChild);
+      }
+      updateBagButton();
+    }
+    function updateBagButton(){
+      const bagBtn=document.querySelector('#tbMainMenu .bbtn.bag');
+      if(bagBtn&&state.tbBag){const total=Object.values(state.tbBag).reduce((a,b)=>a+b,0);bagBtn.innerHTML='🎒 BAG ('+total+')'}
+    }
+    window.runAction=async function(att,def,move,side){
+      const oS=side==='ply'?'foe':'ply';
+      log('<b>'+att.n+'</b> used <span class="effect">'+move.n+'</span>!');
+      await sleep(700);
+      const stunIdx=(att.statusEffects||[]).findIndex(s=>s.t==='stun'||s.t==='freeze');
+      if(stunIdx>=0){const eff=att.statusEffects[stunIdx];log('<b>'+att.n+'</b> is '+(eff.t==='freeze'?'frozen':'stunned')+' and can\'t move!');att.statusEffects.splice(stunIdx,1);renderStatusEffects();await sleep(800);return}
+      if(move.heal){const heal=Math.min(Math.round(move.heal*1.4),att.hpMax-att.hp);att.hp+=heal;log('<b>'+att.n+'</b> healed <span class="effect">'+heal+'</span> HP!');showDmg(side,heal,false,true);if(typeof sfxHeal==='function')sfxHeal();setHp(side,att.hp/att.hpMax);const hn=$(side==='ply'?'plyHpNum':'foeHpNum');if(hn)hn.textContent=att.hp+'/'+att.hpMax;await sleep(800);return}
+      const lv=att.lv||50;const eff=effect(move.t,def.t);const stab=move.t===att.t?1.25:1;const isCrit=Math.random()<0.15;const crit=isCrit?1.7:1;const variance=0.85+Math.random()*0.15;
+      const base=((2*lv/5+2)*move.p*att.atk/Math.max(1,def.def))/35+2;
+      let dmg=Math.max(1,Math.round(base*eff*stab*crit*variance));
+      if((att.statusEffects||[]).find(s=>s.t==='atkUp'))dmg=Math.round(dmg*1.35);
+      if((def.statusEffects||[]).find(s=>s.t==='shield'))dmg=Math.round(dmg*0.55);
+      def.hp=Math.max(0,def.hp-dmg);att.dmgDealt=(att.dmgDealt||0)+dmg;
+      const ultGain=Math.min(28,Math.max(8,Math.round(dmg/3)));
+      att.ult=Math.min(100,(att.ult||0)+ultGain);def.ult=Math.min(100,(def.ult||0)+Math.round(ultGain*0.55));
+      const ff=$('flashFx');if(ff){ff.classList.add('on');setTimeout(()=>ff.classList.remove('on'),400)}
+      const oSpr=$(oS==='ply'?'plySprite':'foeSprite');if(oSpr){oSpr.classList.add('shake');setTimeout(()=>oSpr.classList.remove('shake'),400)}
+      showDmg(oS,dmg,isCrit,false);
+      if(isCrit&&typeof sfxCrit==='function')sfxCrit();else if(typeof sfxHit==='function')sfxHit();
+      setHp(oS,def.hp/def.hpMax);
+      const hn2=$(oS==='ply'?'plyHpNum':'foeHpNum');if(hn2)hn2.textContent=def.hp+'/'+def.hpMax;
+      let sMsg='';if(def.hp>0){sMsg=applyStatusFromMove(att,def,move)}
+      let msg='Dealt <b>'+dmg+'</b> damage';
+      if(isCrit)msg='<span class="crit">⚡ CRITICAL!</span> '+msg;
+      if(eff>1)msg+=' — <span class="effect">Super effective!</span>';else if(eff<1&&eff>0)msg+=' — <span class="effect">Not very effective…</span>';
+      log(msg);if(sMsg)setTimeout(()=>log(sMsg),700);
+      renderStatusEffects();updateUltDisplay();await sleep(900);
+    };
+    function applyStatusFromMove(att,def,move){
+      let chance=0,status=null;const t=(move.t||'').toLowerCase();
+      if(['fire','mage','flame','psychic','radiation'].includes(t)){chance=0.22;status={t:'burn',turns:3,dot:0.07,label:'🔥 BURN'}}
+      else if(['poison','beast','dark','venom','grass'].includes(t)){chance=0.18;status={t:'poison',turns:3,dot:0.06,label:'☠️ POISON'}}
+      else if(['electric','archer','tech','sound','flying'].includes(t)){chance=0.13;status={t:'stun',turns:1,label:'⚡ STUN'}}
+      else if(['ice','water'].includes(t)){chance=0.12;status={t:'freeze',turns:1,label:'❄️ FROZEN'}}
+      else{chance=0.07;status={t:'stun',turns:1,label:'⚡ STUN'}}
+      if(Math.random()<chance&&status){def.statusEffects=def.statusEffects||[];if(!def.statusEffects.find(s=>s.t===status.t)){def.statusEffects.push(Object.assign({},status));return '<span class="effect">'+def.n+' got '+status.label+'!</span>'}}
+      return '';
+    }
+    function tickStatus(h,side){
+      if(!h.statusEffects||h.statusEffects.length===0)return;
+      let dot=0;const labels=[];
+      h.statusEffects=h.statusEffects.filter(s=>{if(s.dot){dot+=Math.round(h.hpMax*s.dot);labels.push(s.label)}s.turns--;return s.turns>0});
+      if(dot>0){h.hp=Math.max(0,h.hp-dot);showDmg(side,dot,false,false);log('<b>'+h.n+'</b> took <span class="effect">'+dot+'</span> from '+labels.join(' & ')+'!');setHp(side,h.hp/h.hpMax);const hn=$(side==='ply'?'plyHpNum':'foeHpNum');if(hn)hn.textContent=h.hp+'/'+h.hpMax}
+      renderStatusEffects();
+    }
+    function renderStatusEffects(){
+      ['Ply','Foe'].forEach(s=>{const cont=document.getElementById('status'+s);if(!cont)return;const h=s==='Ply'?(state.partyTeam&&state.partyTeam[state.active]):(state.partyFoe&&state.partyFoe[state.foeActive]);if(!h){cont.innerHTML='';return}cont.innerHTML=(h.statusEffects||[]).map(e=>'<span class="se">'+e.label+' '+e.turns+'</span>').join('')});
+    }
+    function updateUltDisplay(){
+      const ply=state.partyTeam&&state.partyTeam[state.active];const foe=state.partyFoe&&state.partyFoe[state.foeActive];
+      const pE=document.getElementById('ultPly');const fE=document.getElementById('ultFoe');
+      if(pE&&ply){pE.textContent='⚡ '+(ply.ult||0)+'%';pE.classList.toggle('full',ply.ult>=100)}
+      if(fE&&foe){fE.textContent='⚡ '+(foe.ult||0)+'%';fE.classList.toggle('full',foe.ult>=100)}
+      ensureUltButton();
+    }
+    function ensureUltButton(){
+      const ply=state.partyTeam&&state.partyTeam[state.active];if(!ply)return;
+      const grid=document.getElementById('moveGrid');if(!grid)return;
+      let btn=document.getElementById('ultMoveBtn');
+      if(ply.ult>=100&&!btn){btn=document.createElement('button');btn.id='ultMoveBtn';btn.className='move-btn ult-btn';btn.style.gridColumn='1/-1';btn.innerHTML='<div class="mn">⭐ ULTIMATE STRIKE</div><div class="mt"><span>2.5x DMG · IGNORE DEF</span><span class="pp">⚡ 100%</span></div>';btn.onclick=useUltimate;grid.insertBefore(btn,grid.firstChild)}
+      else if(ply.ult<100&&btn){btn.remove()}
+    }
+    window.useUltimate=async function(){
+      if(state.busy)return;const ply=state.partyTeam[state.active];if(!ply||ply.ult<100)return;const foe=state.partyFoe[state.foeActive];
+      state.busy=true;hideMoves();ply.ult=0;
+      const ultMove={n:ply.n.toUpperCase()+"'S WRATH",p:130,pp:99,ppMax:99,ppNow:99,t:ply.t};
+      const origDef=foe.def;foe.def=Math.max(20,Math.round(foe.def*0.45));battleTurns++;
+      await runAction(ply,foe,ultMove,'ply');
+      foe.def=origDef;
+      if(foe.hp<=0){await onFoeFaint();return}
+      const fmIdx=chooseFoeMove(),fm=foe.moves[fmIdx];
+      await runAction(foe,ply,fm,'foe');foe.moves[fmIdx].ppNow=Math.max(0,foe.moves[fmIdx].ppNow-1);
+      if(ply.hp<=0){await onPlyFaint();return}
+      refreshTb();state.busy=false;
+    };
+    window.useItem=function(){if(state.busy)return;if(typeof sfxClick==='function')sfxClick();showBag()};
+    function showBag(){
+      const bag=state.tbBag||{};
+      const items=[{k:'potion',n:'🧪 POTION',d:'Heal +60 HP',c:bag.potion||0},{k:'energy',n:'⚡ ENERGY DRINK',d:'+35% ATK · 2 turns',c:bag.energy||0},{k:'shield',n:'🛡️ IRON SHIELD',d:'-45% DMG · 2 turns',c:bag.shield||0},{k:'antidote',n:'💊 ANTIDOTE',d:'Cure all status',c:bag.antidote||0}];
+      const old=document.getElementById('bagOverlay');if(old)old.remove();
+      const ov=document.createElement('div');ov.id='bagOverlay';ov.className='bag-overlay';
+      ov.innerHTML='<div class="bag-card"><div class="ti">🎒 ITEM BAG</div>'+items.map(it=>'<button class="bag-item" '+(it.c===0?'disabled':'')+' onclick="applyItem(\''+it.k+'\')"><div style="flex:1"><div>'+it.n+' <span class="ct">×'+it.c+'</span></div><div class="desc">'+it.d+'</div></div></button>').join('')+'<button class="bag-close" onclick="document.getElementById(\'bagOverlay\').remove()">✕ CLOSE</button></div>';
+      const arena=document.querySelector('.tb-arena')||document.body;arena.appendChild(ov);
+    }
+    window.applyItem=async function(k){
+      const bag=state.tbBag||{};if((bag[k]||0)<=0)return;
+      const ov=document.getElementById('bagOverlay');if(ov)ov.remove();
+      bag[k]--;const ply=state.partyTeam[state.active];const foe=state.partyFoe[state.foeActive];
+      state.busy=true;battleTurns++;
+      if(k==='potion'){const heal=Math.min(60,ply.hpMax-ply.hp);ply.hp+=heal;log('<b>'+ply.n+'</b> drank a Potion! +'+heal+' HP');showDmg('ply',heal,false,true);if(typeof sfxHeal==='function')sfxHeal();setHp('ply',ply.hp/ply.hpMax);$('plyHpNum').textContent=ply.hp+'/'+ply.hpMax}
+      else if(k==='energy'){ply.statusEffects=ply.statusEffects||[];ply.statusEffects.push({t:'atkUp',turns:2,label:'⚡ ATK+'});log('<b>'+ply.n+'</b> chugged Energy Drink! Attack rising!');if(typeof sfxHeal==='function')sfxHeal()}
+      else if(k==='shield'){ply.statusEffects=ply.statusEffects||[];ply.statusEffects.push({t:'shield',turns:2,label:'🛡️ SHIELD'});log('<b>'+ply.n+'</b> raised an Iron Shield!');if(typeof sfxHeal==='function')sfxHeal()}
+      else if(k==='antidote'){const had=(ply.statusEffects||[]).filter(s=>['burn','poison','stun','freeze'].includes(s.t)).length;ply.statusEffects=(ply.statusEffects||[]).filter(s=>!['burn','poison','stun','freeze'].includes(s.t));log('<b>'+ply.n+'</b> used Antidote! '+(had?'Status cleared!':'Nothing to cure.'));if(typeof sfxHeal==='function')sfxHeal()}
+      await sleep(900);renderStatusEffects();updateBagButton();updateUltDisplay();
+      const fmIdx=chooseFoeMove(),fm=foe.moves[fmIdx];
+      await runAction(foe,ply,fm,'foe');foe.moves[fmIdx].ppNow=Math.max(0,foe.moves[fmIdx].ppNow-1);
+      if(ply.hp<=0){await onPlyFaint();return}
+      refreshTb();state.busy=false;
+    };
+    const _origUseMove=useMove;
+    window.useMove=async function(idx){
+      if(state.busy)return;const ply=state.partyTeam[state.active];const foe=state.partyFoe[state.foeActive];
+      tickStatus(ply,'ply');if(ply.hp<=0){await onPlyFaint();return}
+      tickStatus(foe,'foe');if(foe.hp<=0){await onFoeFaint();return}
+      await _origUseMove.apply(this,arguments);updateUltDisplay();renderStatusEffects();updateBagButton();
+    };
+    const _origRefresh=refreshTb;
+    window.refreshTb=function(){_origRefresh.apply(this,arguments);renderStatusEffects();updateUltDisplay();updateBagButton()};
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+
+<!-- BOARD MODE PATCH — tower-blocking + hand info button -->
+<style>
+.bb-hand-card .info-btn{position:absolute;top:2px;right:2px;width:18px;height:18px;border-radius:50%;background:rgba(0,0,0,.75);border:1px solid var(--gold);color:var(--gold);font-family:'Black Ops One',cursive;font-size:11px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:5;padding:0;line-height:1;font-weight:bold}
+.bb-hand-card .info-btn:hover{background:var(--gold);color:#000}
+</style>
+<script>
+(function(){
+  function init(){
+    if(typeof refreshBoard!=='function'||typeof towerPhase!=='function'||typeof state==='undefined'||typeof ROSTER==='undefined'){setTimeout(init,120);return}
+    window.towerPhase=async function(){
+      const bb=state.bb;
+      for(let lane=0;lane<2;lane++){
+        if(bb.towers.ply[lane]>0){const t=findClosestEnemyToTower('ply',lane);if(t){t.wounds++;bbLog(`Your Tower hit ${t.n}!`);if(typeof sfxTowerHit==='function')sfxTowerHit();await sleep(350)}}
+        if(bb.towers.foe[lane]>0){const t=findClosestEnemyToTower('foe',lane);if(t){const blocked=bb.statusEffects.some(s=>s.type==='tower-shield'&&s.lane===lane&&s.side==='ply');if(!blocked){t.wounds++;bbLog(`Foe Tower hit ${t.n}!`);if(typeof sfxTowerHit==='function')sfxTowerHit();await sleep(350)}else bbLog(`🛡 Tower shield blocked!`)}}
+      }
+      await cleanupAll();
+      for(let lane=0;lane<2;lane++){
+        for(const u of bb.neutral[lane].slice()){
+          if(u.wounds>=u.woundsMax)continue;
+          const ets=u.side==='ply'?'foe':'ply';
+          const enemiesInLane=bb.neutral[lane].filter(x=>x.side===ets&&x.wounds<x.woundsMax);
+          if(enemiesInLane.length>0){bbLog(`🛡 <b>${u.n}</b> blocked — ${enemiesInLane[0].n} stands in the way!`);await sleep(350);continue}
+          if(bb.towers[ets][lane]>0){
+            await new Promise(resolve=>{showDice('D6',null,n=>{if(typeof sfxDiceLand==='function')sfxDiceLand();const dmg=Math.max(1,Math.floor(n/2));bb.towers[ets][lane]=Math.max(0,bb.towers[ets][lane]-dmg);$('diceLabel').textContent=`${u.n} sieges Tower for ${dmg}w!`;$('diceContinue').style.display='block';bbLog(`<b>${u.n}</b> sieged ${ets==='foe'?'Foe':'Your'} Tower ${'AB'[lane]} ${dmg}w!`);if(typeof sfxTowerHit==='function')sfxTowerHit();$('diceContinue').onclick=()=>{closeDice();resolve()};setTimeout(()=>{if($('diceOverlay').classList.contains('on')){closeDice();resolve()}},1500)})});
+            await sleep(200);
+          } else if(bb.king[ets]>0){
+            await new Promise(resolve=>{showDice('D6',null,n=>{if(typeof sfxDiceLand==='function')sfxDiceLand();const dmg=Math.max(1,Math.floor(n/2));bb.king[ets]=Math.max(0,bb.king[ets]-dmg);$('diceLabel').textContent=`${u.n} hits KING for ${dmg}w!`;$('diceContinue').style.display='block';bbLog(`<b>${u.n}</b> hit King ${dmg}w!`);if(typeof sfxTowerHit==='function')sfxTowerHit();$('diceContinue').onclick=()=>{closeDice();resolve()};setTimeout(()=>{if($('diceOverlay').classList.contains('on')){closeDice();resolve()}},1500)})});
+            await sleep(200);
+          }
+        }
+      }
+      ['ply','foe'].forEach(s=>{
+        if(!bb.kingActive[s]&&(bb.towers[s][0]<=0||bb.towers[s][1]<=0)){bb.kingActive[s]=true;bbLog(`${s==='foe'?'Foe ':'Your '}King AWAKENED!`)}
+        if(bb.kingActive[s]){const e=s==='ply'?'foe':'ply';for(let lane=0;lane<2;lane++){const tg=bb.neutral[lane].find(u=>u.side===e&&u.wounds<u.woundsMax);if(tg){tg.wounds++;bbLog(`${s==='foe'?'Foe':'Your'} KING blasted ${tg.n}!`);break}}}
+      });
+      await cleanupAll();
+    };
+    const _origRefreshBoard=refreshBoard;
+    window.refreshBoard=function(){_origRefreshBoard.apply(this,arguments);injectHandInfoButtons()};
+    function injectHandInfoButtons(){
+      const handEl=document.getElementById('bbHand');if(!handEl)return;
+      handEl.querySelectorAll('.bb-hand-card').forEach((cardEl,idx)=>{
+        if(cardEl.querySelector('.info-btn'))return;
+        const ib=document.createElement('button');ib.className='info-btn';ib.textContent='i';ib.title='Card details';
+        ib.onclick=(e)=>{e.stopPropagation();e.preventDefault();const id=state.bb&&state.bb.hand?state.bb.hand[idx]:null;const card=id?ROSTER.find(r=>r.id===id):null;if(card&&typeof showCardDetail==='function')showCardDetail(card)};
+        cardEl.appendChild(ib);
+      });
+    }
+    injectHandInfoButtons();
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+
+<!-- GAME CONTROLS — speed, pause, mute, unstick + roster balance -->
+<style>
+#gameControls{position:fixed;top:max(8px,calc(env(safe-area-inset-top) + 4px));right:8px;z-index:9000;display:flex;gap:4px;font-family:'Black Ops One',cursive;flex-direction:column;align-items:flex-end;pointer-events:none}
+#gameControls > div,#gameControls button{pointer-events:auto}
+.gc-btn{padding:6px 9px;background:rgba(0,0,0,.78);border:1px solid var(--gold,#ffcb05);color:var(--gold,#ffcb05);border-radius:8px;font-family:'Black Ops One',cursive;font-size:11px;cursor:pointer;min-width:36px;letter-spacing:.5px}
+.gc-btn:active{transform:scale(.94)}
+.gc-btn.unstick{background:rgba(220,38,38,.9);border-color:#fff;color:#fff;font-size:10px;letter-spacing:1px;animation:gc-pulse 1s infinite}
+@keyframes gc-pulse{0%,100%{box-shadow:0 0 6px rgba(220,38,38,.5)}50%{box-shadow:0 0 14px rgba(220,38,38,.95)}}
+</style>
+<script>
+(function(){
+  const PREFS_KEY='arena-prefs-v1';
+  const prefs=(()=>{try{return JSON.parse(localStorage.getItem(PREFS_KEY))||{}}catch(e){return{}}})();
+  if(prefs.speed==null)prefs.speed=1;if(prefs.muted==null)prefs.muted=false;
+  let paused=false,pauseResolvers=[],lastLogTime=Date.now();
+  function savePrefs(){try{localStorage.setItem(PREFS_KEY,JSON.stringify(prefs))}catch(e){}}
+  function init(){
+    if(typeof sleep!=='function'||typeof state==='undefined'){setTimeout(init,150);return}
+    const _origSleep=sleep;
+    window.sleep=function(ms){const adjusted=Math.max(20,Math.round(ms/Math.max(0.25,prefs.speed||1)));return new Promise(resolve=>{const fire=()=>{if(paused)pauseResolvers.push(fire);else setTimeout(resolve,adjusted)};fire()})};
+    if(typeof tone==='function'){const _o=tone;window.tone=function(){if(prefs.muted)return;return _o.apply(this,arguments)}}
+    if(typeof bbLog==='function'){const _o=bbLog;window.bbLog=function(){lastLogTime=Date.now();return _o.apply(this,arguments)}}
+    if(typeof log==='function'){const _o=log;window.log=function(){lastLogTime=Date.now();return _o.apply(this,arguments)}}
+    if(typeof ROSTER!=='undefined'&&Array.isArray(ROSTER)){
+      const ELIXIR_WOUNDS={0:2,1:2,2:3,3:3,4:4,5:4,6:5,7:5,8:6,9:6,10:7};
+      ROSTER.forEach(card=>{
+        if(card._balanced||card.elixir==null)return;
+        card._balanced=true;
+        const cap=ELIXIR_WOUNDS[card.elixir]||5;
+        const baseHp=card.hp||140;
+        const currentWounds=Math.max(2,Math.min(7,Math.round(baseHp/40)));
+        if(currentWounds>cap){card.hp=cap*40;card.hpMax=card.hp}
+        if(card.elixir<=2&&card.atk)card.atk=Math.round(card.atk*1.1);
+      });
+    }
+    buildUI();
+    setInterval(()=>{const ub=document.getElementById('ctrlUnstick');if(!ub)return;const stuck=state&&state.bb&&state.bb.busy&&(Date.now()-lastLogTime>12000);ub.style.display=stuck?'block':'none'},2000);
+  }
+  function buildUI(){
+    if(document.getElementById('gameControls'))return;
+    const c=document.createElement('div');c.id='gameControls';
+    c.innerHTML='<div style="display:flex;gap:4px"><button id="ctrlSpeed" class="gc-btn" title="Speed">'+prefs.speed+'x</button><button id="ctrlPause" class="gc-btn" title="Pause">⏸</button><button id="ctrlMute" class="gc-btn" title="Sound" style="font-size:14px">'+(prefs.muted?'🔇':'🔊')+'</button></div><button id="ctrlUnstick" class="gc-btn unstick" style="display:none;margin-top:4px">⚠ UNSTICK</button>';
+    document.body.appendChild(c);
+    document.getElementById('ctrlSpeed').onclick=()=>{const speeds=[0.5,1,2];const idx=speeds.indexOf(prefs.speed);prefs.speed=speeds[(idx+1)%speeds.length];savePrefs();document.getElementById('ctrlSpeed').textContent=prefs.speed+'x'};
+    document.getElementById('ctrlPause').onclick=()=>{paused=!paused;document.getElementById('ctrlPause').textContent=paused?'▶':'⏸';if(!paused){const all=pauseResolvers.slice();pauseResolvers=[];all.forEach((r,i)=>setTimeout(r,i*30))}};
+    document.getElementById('ctrlMute').onclick=()=>{prefs.muted=!prefs.muted;savePrefs();document.getElementById('ctrlMute').textContent=prefs.muted?'🔇':'🔊'};
+    document.getElementById('ctrlUnstick').onclick=()=>{if(state&&state.bb){state.bb.busy=false;state.bb.phase='deploy';state.bb.whoseTurn='ply';if(typeof bbLog==='function')bbLog('⚙️ Force-unstuck — your turn.');if(typeof refreshBoard==='function')refreshBoard()}if(state)state.busy=false;lastLogTime=Date.now();document.getElementById('ctrlUnstick').style.display='none'};
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+
+<!-- SPELL CARDS + 1v1 ANIMATED EFFECTS -->
+<style>
+.spell-badge{position:absolute;bottom:1px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#7c3aed,#3b82f6);color:#fff;border:1px solid #ffcb05;border-radius:6px;padding:1px 5px;font-size:7px;font-family:'Black Ops One',cursive;letter-spacing:.5px;white-space:nowrap;z-index:6;pointer-events:none}
+.bb-hand-card.is-spell{border-color:#7c3aed;box-shadow:0 0 8px rgba(124,58,237,.4)}
+.spell-target{outline:3px dashed gold!important;outline-offset:-2px;cursor:crosshair!important;animation:t-pulse 1s ease-in-out infinite;position:relative;z-index:5}
+@keyframes t-pulse{0%,100%{outline-color:gold;filter:brightness(1)}50%{outline-color:#fff;filter:brightness(1.35)}}
+#spellTip{animation:s-tip 1.5s ease-in-out infinite}
+@keyframes s-tip{0%,100%{transform:translateX(-50%) scale(1)}50%{transform:translateX(-50%) scale(1.06)}}
+@keyframes spell-flash{0%{opacity:0;transform:scale(.4)}30%{opacity:1;transform:scale(1.3)}100%{opacity:0;transform:scale(1.7)}}
+@keyframes fx-blast{0%{opacity:0;transform:scale(.3)}30%{opacity:1;transform:scale(1.3)}100%{opacity:0;transform:scale(1.9)}}
+.fx-blast{position:absolute;inset:-12px;border-radius:50%;pointer-events:none;animation:fx-blast .7s ease-out forwards;z-index:9}
+@keyframes fx-heal{0%{opacity:0;transform:scale(.8)}40%{opacity:1;transform:scale(1.15)}100%{opacity:0;transform:scale(1.4)}}
+.fx-heal{position:absolute;inset:-10px;border-radius:50%;pointer-events:none;animation:fx-heal 1s ease-out forwards;z-index:9;background:radial-gradient(circle,rgba(34,197,94,.65),transparent 70%);box-shadow:0 0 28px rgba(34,197,94,.85)}
+</style>
+<script>
+(function(){
+  function init(){
+    if(typeof state==='undefined'||typeof ROSTER==='undefined'||typeof refreshBoard!=='function'){setTimeout(init,150);return}
+    if(window._spellsInited)return;window._spellsInited=true;
+    const title=(document.title||'').toLowerCase();
+    const game=title.includes('pokemon')?'pokemon':title.includes('marvel')?'marvel':title.includes('smash')?'smash':'clash';
+    const SP={'fireball':'damage','lightning':'damage','arrows':'splash','tornado':'pull','rocket':'rocket','freeze':'freeze','earthquake':'splash','rage':'buff','log':'pull','snowball':'damage','zap':'damage','poison':'splash','heal spell':'heal','mirror':'damage','graveyard':'summon','goblin barrel':'summon','inferno cast':'damage'};
+    const SW={'fireball':3,'lightning':3,'arrows':1,'tornado':0,'rocket':5,'freeze':0,'earthquake':2,'rage':0,'log':1,'snowball':1,'zap':1,'poison':1,'heal spell':2,'mirror':2,'graveyard':0,'goblin barrel':0,'inferno cast':4};
+    ROSTER.forEach(c=>{if(c.isSpell)return;const n=(c.n||'').toLowerCase();for(const k in SP)if(n.includes(k)){c.isSpell=true;c.spellType=SP[k];c.spellW=SW[k];break}});
+    const NS={
+      pokemon:[{id:'spl_thunder',n:'THUNDERBOLT',fb:'⚡',t:'electric',elixir:3,hp:80,atk:60,def:50,spd:99,spdIcon:'⚡',isSpell:true,spellType:'damage',spellW:3,moves:['Thunder']},{id:'spl_potion',n:'HYPER POTION',fb:'🧪',t:'normal',elixir:2,hp:80,atk:30,def:50,spd:60,spdIcon:'🧍',isSpell:true,spellType:'heal',spellW:2,moves:['Heal Pulse']},{id:'spl_roar',n:'DRAGON ROAR',fb:'🐉',t:'flying',elixir:1,hp:80,atk:30,def:30,spd:90,spdIcon:'⚡',isSpell:true,spellType:'pull',spellW:0,moves:['Push Back']},{id:'spl_quake',n:'EARTHQUAKE',fb:'🌋',t:'ground',elixir:4,hp:80,atk:60,def:50,spd:60,spdIcon:'🐢',isSpell:true,spellType:'splash',spellW:2,moves:['Quake']}],
+      marvel:[{id:'spl_repulsor',n:'STARK REPULSOR',fb:'💥',t:'tech',elixir:3,hp:80,atk:60,def:50,spd:99,spdIcon:'⚡',isSpell:true,spellType:'damage',spellW:3,moves:['Beam']},{id:'spl_web',n:'WEB SHOT',fb:'🕸️',t:'tech',elixir:2,hp:80,atk:30,def:50,spd:80,spdIcon:'⚡',isSpell:true,spellType:'freeze',spellW:0,moves:['Web Snare']},{id:'spl_heal',n:'HEALING FACTOR',fb:'💚',t:'mutant',elixir:2,hp:80,atk:30,def:50,spd:60,spdIcon:'🧍',isSpell:true,spellType:'heal',spellW:2,moves:['Heal']},{id:'spl_bomb',n:'PUMPKIN BOMB',fb:'🎃',t:'tech',elixir:4,hp:80,atk:60,def:50,spd:80,spdIcon:'🧍',isSpell:true,spellType:'splash',spellW:2,moves:['Bomb']}],
+      smash:[{id:'spl_smashball',n:'SMASH BALL',fb:'💎',t:'magic',elixir:4,hp:80,atk:80,def:50,spd:99,spdIcon:'⚡',isSpell:true,spellType:'damage',spellW:4,moves:['Final Smash']},{id:'spl_pokeball',n:'POKE BALL',fb:'🔴',t:'magic',elixir:2,hp:80,atk:30,def:50,spd:80,spdIcon:'⚡',isSpell:true,spellType:'splash',spellW:1,moves:['Random']},{id:'spl_heart',n:'HEART CONTAINER',fb:'❤️',t:'magic',elixir:2,hp:80,atk:30,def:50,spd:60,spdIcon:'🧍',isSpell:true,spellType:'heal',spellW:2,moves:['Heal']},{id:'spl_bumper',n:'BUMPER',fb:'🎾',t:'speedster',elixir:1,hp:80,atk:30,def:30,spd:90,spdIcon:'⚡',isSpell:true,spellType:'pull',spellW:0,moves:['Knockback']}]
+    };
+    if(game!=='clash'&&NS[game])ROSTER.push(...NS[game]);
+    if(typeof deployToBack==='function'){const _o=deployToBack;window.deployToBack=function(lane){const idx=state.bb&&state.bb.selectedCard;if(idx!=null){const c=ROSTER.find(r=>r.id===state.bb.hand[idx]);if(c&&c.isSpell){bbLog('✨ '+c.n+' is a spell — tap an enemy/ally as the target.');return}}return _o.apply(this,arguments)}}
+    const _origRefresh=refreshBoard;
+    window.refreshBoard=function(){_origRefresh.apply(this,arguments);decorateSpells();setupSpellTargeting()};
+    function decorateSpells(){document.querySelectorAll('#bbHand .bb-hand-card').forEach((el,idx)=>{const id=state.bb&&state.bb.hand?state.bb.hand[idx]:null;const c=id?ROSTER.find(r=>r.id===id):null;el.classList.toggle('is-spell',!!(c&&c.isSpell));if(c&&c.isSpell&&!el.querySelector('.spell-badge')){const b=document.createElement('div');b.className='spell-badge';b.textContent='✨ SPELL';el.appendChild(b)}})}
+    function setupSpellTargeting(){
+      document.querySelectorAll('.spell-target').forEach(el=>el.classList.remove('spell-target'));
+      const ot=document.getElementById('spellTip');if(ot)ot.remove();
+      const idx=state.bb?state.bb.selectedCard:null;if(idx==null)return;
+      const id=state.bb.hand[idx];const c=ROSTER.find(r=>r.id===id);
+      if(!c||!c.isSpell)return;
+      const isHeal=['heal','buff'].includes(c.spellType);
+      const t=document.createElement('div');t.id='spellTip';
+      t.style.cssText='position:fixed;top:max(64px,calc(env(safe-area-inset-top) + 64px));left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#7c3aed,#3b82f6);border:2px solid gold;border-radius:12px;padding:8px 16px;color:#fff;font-family:Black Ops One,cursive;font-size:11px;z-index:8500;pointer-events:none;text-align:center;letter-spacing:.8px;box-shadow:0 8px 20px rgba(0,0,0,.5)';
+      t.innerHTML='✨ '+c.n+'<br><span style="font-size:9px;opacity:.85">TAP '+(isHeal?'AN ALLY':'AN ENEMY')+' TARGET</span>';
+      document.body.appendChild(t);
+      const sels=isHeal?['.bb-unit.ply','.bb-tower:not(.foe)','.bb-king:not(.foe)']:['.bb-unit.foe','.bb-tower.foe','.bb-king.foe'];
+      document.querySelectorAll(sels.join(',')).forEach(el=>{if(el.classList.contains('dead'))return;el.classList.add('spell-target');el.onclick=(e)=>{e.stopPropagation();castSpell(c,el,idx)}});
+    }
+    async function castSpell(card,el,idx){
+      const bb=state.bb;if(bb.busy)return;
+      if(bb.elixir<card.elixir){bbLog('⚡ Need '+card.elixir+' elixir');return}
+      bb.busy=true;bb.elixir-=card.elixir;
+      bb.hand.splice(idx,1);bb.selectedCard=null;
+      bb.deploysCount=(bb.deploysCount||0)+1;
+      bbLog('✨ <b>'+card.n+'</b> cast!');
+      if(typeof sfxDeploy==='function')sfxDeploy();
+      flashSpellAt(el,card.spellType);
+      const tgt=findTargetFromEl(el);if(tgt)await applySpell(card,tgt);
+      const tip=document.getElementById('spellTip');if(tip)tip.remove();
+      bb.busy=false;drawCards('ply',1);
+      if(typeof checkBoardWin==='function'&&checkBoardWin())return;
+      refreshBoard();
+    }
+    function findTargetFromEl(el){
+      const bb=state.bb;
+      if(el.classList.contains('bb-king'))return{type:'king',side:el.classList.contains('foe')?'foe':'ply'};
+      if(el.classList.contains('bb-tower')){const row=el.parentElement;const idx=Array.from(row.children).indexOf(el);return{type:'tower',lane:idx,side:el.classList.contains('foe')?'foe':'ply'}}
+      if(el.classList.contains('bb-unit')){const side=el.classList.contains('ply')?'ply':'foe';for(let lane=0;lane<2;lane++)for(const u of bb.neutral[lane])if(u.side===side&&u.wounds<u.woundsMax)return{type:'unit',unit:u,lane};for(let lane=0;lane<2;lane++)for(let row=0;row<2;row++)for(const u of bb.zones[side][row][lane])if(u.wounds<u.woundsMax)return{type:'unit',unit:u,lane}}
+      return null;
+    }
+    async function applySpell(card,tgt){
+      const bb=state.bb;const w=card.spellW||2;
+      switch(card.spellType){
+        case 'damage':case 'rocket':case 'lightning':if(tgt.type==='unit'){tgt.unit.wounds=Math.min(tgt.unit.woundsMax,tgt.unit.wounds+w);bb.dmgDealt+=w;bbLog('🔥 '+w+'w to '+tgt.unit.n)}else if(tgt.type==='tower'){bb.towers[tgt.side][tgt.lane]=Math.max(0,bb.towers[tgt.side][tgt.lane]-w);bb.dmgDealt+=w;bbLog('💥 Tower hit '+w+'!')}else if(tgt.type==='king'){bb.king[tgt.side]=Math.max(0,bb.king[tgt.side]-w);bb.dmgDealt+=w;bbLog('💥 KING '+w+'!')}break;
+        case 'splash':if(tgt.type==='unit'){for(const u of bb.neutral[tgt.lane])if(u.side==='foe'&&u.wounds<u.woundsMax){u.wounds=Math.min(u.woundsMax,u.wounds+w);bb.dmgDealt+=w}bbLog('💥 Lane '+'AB'[tgt.lane]+' splash!')}else if(tgt.type==='tower'){bb.towers[tgt.side][tgt.lane]=Math.max(0,bb.towers[tgt.side][tgt.lane]-w);bbLog('💥 Tower splash')}break;
+        case 'freeze':if(tgt.type==='unit'){bb.statusEffects.push({type:'frozen',target:tgt.unit,ttl:2});bbLog('🧊 '+tgt.unit.n+' frozen 2 turns!')}break;
+        case 'pull':if(tgt.type==='unit'){for(let l=0;l<2;l++){const i=bb.neutral[l].indexOf(tgt.unit);if(i>=0){bb.neutral[l].splice(i,1);bb.zones.foe[1][l].push(tgt.unit);bbLog('🌪 '+tgt.unit.n+' pushed back!');break}}}break;
+        case 'heal':if(tgt.type==='unit'){tgt.unit.wounds=Math.max(0,tgt.unit.wounds-w);bbLog('💚 '+tgt.unit.n+' healed '+w+'w!')}else if(tgt.type==='tower'){bb.towers.ply[tgt.lane]=Math.min(5,bb.towers.ply[tgt.lane]+w);bbLog('💚 Tower healed!')}else if(tgt.type==='king'){bb.king.ply=Math.min(8,bb.king.ply+w);bbLog('💚 King healed!')}break;
+        case 'buff':if(tgt.type==='unit'){bb.statusEffects.push({type:'rage',target:tgt.unit,ttl:2});bbLog('🔥 '+tgt.unit.n+' RAGE!')}break;
+        case 'summon':const lane=tgt.lane||0;if(typeof buildUnit==='function'){const skel=buildUnit({id:'sum_'+Date.now(),n:'Summon',fb:'💀',t:'beast',hp:80,atk:50,def:40,spd:80,elixir:0,spdIcon:'⚡',moves:[]},'ply',lane);bb.zones.ply[1][lane].push(skel);bbLog('💀 Summoned ally!')}break;
+      }
+      await sleep(400);
+    }
+    function flashSpellAt(el,type){const fx=document.createElement('div');const colors={damage:'rgba(220,38,38,.85)',lightning:'rgba(255,215,0,.95)',rocket:'rgba(220,38,38,.95)',splash:'rgba(245,101,39,.85)',freeze:'rgba(34,211,238,.85)',pull:'rgba(168,85,247,.85)',heal:'rgba(34,197,94,.85)',buff:'rgba(255,215,0,.7)',summon:'rgba(120,120,120,.7)'};const r=el.getBoundingClientRect();fx.style.cssText='position:fixed;left:'+r.left+'px;top:'+r.top+'px;width:'+r.width+'px;height:'+r.height+'px;pointer-events:none;z-index:9999;animation:spell-flash 0.7s ease-out forwards;border-radius:14px;background:radial-gradient(circle,'+(colors[type]||colors.damage)+',transparent 60%)';document.body.appendChild(fx);setTimeout(()=>fx.remove(),750)}
+    if(typeof runAction==='function'){const _wRA=runAction;window.runAction=async function(att,def,move,side){const oS=side==='ply'?'foe':'ply';const oSpr=document.getElementById(oS+'Sprite');const sSpr=document.getElementById(side+'Sprite');if(move&&!move.heal&&oSpr){const t=(move.t||'').toLowerCase();const colors={fire:'#ff4500',mage:'#7c3aed',ice:'#22d3ee',water:'#3b82f6',electric:'#fbbf24',archer:'#22c55e',beast:'#f97316',grass:'#22c55e',psychic:'#a855f7',ground:'#a16207',flying:'#06b6d4',rock:'#71717a',ghost:'#6366f1',dragon:'#dc2626',steel:'#71717a',poison:'#a855f7',dark:'#4c1d95',fairy:'#ec4899',tech:'#fbbf24',mutant:'#ec4899',cosmic:'#22d3ee',symbiote:'#dc2626',soldier:'#2563eb',brawler:'#ff6b35',sword:'#3b82f6',zoner:'#10b981',speedster:'#fbbf24',magic:'#a855f7',trickster:'#ec4899',knight:'#9ca3af',air:'#06b6d4',building:'#a16207'};const c=colors[t]||'#ff4500';const blast=document.createElement('div');blast.className='fx-blast';blast.style.background='radial-gradient(circle,'+c+'cc,transparent 65%)';blast.style.boxShadow='0 0 30px '+c+',inset 0 0 20px '+c;oSpr.style.position='relative';oSpr.appendChild(blast);setTimeout(()=>{if(blast.parentNode)blast.remove()},750)}if(move&&move.heal&&sSpr){const heal=document.createElement('div');heal.className='fx-heal';sSpr.style.position='relative';sSpr.appendChild(heal);setTimeout(()=>{if(heal.parentNode)heal.remove()},1050)}return _wRA.apply(this,arguments)}}
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+
+<!-- v3 — story 1v1, dice anim, roll history, end-turn card, etc. -->
+<style>
+#home > .shield, #home > .pokeball{display:none!important}
+.dice-rolling-active .dice-cube{animation:diceSpin 1s linear infinite!important}
+.dice-rolling-active .dice-face{background:linear-gradient(135deg,#ffcb05,#ff6b00)!important;color:#000!important;text-shadow:0 0 10px rgba(255,255,255,.6);box-shadow:0 0 30px rgba(255,203,5,.8),inset 0 0 20px rgba(0,0,0,.25)!important;border-color:#fff!important}
+@keyframes diceSpin{0%{transform:rotateX(0) rotateY(0) rotateZ(0)}100%{transform:rotateX(720deg) rotateY(540deg) rotateZ(360deg)}}
+.roll-history{position:fixed;bottom:max(160px,calc(env(safe-area-inset-bottom) + 160px));left:6px;background:rgba(0,0,0,.78);border:1px solid rgba(255,203,5,.5);border-radius:8px;padding:5px 8px;font-family:'Black Ops One',cursive;font-size:9px;color:#ffcb05;z-index:7000;letter-spacing:.5px;display:none;max-width:160px}
+.roll-history.show{display:block}
+.roll-history span{color:#fff;background:rgba(255,255,255,.1);padding:1px 5px;border-radius:4px;margin-left:3px;font-size:8px}
+.end-turn-card{flex-shrink:0;width:78px;background:linear-gradient(160deg,#16a34a,#15803d)!important;border:2px solid #22c55e!important;border-radius:10px;color:#fff;cursor:pointer;font-family:'Black Ops One',cursive;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px;text-align:center;min-height:108px;letter-spacing:1px}
+.end-turn-card:active{transform:scale(.96)}
+.end-turn-card:disabled{opacity:.35;cursor:not-allowed}
+.end-turn-card .icon{font-size:32px;margin-bottom:6px;line-height:1}
+.end-turn-card .label{font-size:10px;line-height:1.15}
+</style>
+<script>
+(function(){
+  function init(){
+    if(typeof state==='undefined'||typeof refreshBoard!=='function'){setTimeout(init,150);return}
+    if(window._v3Inited)return;window._v3Inited=true;
+    function toggleControls(){const onBoard=document.querySelector('#bbattle.on');const ss=document.getElementById('ctrlSpeed');const pp=document.getElementById('ctrlPause');if(ss)ss.style.display=onBoard?'':'none';if(pp)pp.style.display=onBoard?'':'none'}
+    setInterval(toggleControls,400);toggleControls();
+    if(typeof showDice==='function'){const _origShowDice=showDice;window.showDice=function(type,fixedN,cb){const o=document.getElementById('diceOverlay');const face=document.getElementById('diceFace');const num=document.getElementById('diceNum');const lbl=document.getElementById('diceLabel');const cont=document.getElementById('diceContinue');if(!o||!face){return _origShowDice.apply(this,arguments)}o.classList.add('on');o.classList.add('dice-rolling-active');face.textContent='?';if(num)num.textContent='?';if(lbl)lbl.textContent='Rolling '+type+'…';if(cont)cont.style.display='none';const max={D20:20,D6:6,D8:8,D12:12}[type]||20;const tickInt=setInterval(()=>{face.textContent=Math.floor(Math.random()*max)+1},65);setTimeout(()=>{clearInterval(tickInt);o.classList.remove('dice-rolling-active');const n=fixedN!=null?fixedN:Math.floor(Math.random()*max)+1;face.textContent=n;if(num)num.textContent=n;if(state.bb){state.bb.rollHistory=[{n,type},...(state.bb.rollHistory||[]).slice(0,2)];updateRollHistoryUI()}cb(n)},1100)}}
+    function updateRollHistoryUI(){let el=document.getElementById('rollHistory');if(!el){el=document.createElement('div');el.id='rollHistory';el.className='roll-history';document.body.appendChild(el)}const hist=state.bb&&state.bb.rollHistory?state.bb.rollHistory:[];const onBoard=!!document.querySelector('#bbattle.on');if(hist.length===0||!onBoard){el.classList.remove('show');return}el.innerHTML='🎲 LAST ROLLS '+hist.map(r=>'<span>'+r.type+':'+r.n+'</span>').join('');el.classList.add('show')}
+    setInterval(updateRollHistoryUI,500);
+    const _origRefresh=refreshBoard;
+    window.refreshBoard=function(){_origRefresh.apply(this,arguments);injectEndTurnCard()};
+    function injectEndTurnCard(){const hand=document.getElementById('bbHand');if(!hand)return;const orig=document.getElementById('bbEndDeploy');if(orig)orig.style.display='none';let card=hand.querySelector('.end-turn-card');const isPlayerDeploy=state.bb&&state.bb.whoseTurn==='ply'&&state.bb.phase==='deploy';if(!card){card=document.createElement('button');card.className='bb-hand-card end-turn-card';card.innerHTML='<div class="icon">⏭</div><div class="label">END<br>TURN</div>';card.onclick=()=>{if(typeof endDeployPhase==='function')endDeployPhase()};hand.appendChild(card)}card.style.display=isPlayerDeploy?'':'none';card.disabled=!isPlayerDeploy}
+    if(typeof BOSSES!=='undefined'&&Array.isArray(BOSSES)&&BOSSES.length>0){const home=document.getElementById('home');if(home&&!home.querySelector('.tb-story-btn')){const btn=document.createElement('button');btn.className='menu-btn tb-story-btn';btn.innerHTML='<span class="ico">⚔️</span><span class="lbl">1V1 CAMPAIGN<span class="sub">'+BOSSES.length+' boss duels</span></span><span class="arr">›</span>';btn.onclick=showTbStoryModal;home.appendChild(btn)}}
+    function showTbStoryModal(){const ov=document.createElement('div');ov.id='tbStoryModal';ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9000;display:flex;flex-direction:column;align-items:center;padding:20px;padding-top:max(40px,calc(env(safe-area-inset-top) + 30px));overflow-y:auto';ov.innerHTML='<div style="color:#ffcb05;font-family:Black Ops One,cursive;font-size:20px;margin-bottom:8px;letter-spacing:2px;text-align:center">⚔️ 1V1 CAMPAIGN</div><div style="color:rgba(255,255,255,.7);font-family:Black Ops One,cursive;font-size:11px;margin-bottom:16px;text-align:center;letter-spacing:.5px">Turn battle vs each boss\'s signature team</div>';BOSSES.forEach(b=>{const card=document.createElement('button');card.style.cssText='width:100%;max-width:400px;margin-bottom:8px;padding:12px;background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--bdr);border-radius:10px;color:#fff;font-family:Black Ops One,cursive;cursor:pointer;display:flex;align-items:center;gap:10px;text-align:left;letter-spacing:.5px';card.innerHTML='<span style="font-size:1.8rem">'+(b.ico||'⚔')+'</span><div style="flex:1"><div style="font-size:13px;color:#ffcb05">'+b.n+'</div><div style="font-size:9px;opacity:.75;margin-top:2px">'+(b.desc||'Boss duel')+'</div></div><span style="color:#ffcb05;font-size:18px">›</span>';card.onclick=()=>{ov.remove();startStoryTb(b.id)};ov.appendChild(card)});const close=document.createElement('button');close.textContent='✕ CLOSE';close.style.cssText='margin-top:14px;padding:10px 24px;background:rgba(255,80,80,.2);border:1px solid var(--red);color:#fff;font-family:Black Ops One,cursive;cursor:pointer;border-radius:8px;font-size:12px;letter-spacing:1px';close.onclick=()=>ov.remove();ov.appendChild(close);document.body.appendChild(ov)}
+    window.startStoryTb=function(bossId){const boss=BOSSES.find(b=>b.id===bossId);if(!boss)return;state.pendingStoryTbBoss=boss;state.storyBoss=boss;if(typeof openSelect==='function')openSelect('tb',bossId)};
+    if(typeof startTurnBattle==='function'){const _origStartTb=startTurnBattle;window.startTurnBattle=function(){const stashed=state.pendingStoryTbBoss;_origStartTb.apply(this,arguments);if(stashed){state.storyBoss=stashed;state.pendingStoryTbBoss=null;const lv=10;const teamIds=stashed.team||[];const foes=teamIds.slice(0,3).map(id=>{const t=ROSTER.find(r=>r.id===id);return t&&typeof buildHero==='function'?buildHero(t,lv):null}).filter(Boolean);if(foes.length>0){state.partyFoe=foes;state.foeActive=0;const tt=document.getElementById('tbTitle');if(tt)tt.textContent='⚔️ '+stashed.n;const tm=document.getElementById('tbMeta');if(tm)tm.textContent=stashed.desc||'Boss duel';if(typeof refreshTb==='function')refreshTb();if(typeof log==='function')log('<b>'+stashed.n+'</b> challenges you to a duel!')}}}}
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+
+<!-- v4 — compact home + deck filters -->
+<style>
+#home.on{display:grid!important;grid-template-columns:1fr 1fr!important;gap:6px;padding:10px 12px 14px;align-content:start;overflow-y:auto}
+#home > .launcher-back,#home > img,#home > .logo-main,#home > .logo-sub,#home > .logo-tag,#home > .shield,#home > .pokeball,#home > .mode-pill{grid-column:1/-1}
+#home > .mode-pill{display:none!important}
+#home > img{max-height:54px!important;margin:2px auto!important;max-width:80%}
+#home > .logo-main{font-size:1.5rem!important;letter-spacing:3px!important;margin:0!important;line-height:1;text-align:center}
+#home > .logo-sub{font-size:.85rem!important;letter-spacing:5px!important;margin:0!important;line-height:1;text-align:center}
+#home > .logo-tag{font-size:.55rem!important;letter-spacing:1.5px!important;margin:2px 0 6px!important;text-align:center}
+#home > .menu-btn{width:auto!important;max-width:none!important;min-height:auto!important;padding:9px 8px!important;margin:0!important;font-size:.7rem!important;gap:6px!important;letter-spacing:.5px!important;display:flex!important;align-items:center}
+#home > .menu-btn .ico{font-size:1.2rem!important;width:24px!important;flex-shrink:0;text-align:center}
+#home > .menu-btn .lbl{font-size:.65rem!important;line-height:1.1!important;flex:1;min-width:0;overflow:hidden}
+#home > .menu-btn .sub{font-size:.5rem!important;letter-spacing:0!important;margin-top:1px!important;display:block;opacity:.7}
+#home > .menu-btn .arr{display:none!important}
+@media(max-height:680px){
+  #home > img{max-height:40px!important}
+  #home > .logo-main{font-size:1.2rem!important}
+  #home > .logo-sub{font-size:.75rem!important}
+  #home > .logo-tag{display:none!important}
+  #home > .menu-btn{padding:7px 6px!important;font-size:.6rem!important}
+  #home > .menu-btn .ico{font-size:1rem!important;width:20px!important}
+  #home > .menu-btn .sub{display:none!important}
+}
+.select-filters{padding:6px 10px;background:rgba(0,0,0,.4);border-bottom:1px solid var(--bdr)}
+.select-filters .filter-row{display:flex;gap:4px;margin-bottom:4px;align-items:center;flex-wrap:wrap}
+.select-filters .filter-row:last-child{margin-bottom:0}
+.select-filters .filter-label{font-family:'Black Ops One',cursive;font-size:9px;color:var(--gold);letter-spacing:1px;margin-right:4px;flex-shrink:0;min-width:42px}
+.filter-chip{padding:3px 8px;background:rgba(255,255,255,.05);border:1px solid var(--bdr);border-radius:12px;color:var(--soft);font-family:'Black Ops One',cursive;font-size:9px;cursor:pointer;letter-spacing:.5px;text-transform:uppercase}
+.filter-chip:active{transform:scale(.94)}
+.filter-chip.active{background:var(--gold);color:#000;border-color:var(--gold)}
+.filter-chip.clear{background:rgba(220,38,38,.15);border-color:var(--red);color:#fff}
+</style>
+<script>
+(function(){
+  function init(){
+    if(typeof renderSelect!=='function'||typeof ROSTER==='undefined'){setTimeout(init,150);return}
+    if(window._v4Inited)return;window._v4Inited=true;
+    let activeFilters={types:[],elixirs:[]};
+    function buildFilterUI(){const grid=document.getElementById('selectGrid');if(!grid||document.getElementById('selectFilters'))return;const types=[...new Set(ROSTER.map(c=>c.t).filter(Boolean))].sort();const elixirs=[...new Set(ROSTER.map(c=>c.elixir).filter(e=>e!=null))].sort((a,b)=>a-b);const fil=document.createElement('div');fil.id='selectFilters';fil.className='select-filters';let html='<div class="filter-row"><span class="filter-label">TYPE</span>';types.forEach(t=>{html+='<button class="filter-chip" data-filter="type" data-val="'+t+'">'+t+'</button>'});html+='</div><div class="filter-row"><span class="filter-label">ELIXIR</span>';elixirs.forEach(e=>{html+='<button class="filter-chip" data-filter="elixir" data-val="'+e+'">'+e+'</button>'});html+='<button class="filter-chip clear" id="filterClear">✕ CLEAR</button></div>';fil.innerHTML=html;grid.parentNode.insertBefore(fil,grid);fil.addEventListener('click',e=>{const t=e.target.closest('.filter-chip');if(!t)return;if(t.id==='filterClear'){activeFilters={types:[],elixirs:[]};fil.querySelectorAll('.filter-chip.active').forEach(c=>c.classList.remove('active'))}else{t.classList.toggle('active');const fi=t.dataset.filter;const val=t.dataset.val;if(fi==='type'){if(t.classList.contains('active'))activeFilters.types.push(val);else activeFilters.types=activeFilters.types.filter(x=>x!==val)}else if(fi==='elixir'){const ev=parseInt(val);if(t.classList.contains('active'))activeFilters.elixirs.push(ev);else activeFilters.elixirs=activeFilters.elixirs.filter(x=>x!==ev)}}applyFilters()})}
+    function applyFilters(){const f=activeFilters;const cards=document.querySelectorAll('#selectGrid .hero-card');const noFilter=f.types.length===0&&f.elixirs.length===0;cards.forEach(card=>{if(noFilter){card.style.display='';return}const nameEl=card.querySelector('.name');if(!nameEl){card.style.display='';return}const r=ROSTER.find(x=>x.n===nameEl.textContent);if(!r){card.style.display='';return}let show=true;if(f.types.length>0&&!f.types.includes(r.t))show=false;if(f.elixirs.length>0&&!f.elixirs.includes(r.elixir))show=false;card.style.display=show?'':'none'})}
+    const _origRender=renderSelect;
+    window.renderSelect=function(){_origRender.apply(this,arguments);buildFilterUI();applyFilters()};
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+
+<!-- FX FIX: dice settles flat, no duplicate number, sprite stays -->
+<style>
+.dice-num{display:none!important}
+@keyframes diceRoll{0%{transform:rotateX(0) rotateY(0)}40%{transform:rotateX(180deg) rotateY(180deg)}100%{transform:rotateX(0) rotateY(360deg)}}
+@keyframes diceSpin{0%{transform:rotateX(0) rotateY(0)}25%{transform:rotateX(180deg) rotateY(90deg)}50%{transform:rotateX(360deg) rotateY(180deg)}75%{transform:rotateX(540deg) rotateY(270deg)}100%{transform:rotateX(720deg) rotateY(360deg)}}
+.dice-rolling-active .dice-cube{animation:diceSpin 1s linear infinite!important}
+.dice-rolling-active .dice-face{background:linear-gradient(135deg,#ffcb05,#ff6b00)!important;color:#000!important;text-shadow:0 0 10px rgba(255,255,255,.6);box-shadow:0 0 30px rgba(255,203,5,.8),inset 0 0 20px rgba(0,0,0,.25)!important;border-color:#fff!important}
+.tb-sprite{position:absolute!important}
+.tb-sprite > .fx-blast,.tb-sprite > .fx-heal{display:none!important}
+</style>
+<script>
+(function(){
+  function init(){
+    if(typeof runAction!=='function'||typeof state==='undefined'){setTimeout(init,200);return}
+    if(window._fxFixInited)return;window._fxFixInited=true;
+    const _wRA=runAction;
+    window.runAction=async function(att,def,move,side){
+      const oS=side==='ply'?'foe':'ply';
+      const oSpr=document.getElementById(oS+'Sprite');
+      const sSpr=document.getElementById(side+'Sprite');
+      if(oSpr&&oSpr.style.position)oSpr.style.position='';
+      if(sSpr&&sSpr.style.position)sSpr.style.position='';
+      if(move&&!move.heal&&oSpr){
+        const t=(move.t||'').toLowerCase();
+        const colors={fire:'#ff4500',mage:'#7c3aed',ice:'#22d3ee',water:'#3b82f6',electric:'#fbbf24',archer:'#22c55e',beast:'#f97316',grass:'#22c55e',psychic:'#a855f7',ground:'#a16207',flying:'#06b6d4',rock:'#71717a',ghost:'#6366f1',dragon:'#dc2626',steel:'#71717a',poison:'#a855f7',dark:'#4c1d95',fairy:'#ec4899',tech:'#fbbf24',mutant:'#ec4899',cosmic:'#22d3ee',symbiote:'#dc2626',soldier:'#2563eb',brawler:'#ff6b35',sword:'#3b82f6',zoner:'#10b981',speedster:'#fbbf24',magic:'#a855f7',trickster:'#ec4899',knight:'#9ca3af',air:'#06b6d4',building:'#a16207'};
+        const c=colors[t]||'#ff4500';
+        const r=oSpr.getBoundingClientRect();
+        if(r.width&&r.height){const blast=document.createElement('div');blast.style.cssText='position:fixed;left:'+(r.left-12)+'px;top:'+(r.top-12)+'px;width:'+(r.width+24)+'px;height:'+(r.height+24)+'px;border-radius:50%;pointer-events:none;animation:fx-blast .7s ease-out forwards;z-index:50;background:radial-gradient(circle,'+c+'cc,transparent 65%);box-shadow:0 0 30px '+c+',inset 0 0 20px '+c;document.body.appendChild(blast);setTimeout(()=>{if(blast.parentNode)blast.remove()},750)}
+      }
+      if(move&&move.heal&&sSpr){
+        const r=sSpr.getBoundingClientRect();
+        if(r.width&&r.height){const heal=document.createElement('div');heal.style.cssText='position:fixed;left:'+(r.left-10)+'px;top:'+(r.top-10)+'px;width:'+(r.width+20)+'px;height:'+(r.height+20)+'px;border-radius:50%;pointer-events:none;animation:fx-heal 1s ease-out forwards;z-index:50;background:radial-gradient(circle,rgba(34,197,94,.65),transparent 70%);box-shadow:0 0 28px rgba(34,197,94,.85)';document.body.appendChild(heal);setTimeout(()=>{if(heal.parentNode)heal.remove()},1050)}
+      }
+      return _wRA.apply(this,arguments);
+    };
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+
+<!-- v5 — pre-game deck picker + reposition 1V1 campaign -->
+<style>
+.dp-modal{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9000;display:flex;flex-direction:column;align-items:center;padding:20px;padding-top:max(40px,calc(env(safe-area-inset-top) + 30px));overflow-y:auto;font-family:'Black Ops One',cursive}
+.dp-deck{width:100%;max-width:400px;margin-bottom:8px;padding:12px;background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--gold,#ffcb05);border-radius:10px;color:#fff;font-family:'Black Ops One',cursive;cursor:pointer;text-align:left;letter-spacing:.5px}
+.dp-deck:active{transform:scale(.97)}
+.dp-deck .nm{font-size:13px;color:#ffcb05}
+.dp-deck .sm{font-size:9px;opacity:.75;margin-top:3px}
+.dp-new{width:100%;max-width:400px;margin-bottom:8px;padding:12px;background:linear-gradient(135deg,#16a34a,#15803d);border:1px solid #22c55e;border-radius:10px;color:#fff;font-family:'Black Ops One',cursive;cursor:pointer;font-size:13px;letter-spacing:1px}
+.dp-close{margin-top:6px;padding:8px 20px;background:rgba(255,80,80,.15);border:1px solid var(--red,#ee1515);color:#fff;font-family:'Black Ops One',cursive;cursor:pointer;border-radius:8px;font-size:11px;letter-spacing:1px}
+</style>
+<script>
+(function(){function init(){if(typeof openSelect!=='function'||typeof state==='undefined'){setTimeout(init,150);return}if(window._deckPickerInited)return;window._deckPickerInited=true;function reposition(){const home=document.getElementById('home');if(!home)return;const tbStoryBtn=home.querySelector('.tb-story-btn');if(!tbStoryBtn)return;const qbbBtn=Array.from(home.querySelectorAll('button.menu-btn')).find(b=>!b.classList.contains('tb-story-btn')&&((b.getAttribute('onclick')||'').includes('quick-bb')||(b.textContent||'').includes('QUICK BOARD')));if(qbbBtn&&qbbBtn.previousSibling!==tbStoryBtn){qbbBtn.parentNode.insertBefore(tbStoryBtn,qbbBtn)}}setTimeout(reposition,400);setInterval(reposition,2000);const _origOpenSelect=openSelect;window.openSelect=function(mode,bossId){const decks=(typeof getDecks==='function')?(getDecks(mode)||[]):[];const valid=[];decks.forEach((d,idx)=>{if(d&&d.members&&d.members.length>0)valid.push({deck:d,idx})});if(valid.length===0)return _origOpenSelect.apply(this,arguments);showDeckPicker(mode,bossId,valid,_origOpenSelect)};function showDeckPicker(mode,bossId,validDecks,origOpen){const ov=document.createElement('div');ov.id='deckPickerModal';ov.className='dp-modal';const modeLabel=mode==='tb'?'⚔️ TURN BATTLE':'🃏 BOARD BATTLE';const bossInfo=bossId&&typeof BOSSES!=='undefined'?BOSSES.find(b=>b.id===bossId):null;let html='<div style="color:#ffcb05;font-size:18px;letter-spacing:2px;margin-bottom:6px;text-align:center">📋 PICK YOUR DECK</div>';html+='<div style="color:rgba(255,255,255,.7);font-size:11px;margin-bottom:14px;text-align:center;letter-spacing:1px">'+modeLabel+(bossInfo?' · vs '+bossInfo.n:'')+'</div>';validDecks.forEach((item,i)=>{const d=item.deck;const summary=(typeof summarizeDeck==='function')?summarizeDeck(d.members):(d.members.length+' cards');html+='<button class="dp-deck" data-real-idx="'+item.idx+'"><div class="nm">'+(d.name||'Saved Deck '+(i+1))+'</div><div class="sm">'+summary+'</div></button>'});html+='<button class="dp-new">🆕 BUILD NEW DECK</button><button class="dp-close">✕ CANCEL</button>';ov.innerHTML=html;document.body.appendChild(ov);ov.querySelectorAll('.dp-deck').forEach(b=>{b.onclick=()=>{const realIdx=parseInt(b.dataset.realIdx);const allDecks=(typeof getDecks==='function')?getDecks(mode):[];const deck=allDecks[realIdx];if(!deck||!deck.members){ov.remove();return}ov.remove();origOpen.call(window,mode,bossId);try{selectingTeam=deck.members.filter(id=>ROSTER.find(r=>r.id===id))}catch(e){}setTimeout(()=>{if(typeof startBattle==='function')startBattle()},150)}});ov.querySelector('.dp-new').onclick=()=>{ov.remove();origOpen.call(window,mode,bossId)};ov.querySelector('.dp-close').onclick=()=>ov.remove()}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init()})();
 </script>
 </body>
 </html>

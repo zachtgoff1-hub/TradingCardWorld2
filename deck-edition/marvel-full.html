@@ -1163,5 +1163,95 @@ html{background:var(--bg,#06080F)!important}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
 </script>
+
+<!-- SPELL CARDS + 1v1 ANIMATED EFFECTS -->
+<style>
+.spell-badge{position:absolute;bottom:1px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#7c3aed,#3b82f6);color:#fff;border:1px solid #ffcb05;border-radius:6px;padding:1px 5px;font-size:7px;font-family:'Black Ops One',cursive;letter-spacing:.5px;white-space:nowrap;z-index:6;pointer-events:none}
+.bb-hand-card.is-spell{border-color:#7c3aed;box-shadow:0 0 8px rgba(124,58,237,.4)}
+.spell-target{outline:3px dashed gold!important;outline-offset:-2px;cursor:crosshair!important;animation:t-pulse 1s ease-in-out infinite;position:relative;z-index:5}
+@keyframes t-pulse{0%,100%{outline-color:gold;filter:brightness(1)}50%{outline-color:#fff;filter:brightness(1.35)}}
+#spellTip{animation:s-tip 1.5s ease-in-out infinite}
+@keyframes s-tip{0%,100%{transform:translateX(-50%) scale(1)}50%{transform:translateX(-50%) scale(1.06)}}
+@keyframes spell-flash{0%{opacity:0;transform:scale(.4)}30%{opacity:1;transform:scale(1.3)}100%{opacity:0;transform:scale(1.7)}}
+@keyframes fx-blast{0%{opacity:0;transform:scale(.3)}30%{opacity:1;transform:scale(1.3)}100%{opacity:0;transform:scale(1.9)}}
+.fx-blast{position:absolute;inset:-12px;border-radius:50%;pointer-events:none;animation:fx-blast .7s ease-out forwards;z-index:9}
+@keyframes fx-heal{0%{opacity:0;transform:scale(.8)}40%{opacity:1;transform:scale(1.15)}100%{opacity:0;transform:scale(1.4)}}
+.fx-heal{position:absolute;inset:-10px;border-radius:50%;pointer-events:none;animation:fx-heal 1s ease-out forwards;z-index:9;background:radial-gradient(circle,rgba(34,197,94,.65),transparent 70%);box-shadow:0 0 28px rgba(34,197,94,.85)}
+</style>
+<script>
+(function(){
+  function init(){
+    if(typeof state==='undefined'||typeof ROSTER==='undefined'||typeof refreshBoard!=='function'){setTimeout(init,150);return}
+    if(window._spellsInited)return;window._spellsInited=true;
+    const title=(document.title||'').toLowerCase();
+    const game=title.includes('pokemon')?'pokemon':title.includes('marvel')?'marvel':title.includes('smash')?'smash':'clash';
+    const SP={'fireball':'damage','lightning':'damage','arrows':'splash','tornado':'pull','rocket':'rocket','freeze':'freeze','earthquake':'splash','rage':'buff','log':'pull','snowball':'damage','zap':'damage','poison':'splash','heal spell':'heal','mirror':'damage','graveyard':'summon','goblin barrel':'summon','inferno cast':'damage'};
+    const SW={'fireball':3,'lightning':3,'arrows':1,'tornado':0,'rocket':5,'freeze':0,'earthquake':2,'rage':0,'log':1,'snowball':1,'zap':1,'poison':1,'heal spell':2,'mirror':2,'graveyard':0,'goblin barrel':0,'inferno cast':4};
+    ROSTER.forEach(c=>{if(c.isSpell)return;const n=(c.n||'').toLowerCase();for(const k in SP)if(n.includes(k)){c.isSpell=true;c.spellType=SP[k];c.spellW=SW[k];break}});
+    const NS={
+      pokemon:[{id:'spl_thunder',n:'THUNDERBOLT',fb:'⚡',t:'electric',elixir:3,hp:80,atk:60,def:50,spd:99,spdIcon:'⚡',isSpell:true,spellType:'damage',spellW:3,moves:['Thunder']},{id:'spl_potion',n:'HYPER POTION',fb:'🧪',t:'normal',elixir:2,hp:80,atk:30,def:50,spd:60,spdIcon:'🧍',isSpell:true,spellType:'heal',spellW:2,moves:['Heal Pulse']},{id:'spl_roar',n:'DRAGON ROAR',fb:'🐉',t:'flying',elixir:1,hp:80,atk:30,def:30,spd:90,spdIcon:'⚡',isSpell:true,spellType:'pull',spellW:0,moves:['Push Back']},{id:'spl_quake',n:'EARTHQUAKE',fb:'🌋',t:'ground',elixir:4,hp:80,atk:60,def:50,spd:60,spdIcon:'🐢',isSpell:true,spellType:'splash',spellW:2,moves:['Quake']}],
+      marvel:[{id:'spl_repulsor',n:'STARK REPULSOR',fb:'💥',t:'tech',elixir:3,hp:80,atk:60,def:50,spd:99,spdIcon:'⚡',isSpell:true,spellType:'damage',spellW:3,moves:['Beam']},{id:'spl_web',n:'WEB SHOT',fb:'🕸️',t:'tech',elixir:2,hp:80,atk:30,def:50,spd:80,spdIcon:'⚡',isSpell:true,spellType:'freeze',spellW:0,moves:['Web Snare']},{id:'spl_heal',n:'HEALING FACTOR',fb:'💚',t:'mutant',elixir:2,hp:80,atk:30,def:50,spd:60,spdIcon:'🧍',isSpell:true,spellType:'heal',spellW:2,moves:['Heal']},{id:'spl_bomb',n:'PUMPKIN BOMB',fb:'🎃',t:'tech',elixir:4,hp:80,atk:60,def:50,spd:80,spdIcon:'🧍',isSpell:true,spellType:'splash',spellW:2,moves:['Bomb']}],
+      smash:[{id:'spl_smashball',n:'SMASH BALL',fb:'💎',t:'magic',elixir:4,hp:80,atk:80,def:50,spd:99,spdIcon:'⚡',isSpell:true,spellType:'damage',spellW:4,moves:['Final Smash']},{id:'spl_pokeball',n:'POKE BALL',fb:'🔴',t:'magic',elixir:2,hp:80,atk:30,def:50,spd:80,spdIcon:'⚡',isSpell:true,spellType:'splash',spellW:1,moves:['Random']},{id:'spl_heart',n:'HEART CONTAINER',fb:'❤️',t:'magic',elixir:2,hp:80,atk:30,def:50,spd:60,spdIcon:'🧍',isSpell:true,spellType:'heal',spellW:2,moves:['Heal']},{id:'spl_bumper',n:'BUMPER',fb:'🎾',t:'speedster',elixir:1,hp:80,atk:30,def:30,spd:90,spdIcon:'⚡',isSpell:true,spellType:'pull',spellW:0,moves:['Knockback']}]
+    };
+    if(game!=='clash'&&NS[game])ROSTER.push(...NS[game]);
+    if(typeof deployToBack==='function'){const _o=deployToBack;window.deployToBack=function(lane){const idx=state.bb&&state.bb.selectedCard;if(idx!=null){const c=ROSTER.find(r=>r.id===state.bb.hand[idx]);if(c&&c.isSpell){bbLog('✨ '+c.n+' is a spell — tap an enemy/ally as the target.');return}}return _o.apply(this,arguments)}}
+    const _origRefresh=refreshBoard;
+    window.refreshBoard=function(){_origRefresh.apply(this,arguments);decorateSpells();setupSpellTargeting()};
+    function decorateSpells(){document.querySelectorAll('#bbHand .bb-hand-card').forEach((el,idx)=>{const id=state.bb&&state.bb.hand?state.bb.hand[idx]:null;const c=id?ROSTER.find(r=>r.id===id):null;el.classList.toggle('is-spell',!!(c&&c.isSpell));if(c&&c.isSpell&&!el.querySelector('.spell-badge')){const b=document.createElement('div');b.className='spell-badge';b.textContent='✨ SPELL';el.appendChild(b)}})}
+    function setupSpellTargeting(){
+      document.querySelectorAll('.spell-target').forEach(el=>el.classList.remove('spell-target'));
+      const ot=document.getElementById('spellTip');if(ot)ot.remove();
+      const idx=state.bb?state.bb.selectedCard:null;if(idx==null)return;
+      const id=state.bb.hand[idx];const c=ROSTER.find(r=>r.id===id);
+      if(!c||!c.isSpell)return;
+      const isHeal=['heal','buff'].includes(c.spellType);
+      const t=document.createElement('div');t.id='spellTip';
+      t.style.cssText='position:fixed;top:max(64px,calc(env(safe-area-inset-top) + 64px));left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#7c3aed,#3b82f6);border:2px solid gold;border-radius:12px;padding:8px 16px;color:#fff;font-family:Black Ops One,cursive;font-size:11px;z-index:8500;pointer-events:none;text-align:center;letter-spacing:.8px;box-shadow:0 8px 20px rgba(0,0,0,.5)';
+      t.innerHTML='✨ '+c.n+'<br><span style="font-size:9px;opacity:.85">TAP '+(isHeal?'AN ALLY':'AN ENEMY')+' TARGET</span>';
+      document.body.appendChild(t);
+      const sels=isHeal?['.bb-unit.ply','.bb-tower:not(.foe)','.bb-king:not(.foe)']:['.bb-unit.foe','.bb-tower.foe','.bb-king.foe'];
+      document.querySelectorAll(sels.join(',')).forEach(el=>{if(el.classList.contains('dead'))return;el.classList.add('spell-target');el.onclick=(e)=>{e.stopPropagation();castSpell(c,el,idx)}});
+    }
+    async function castSpell(card,el,idx){
+      const bb=state.bb;if(bb.busy)return;
+      if(bb.elixir<card.elixir){bbLog('⚡ Need '+card.elixir+' elixir');return}
+      bb.busy=true;bb.elixir-=card.elixir;
+      bb.hand.splice(idx,1);bb.selectedCard=null;
+      bb.deploysCount=(bb.deploysCount||0)+1;
+      bbLog('✨ <b>'+card.n+'</b> cast!');
+      if(typeof sfxDeploy==='function')sfxDeploy();
+      flashSpellAt(el,card.spellType);
+      const tgt=findTargetFromEl(el);if(tgt)await applySpell(card,tgt);
+      const tip=document.getElementById('spellTip');if(tip)tip.remove();
+      bb.busy=false;drawCards('ply',1);
+      if(typeof checkBoardWin==='function'&&checkBoardWin())return;
+      refreshBoard();
+    }
+    function findTargetFromEl(el){
+      const bb=state.bb;
+      if(el.classList.contains('bb-king'))return{type:'king',side:el.classList.contains('foe')?'foe':'ply'};
+      if(el.classList.contains('bb-tower')){const row=el.parentElement;const idx=Array.from(row.children).indexOf(el);return{type:'tower',lane:idx,side:el.classList.contains('foe')?'foe':'ply'}}
+      if(el.classList.contains('bb-unit')){const side=el.classList.contains('ply')?'ply':'foe';for(let lane=0;lane<2;lane++)for(const u of bb.neutral[lane])if(u.side===side&&u.wounds<u.woundsMax)return{type:'unit',unit:u,lane};for(let lane=0;lane<2;lane++)for(let row=0;row<2;row++)for(const u of bb.zones[side][row][lane])if(u.wounds<u.woundsMax)return{type:'unit',unit:u,lane}}
+      return null;
+    }
+    async function applySpell(card,tgt){
+      const bb=state.bb;const w=card.spellW||2;
+      switch(card.spellType){
+        case 'damage':case 'rocket':case 'lightning':if(tgt.type==='unit'){tgt.unit.wounds=Math.min(tgt.unit.woundsMax,tgt.unit.wounds+w);bb.dmgDealt+=w;bbLog('🔥 '+w+'w to '+tgt.unit.n)}else if(tgt.type==='tower'){bb.towers[tgt.side][tgt.lane]=Math.max(0,bb.towers[tgt.side][tgt.lane]-w);bb.dmgDealt+=w;bbLog('💥 Tower hit '+w+'!')}else if(tgt.type==='king'){bb.king[tgt.side]=Math.max(0,bb.king[tgt.side]-w);bb.dmgDealt+=w;bbLog('💥 KING '+w+'!')}break;
+        case 'splash':if(tgt.type==='unit'){for(const u of bb.neutral[tgt.lane])if(u.side==='foe'&&u.wounds<u.woundsMax){u.wounds=Math.min(u.woundsMax,u.wounds+w);bb.dmgDealt+=w}bbLog('💥 Lane '+'AB'[tgt.lane]+' splash!')}else if(tgt.type==='tower'){bb.towers[tgt.side][tgt.lane]=Math.max(0,bb.towers[tgt.side][tgt.lane]-w);bbLog('💥 Tower splash')}break;
+        case 'freeze':if(tgt.type==='unit'){bb.statusEffects.push({type:'frozen',target:tgt.unit,ttl:2});bbLog('🧊 '+tgt.unit.n+' frozen 2 turns!')}break;
+        case 'pull':if(tgt.type==='unit'){for(let l=0;l<2;l++){const i=bb.neutral[l].indexOf(tgt.unit);if(i>=0){bb.neutral[l].splice(i,1);bb.zones.foe[1][l].push(tgt.unit);bbLog('🌪 '+tgt.unit.n+' pushed back!');break}}}break;
+        case 'heal':if(tgt.type==='unit'){tgt.unit.wounds=Math.max(0,tgt.unit.wounds-w);bbLog('💚 '+tgt.unit.n+' healed '+w+'w!')}else if(tgt.type==='tower'){bb.towers.ply[tgt.lane]=Math.min(5,bb.towers.ply[tgt.lane]+w);bbLog('💚 Tower healed!')}else if(tgt.type==='king'){bb.king.ply=Math.min(8,bb.king.ply+w);bbLog('💚 King healed!')}break;
+        case 'buff':if(tgt.type==='unit'){bb.statusEffects.push({type:'rage',target:tgt.unit,ttl:2});bbLog('🔥 '+tgt.unit.n+' RAGE!')}break;
+        case 'summon':const lane=tgt.lane||0;if(typeof buildUnit==='function'){const skel=buildUnit({id:'sum_'+Date.now(),n:'Summon',fb:'💀',t:'beast',hp:80,atk:50,def:40,spd:80,elixir:0,spdIcon:'⚡',moves:[]},'ply',lane);bb.zones.ply[1][lane].push(skel);bbLog('💀 Summoned ally!')}break;
+      }
+      await sleep(400);
+    }
+    function flashSpellAt(el,type){const fx=document.createElement('div');const colors={damage:'rgba(220,38,38,.85)',lightning:'rgba(255,215,0,.95)',rocket:'rgba(220,38,38,.95)',splash:'rgba(245,101,39,.85)',freeze:'rgba(34,211,238,.85)',pull:'rgba(168,85,247,.85)',heal:'rgba(34,197,94,.85)',buff:'rgba(255,215,0,.7)',summon:'rgba(120,120,120,.7)'};const r=el.getBoundingClientRect();fx.style.cssText='position:fixed;left:'+r.left+'px;top:'+r.top+'px;width:'+r.width+'px;height:'+r.height+'px;pointer-events:none;z-index:9999;animation:spell-flash 0.7s ease-out forwards;border-radius:14px;background:radial-gradient(circle,'+(colors[type]||colors.damage)+',transparent 60%)';document.body.appendChild(fx);setTimeout(()=>fx.remove(),750)}
+    if(typeof runAction==='function'){const _wRA=runAction;window.runAction=async function(att,def,move,side){const oS=side==='ply'?'foe':'ply';const oSpr=document.getElementById(oS+'Sprite');const sSpr=document.getElementById(side+'Sprite');if(move&&!move.heal&&oSpr){const t=(move.t||'').toLowerCase();const colors={fire:'#ff4500',mage:'#7c3aed',ice:'#22d3ee',water:'#3b82f6',electric:'#fbbf24',archer:'#22c55e',beast:'#f97316',grass:'#22c55e',psychic:'#a855f7',ground:'#a16207',flying:'#06b6d4',rock:'#71717a',ghost:'#6366f1',dragon:'#dc2626',steel:'#71717a',poison:'#a855f7',dark:'#4c1d95',fairy:'#ec4899',tech:'#fbbf24',mutant:'#ec4899',cosmic:'#22d3ee',symbiote:'#dc2626',soldier:'#2563eb',brawler:'#ff6b35',sword:'#3b82f6',zoner:'#10b981',speedster:'#fbbf24',magic:'#a855f7',trickster:'#ec4899',knight:'#9ca3af',air:'#06b6d4',building:'#a16207'};const c=colors[t]||'#ff4500';const blast=document.createElement('div');blast.className='fx-blast';blast.style.background='radial-gradient(circle,'+c+'cc,transparent 65%)';blast.style.boxShadow='0 0 30px '+c+',inset 0 0 20px '+c;oSpr.style.position='relative';oSpr.appendChild(blast);setTimeout(()=>{if(blast.parentNode)blast.remove()},750)}if(move&&move.heal&&sSpr){const heal=document.createElement('div');heal.className='fx-heal';sSpr.style.position='relative';sSpr.appendChild(heal);setTimeout(()=>{if(heal.parentNode)heal.remove()},1050)}return _wRA.apply(this,arguments)}}
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
 </body>
 </html>

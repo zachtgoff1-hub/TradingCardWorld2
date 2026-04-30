@@ -156,6 +156,14 @@
 .mini-dice .face{width:100px;height:100px;border-radius:14px;border:3px solid var(--gold);background:linear-gradient(135deg,var(--panel),var(--panel2));display:flex;align-items:center;justify-content:center;font-family:'Black Ops One',cursive;font-size:3.6rem;color:var(--gold);animation:dice-spin 1s ease-out forwards}
 @keyframes dice-spin{0%{transform:rotate(0)}100%{transform:rotate(720deg)}}
 .mini-dice .lbl{color:#fff;font-family:'Black Ops One',cursive;font-size:var(--fs-base);letter-spacing:1px;max-width:80vw;text-align:center}
+
+.exp-continue-pill{display:flex;align-items:center;gap:10px;padding:10px 14px;background:linear-gradient(135deg,rgba(34,197,94,.25),rgba(22,163,74,.15));border:2px solid #22c55e;border-radius:14px;width:300px;max-width:92vw;color:#fff;font-family:'Black Ops One',cursive;font-size:13px;cursor:pointer;letter-spacing:1.5px;margin-bottom:10px}
+.exp-continue-pill:active{transform:scale(.97)}
+.exp-continue-pill .ic{font-size:1.6rem}
+.exp-continue-pill .sub{display:block;font-size:9px;opacity:.85;font-family:'Share Tech Mono',monospace;letter-spacing:.5px;margin-top:2px}
+
+@keyframes laneDeploy{0%{transform:translateY(40px) scale(.6);opacity:0;filter:drop-shadow(0 0 12px var(--gold))}60%{transform:translateY(-4px) scale(1.08);opacity:1}100%{transform:translateY(0) scale(1);filter:none}}
+.lane-unit-deploy{animation:laneDeploy .42s cubic-bezier(.2,.8,.3,1.1) both}
 `;
   document.head.appendChild(style);
 
@@ -304,6 +312,23 @@
     return el;
   }
   function tone(f,d,t,v){if(typeof window.tone==='function')return window.tone(f,d,t,v)}
+  function tt(f,d,t,v){ try{ if(typeof window.tone==='function') window.tone(f,d,t,v); else if(window.AudioContext||window.webkitAudioContext){const ctx=tt._ctx||(tt._ctx=new (window.AudioContext||window.webkitAudioContext)());const o=ctx.createOscillator();const g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.type=t;o.frequency.value=f;g.gain.setValueAtTime(v,ctx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+d);o.start();o.stop(ctx.currentTime+d);} }catch(e){} }
+  var sfx = {
+    dice: ()=>{ for(let i=0;i<4;i++) setTimeout(()=>tt(700+Math.random()*400,0.04,'square',0.05), i*70); },
+    step: ()=>tt(400,0.06,'square',0.05),
+    battle: ()=>{ tt(220,0.15,'sawtooth',0.08); setTimeout(()=>tt(330,0.12,'sawtooth',0.08),120); },
+    hit: ()=>tt(180,0.08,'square',0.1),
+    heal: ()=>{ tt(523,0.12,'sine',0.1); setTimeout(()=>tt(659,0.15,'sine',0.1),100); },
+    powerup: ()=>{ tt(523,0.08,'triangle',0.08); setTimeout(()=>tt(659,0.08,'triangle',0.08),80); setTimeout(()=>tt(784,0.12,'triangle',0.08),160); },
+    trap: ()=>tt(110,0.25,'sawtooth',0.1),
+    treasure: ()=>{ for(let i=0;i<3;i++) setTimeout(()=>tt(600+i*100,0.1,'sine',0.07), i*80); },
+    win: ()=>{ tt(523,0.15,'triangle',0.1); setTimeout(()=>tt(659,0.15,'triangle',0.1),150); setTimeout(()=>tt(784,0.25,'triangle',0.1),300); },
+    lose: ()=>{ tt(330,0.2,'sawtooth',0.1); setTimeout(()=>tt(220,0.3,'sawtooth',0.1),200); },
+    deploy: ()=>tt(500,0.06,'square',0.06),
+    spell: ()=>{ tt(800,0.08,'sine',0.07); setTimeout(()=>tt(1000,0.06,'sine',0.07),50); },
+    freeze: ()=>tt(900,0.18,'sine',0.06),
+    fireball: ()=>{ tt(180,0.1,'sawtooth',0.1); setTimeout(()=>tt(120,0.18,'sawtooth',0.1),100); }
+  };
   function sfxClick(){if(typeof window.sfxClick==='function')window.sfxClick()}
   function sfxSelect(){if(typeof window.sfxSelect==='function')window.sfxSelect()}
   function sfxHit(){if(typeof window.sfxHit==='function')window.sfxHit()}
@@ -337,6 +362,26 @@
   function setAdventure(a){const s=loadStore();s.adventure=a;saveStore(s)}
   function getLane(){const s=loadStore();return s.lane||{wins:0,losses:0}}
   function setLane(l){const s=loadStore();s.lane=l;saveStore(s)}
+
+  function saveAdvRun(){
+    if(!advState) return;
+    try{
+      const s=loadStore();
+      s.advRun={
+        party: advState.party.map(p=>({id:p.id,n:p.n,fb:p.fb,pid:p.pid,t:p.t,atk:p.atk,def:p.def,spd:p.spd,hp:p.hp,hpMax:p.hpMax,xp:p.xp||0,fainted:!!p.fainted})),
+        pos: advState.space,
+        types: advState.types,
+        inventory: advState.inventory.map(i=>({k:i.k,ic:i.ic,n:i.n,desc:i.desc})),
+        shieldNext: !!advState.shieldNext,
+        atkBuffNext: !!advState.atkBuffNext,
+        rerollAvailable: advState.rerollAvailable||0,
+        log: (advState.log||[]).slice(-12),
+      };
+      saveStore(s);
+    }catch(e){}
+  }
+  function clearAdvRun(){try{const s=loadStore();delete s.advRun;saveStore(s);}catch(e){}}
+  function hasAdvRun(){try{const s=loadStore();return !!(s&&s.advRun&&Array.isArray(s.advRun.party)&&s.advRun.party.length);}catch(e){return false}}
 
   /* ============================== ADVENTURE BOARD ============================== */
   let advState=null;
@@ -413,20 +458,23 @@
   function buildSpaceTypes(){
     const arr=new Array(25).fill('battle');
     const set=(num,t)=>arr[num-1]=t;
-    [1,5,10,14,18,22].forEach(n=>set(n,'battle'));
-    [3,8,16,24].forEach(n=>set(n,'power'));
-    [6,12,20].forEach(n=>set(n,'heal'));
-    [2,9,17].forEach(n=>set(n,'treasure'));
-    [4,13,21].forEach(n=>set(n,'trap'));
-    set(7,'skip');
-    [11,19].forEach(n=>set(n,'rest'));
-    [15,23].forEach(n=>set(n,'mystery'));
+    [1,4,7,10,12,14,17,19,21,23].forEach(n=>set(n,'battle'));
+    [2,8,15,20].forEach(n=>set(n,'power'));
+    [5,11,18].forEach(n=>set(n,'heal'));
+    [3,13,22].forEach(n=>set(n,'treasure'));
+    [6,16].forEach(n=>set(n,'trap'));
+    set(9,'skip');
+    set(24,'rest');
     set(25,'boss');
     return arr;
   }
 
   window.advStart = function(){
     if(advPickList.length!==8)return;
+    if(hasAdvRun()){
+      if(!confirm('Start a fresh run? Your saved run will be lost.'))return;
+      clearAdvRun();
+    }
     sfxClick();
     const ROSTER=window.ROSTER||[];
     const party=advPickList.map(id=>{const r=ROSTER.find(x=>x.id===id);return{id:r.id,n:r.n,fb:r.fb,pid:r.pid,t:r.t,atk:r.atk,def:r.def,spd:r.spd,hpMax:r.hp,hp:r.hp,xp:0,fainted:false}});
@@ -438,6 +486,35 @@
     goScreenInner('adventure');
     drawAdvBoard();advUpdateHUD();
     advLog('🎲 Welcome! Tap ROLL DICE to begin.');
+    saveAdvRun();
+  };
+
+  window.advResume = function(){
+    if(!hasAdvRun())return;
+    try{
+      const s=loadStore();const r=s.advRun;
+      const ROSTER=window.ROSTER||[];
+      const party=r.party.map(p=>{
+        const ros=ROSTER.find(x=>x.id===p.id)||{};
+        return{id:p.id,n:p.n||ros.n,fb:p.fb||ros.fb,pid:p.pid||ros.pid,t:p.t||ros.t,atk:p.atk||ros.atk,def:p.def||ros.def,spd:p.spd||ros.spd,hpMax:p.hpMax,hp:p.hp,xp:p.xp||0,fainted:!!p.fainted};
+      });
+      advState={
+        party,
+        space:r.pos||0,
+        types:Array.isArray(r.types)&&r.types.length===25?r.types:buildSpaceTypes(),
+        waypoints:buildBoardWaypoints(),
+        inventory:Array.isArray(r.inventory)?r.inventory.slice():[],
+        shieldNext:!!r.shieldNext,atkBuffNext:!!r.atkBuffNext,
+        log:Array.isArray(r.log)?r.log.slice():[],
+        busy:false,pendingSteps:0,rerollAvailable:r.rerollAvailable||0,
+      };
+      goScreenInner('adventure');
+      drawAdvBoard();
+      movePawn(Math.max(0,advState.space-1));
+      advUpdateHUD();
+      highlightCurrentTile();
+      advLog('▶ Resumed your run at space '+advState.space+'/25.');
+    }catch(e){clearAdvRun();}
   };
 
   function drawAdvBoard(){
@@ -507,9 +584,11 @@
   window.advRollDice = async function(){
     if(advState.busy)return;advState.busy=true;
     $('advDiceBtn').disabled=true;
+    sfx.dice();
     await advRollAndStep(false);
     if(advState.space<25)advState.busy=false;
     $('advDiceBtn').disabled=advState.busy||advState.space>=25;
+    saveAdvRun();
   };
 
   async function advRollAndStep(skipDiceAnim){
@@ -520,11 +599,13 @@
       if(advState.space>=25)break;
       advState.space++;
       movePawn(advState.space-1);
-      sfxStep();
+      sfxStep();sfx.step();
       await sleep(280);
     }
     advUpdateHUD();highlightCurrentTile();
+    saveAdvRun();
     await advTriggerSpace(advState.space);
+    saveAdvRun();
   }
 
   function advShowDice(){return new Promise(resolve=>{
@@ -571,23 +652,27 @@
     const p=POWERUPS[Math.floor(Math.random()*POWERUPS.length)];
     advState.inventory.push({...p});
     advLog(`🎁 Found a <b>${p.n}</b>!`);
-    toast('Got '+p.ic+' '+p.n);sfxTreasure();
+    toast('Got '+p.ic+' '+p.n);sfxTreasure();sfx.powerup();
+    saveAdvRun();
   }
   async function advDoHeal(){
-    flashScreen('green');sfxHeal();
+    flashScreen('green');sfxHeal();sfx.heal();
     advState.party.forEach(p=>{if(!p.fainted&&p.hp>0){p.hp=Math.min(p.hpMax,p.hp+50)}});
     advLog('❤️ Healing aura — all party +50 HP!');
+    saveAdvRun();
     await sleep(700);
   }
   function advDoTreasure(){
     const alive=advState.party.filter(p=>!p.fainted);
     if(alive.length){const tgt=alive[Math.floor(Math.random()*alive.length)];tgt.xp+=50;advLog(`💎 Treasure! ${tgt.n} gained 50 XP.`)}
-    toast('+50 XP');sfxTreasure();
+    toast('+50 XP');sfxTreasure();sfx.treasure();
+    saveAdvRun();
   }
   async function advDoTrap(){
-    flashScreen('red');sfxTrap();
+    flashScreen('red');sfxTrap();sfx.trap();
     advState.party.forEach(p=>{if(!p.fainted){p.hp=Math.max(0,p.hp-30);if(p.hp<=0)p.fainted=true}});
     advLog('⚠️ TRAP! Party took 30 damage each!');
+    saveAdvRun();
     await sleep(800);
   }
   async function advDoSkip(){
@@ -613,7 +698,13 @@
   }
 
   let advFightState=null;
-  function advDoBattle(isBoss){return new Promise(resolve=>{advFightOpen(isBoss,resolve)})}
+  function advDoBattle(isBoss){sfx.battle();return new Promise(resolve=>{advFightOpen(isBoss,resolve)})}
+  function advFoeLevelForPos(pos){
+    if(pos>20)return 11;
+    if(pos>=13)return 9;
+    if(pos>=5)return 7;
+    return 5;
+  }
   function advFightOpen(isBoss,onClose){
     const ROSTER=window.ROSTER||[];
     let foe;
@@ -621,17 +712,22 @@
       const bossIds=['mewtwo','mew','dragonite'];
       const found=bossIds.map(id=>ROSTER.find(r=>r.id===id)).filter(Boolean);
       const pool=found.length?found:[...ROSTER].sort((a,b)=>b.hp-a.hp).slice(0,3);
-      advFightState={isBoss:true,foeTeam:pool.map(r=>buildFighter(r,1.4)),foeIdx:0,onClose};
+      advFightState={isBoss:true,foeTeam:pool.map(r=>buildFighter(r,1.4)),foeIdx:0,onClose,foeLevel:11};
       advFightShowPick(true);
       return;
     }
     const pool=ROSTER.filter(r=>r.id!==advState.party[0].id);
     const r=pool[Math.floor(Math.random()*pool.length)];
-    foe=buildFighter(r,1.0);
-    advFightState={isBoss:false,foe,plyIdx:null,onClose};
+    const lv=advFoeLevelForPos(advState.space||0);
+    const hpScale=1+(lv-5)*0.06;
+    const atkScale=1+(lv-5)*0.05;
+    foe=buildFighterScaled(r,hpScale,atkScale);
+    foe._lv=lv;
+    advFightState={isBoss:false,foe,plyIdx:null,onClose,foeLevel:lv};
     advFightShowPick(false);
   }
   function buildFighter(r,scale){return{id:r.id,n:r.n,fb:r.fb,pid:r.pid,t:r.t,hpMax:Math.round(r.hp*scale),hp:Math.round(r.hp*scale),atk:Math.round(r.atk*scale),def:Math.round(r.def*scale),spd:r.spd,fainted:false}}
+  function buildFighterScaled(r,hpScale,atkScale){return{id:r.id,n:r.n,fb:r.fb,pid:r.pid,t:r.t,hpMax:Math.round(r.hp*hpScale),hp:Math.round(r.hp*hpScale),atk:Math.round(r.atk*atkScale),def:Math.round(r.def*hpScale),spd:r.spd,fainted:false}}
   function advFightShowPick(isBoss){
     $('advFight').classList.add('on');
     $('advFightPick').style.display='flex';
@@ -670,7 +766,8 @@
     const ply=advState.party[plyIdx];
     advFightState.ply={...ply,_partyIdx:plyIdx};
     advFightUpdate();
-    $('advFightLog').innerHTML='A wild <b>'+advFightState.foe.n+'</b> appeared!';
+    const lv=advFightState.foeLevel||5;
+    $('advFightLog').innerHTML='A LEVEL '+lv+' <b>'+advFightState.foe.n+'</b> appears!';
   }
   function advFightStartBoss(plyIdxArr){
     advFightState.plyTeam=plyIdxArr.map(idx=>{const p=advState.party[idx];return{...p,_partyIdx:idx}});
@@ -715,7 +812,7 @@
     if(shielded){$('advFightLog').innerHTML='🛡️ Shield blocked the first attack!';dmg=0;await sleep(700)}
     if(dmg>0){
       def.hp=Math.max(0,def.hp-dmg);
-      sfxHit();
+      sfxHit();sfx.hit();
       let msg=`<b>${att.n}</b> hits ${def.n} for <b>${dmg}</b>!`;
       if(eff>1)msg+=' Super effective!';else if(eff<1)msg+=' Resisted.';
       $('advFightLog').innerHTML=msg;
@@ -751,6 +848,7 @@
     sfxFaint();
     const ply=advFightState.ply;
     if(ply._partyIdx!=null){const p=advState.party[ply._partyIdx];p.hp=0;p.fainted=true}
+    saveAdvRun();
     $('advFightLog').innerHTML='💀 Your <b>'+ply.n+'</b> fainted!';
     await sleep(1100);
     if(advFightState.isBoss){
@@ -771,6 +869,7 @@
     advFightState=null;
     advState.busy=false;
     $('advDiceBtn').disabled=advState.space>=25;
+    saveAdvRun();
     if(cb)cb();
   }
   window.advFightOpenBag = function(){
@@ -778,10 +877,10 @@
     if(!usable.length){toast('No usable items');return}
     const it=usable[0];
     const idx=advState.inventory.indexOf(it);
-    if(it.k==='potion'){const ply=advFightState.ply;const heal=Math.min(50,ply.hpMax-ply.hp);ply.hp+=heal;if(ply._partyIdx!=null)advState.party[ply._partyIdx].hp=ply.hp;sfxHeal();$('advFightLog').innerHTML='🧪 Used Potion! +'+heal+' HP.';showDmgFloat('#advFightPlyArt','+'+heal,'#22c55e');advFightUpdate()}
+    if(it.k==='potion'){const ply=advFightState.ply;const heal=Math.min(50,ply.hpMax-ply.hp);ply.hp+=heal;if(ply._partyIdx!=null)advState.party[ply._partyIdx].hp=ply.hp;sfxHeal();sfx.heal();$('advFightLog').innerHTML='🧪 Used Potion! +'+heal+' HP.';showDmgFloat('#advFightPlyArt','+'+heal,'#22c55e');advFightUpdate()}
     else if(it.k==='damage'){advState.atkBuffNext=true;$('advFightLog').innerHTML='⚡ Damage Buff active!'}
     else if(it.k==='shield'){advState.shieldNext=true;$('advFightLog').innerHTML='🛡️ Shield raised!'}
-    advState.inventory.splice(idx,1);advUpdateHUD();
+    advState.inventory.splice(idx,1);advUpdateHUD();saveAdvRun();
   };
   window.advFightSwap = function(){
     if(advFightState.isBoss&&advFightState.plyTeam){
@@ -830,38 +929,40 @@
         if(!target){toast('All members at full HP');return}
         const heal=Math.min(50,target.hpMax-target.hp);
         target.hp+=heal;
-        toast(`+${heal} HP to ${target.n}`);sfxHeal();break;
+        toast(`+${heal} HP to ${target.n}`);sfxHeal();sfx.heal();break;
       }
       case 'damage':advState.atkBuffNext=true;toast('⚡ ATK buff queued');break;
       case 'shield':advState.shieldNext=true;toast('🛡 Shield queued');break;
       case 'energy':{
-        window.advCloseInv();advState.inventory.splice(i,1);advUpdateHUD();
+        window.advCloseInv();advState.inventory.splice(i,1);advUpdateHUD();saveAdvRun();
         toast('🔋 Extra roll!');window.advRollDice();return;
       }
       case 'reroll':toast('🔄 Reroll stored');advState.rerollAvailable++;break;
     }
     advState.inventory.splice(i,1);
-    advUpdateHUD();window.advOpenInv();
+    advUpdateHUD();saveAdvRun();window.advOpenInv();
   }
-  window.advQuit = function(){if(!confirm('Quit your adventure? Progress will be lost.'))return;advState=null;goScreenInner('home')};
+  window.advQuit = function(){if(!confirm('Quit your adventure? Progress will be lost.'))return;clearAdvRun();advState=null;goScreenInner('home');refreshContinuePill();};
   function advGameOver(won){
     advState.busy=true;
     const adv=getAdventure();
     if(won){
       adv.wins=(adv.wins||0)+1;adv.lastClear=Date.now();
-      sfxVictory();
+      sfxVictory();sfx.win();
       if($('endTitle')){$('endTitle').textContent='ADVENTURE CHAMPION!';$('endTitle').className='end-title win'}
       if($('endSub'))$('endSub').textContent='You conquered the 25-space board and the boss!';
     }else{
       adv.losses=(adv.losses||0)+1;
-      sfxDefeat();
+      sfxDefeat();sfx.lose();
       if($('endTitle')){$('endTitle').textContent='Defeated…';$('endTitle').className='end-title lose'}
       if($('endSub'))$('endSub').textContent='Your party fell. Try again.';
     }
     setAdventure(adv);
+    clearAdvRun();
     if($('endStats'))$('endStats').innerHTML=`Reached space <b>${advState.space}</b>/25 · Items collected: ${advState.inventory.length}<br>Total runs: ${adv.runs} · Wins: ${adv.wins||0} · Losses: ${adv.losses||0}`;
-    if($('endNext')){$('endNext').textContent='▶ NEW QUEST';$('endNext').onclick=()=>{$('endOverlay').classList.remove('on');goScreenInner('advPick')}}
+    if($('endNext')){$('endNext').textContent='▶ NEW QUEST';$('endNext').onclick=()=>{$('endOverlay').classList.remove('on');refreshContinuePill();goScreenInner('advPick')}}
     if($('endOverlay'))$('endOverlay').classList.add('on');
+    refreshContinuePill();
   }
 
   /* ============================== ONE-LANE BATTLE ============================== */
@@ -962,6 +1063,7 @@
       ls.rows[i].forEach(u=>{
         const el=document.createElement('div');
         el.className='lane-unit '+(u.side==='ply'?'ply':'foe')+(u.frozen?' frozen':'');
+        if(u._justDeployed){el.classList.add('lane-unit-deploy');setTimeout(()=>{u._justDeployed=false;},420);}
         el.innerHTML=`<div class="uart">${artHTML(u)}</div><div class="uname">${u.n}</div><div class="uhp">${Math.max(0,u.hp)}/${u.hpMax}</div>`;
         z.appendChild(el);
       });
@@ -1035,20 +1137,21 @@
       ls.elixir-=c.cost;
       ls.hand.splice(ls.selectedCard,1);
       ls.selectedCard=null;
-      const unit={...c,side:'ply',frozen:false};
+      const unit={...c,side:'ply',frozen:false,_justDeployed:true};
       ls.rows[4].push(unit);
       laneDraw('ply',1);
       laneLog(`Deployed <b>${c.n}</b> to Row 5.`);
-      sfxClick();laneRender();return;
+      sfxClick();sfx.deploy();laneRender();return;
     }
     if(ls.selectedSpell!=null){
       const s=SPELLS[ls.selectedSpell];if(!s)return;
       if(ls.elixir<s.cost){laneLog('Not enough elixir!');return}
       ls.elixir-=s.cost;
       ls.selectedSpell=null;
-      if(s.id==='fireball')laneCastFireball(rowIdx);
-      else if(s.id==='freeze')laneCastFreeze(rowIdx);
-      else if(s.id==='heal')laneCastHeal();
+      if(s.id==='fireball'){sfx.fireball();laneCastFireball(rowIdx);}
+      else if(s.id==='freeze'){sfx.freeze();laneCastFreeze(rowIdx);}
+      else if(s.id==='heal'){sfx.heal();laneCastHeal();}
+      else sfx.spell();
       sfxHit();laneRender();return;
     }
   }
@@ -1139,19 +1242,40 @@
 
   async function laneFoeTurn(){
     const ls=laneState;
-    let deploys=0;const max=2;
-    while(deploys<max&&ls.foeHand.length){
-      if(Math.random()<0.15&&deploys>0)break;
-      const playable=ls.foeHand.map((c,i)=>({c,i})).filter(x=>x.c.cost<=ls.foeElixir);
-      if(!playable.length)break;
-      const pick=playable[Math.floor(Math.random()*playable.length)];
-      ls.foeElixir-=pick.c.cost;
-      ls.foeHand.splice(pick.i,1);
+    // Detect threats: any player units past midfield (rows 0..2 are foe-side)
+    const playerNearTower = ls.rows.some((row,ri)=>ri<=2 && row.some(u=>u.side==='ply'));
+    // Sort affordable cards by cost descending (strongest first)
+    const affordable = ls.foeHand
+      .map((c,i)=>({c,i}))
+      .filter(x=>x.c.cost<=ls.foeElixir)
+      .sort((a,b)=>b.c.cost-a.c.cost);
+    if(!affordable.length)return;
+    const toDeploy = [];
+    if(playerNearTower){
+      // Defensive: deploy strongest affordable to counter
+      toDeploy.push(affordable[0]);
+    } else if(ls.foeElixir>=7){
+      // Push hard with multiple cards
+      let e=ls.foeElixir;
+      for(const x of affordable){
+        if(x.c.cost<=e){toDeploy.push(x);e-=x.c.cost;if(toDeploy.length>=2)break;}
+      }
+    } else if(Math.random()<0.7){
+      // Random single deploy
+      toDeploy.push(affordable[Math.floor(Math.random()*affordable.length)]);
+    }
+    // else save elixir
+    // Sort by original index DESC so splices don't shift later picks
+    toDeploy.sort((a,b)=>b.i-a.i);
+    for(const x of toDeploy){
+      if(ls.foeElixir<x.c.cost)continue;
+      ls.foeElixir-=x.c.cost;
+      ls.foeHand.splice(x.i,1);
       laneDraw('foe',1);
-      const unit={...pick.c,side:'foe',frozen:false};
+      const unit={...x.c,side:'foe',frozen:false,_justDeployed:true};
       ls.rows[0].push(unit);
-      laneLog(`Foe deployed <b>${pick.c.n}</b>!`);
-      deploys++;
+      laneLog(`Foe deployed <b>${x.c.n}</b>!`);
+      sfx.deploy();
       laneRender();
       await sleep(450);
     }
@@ -1165,7 +1289,7 @@
   }
 
   function laneWin(){
-    sfxVictory();
+    sfxVictory();sfx.win();
     const lane=getLane();lane.wins=(lane.wins||0)+1;setLane(lane);
     if($('endTitle')){$('endTitle').textContent='VICTORY!';$('endTitle').className='end-title win'}
     if($('endSub'))$('endSub').textContent='You stormed the king tower!';
@@ -1175,7 +1299,7 @@
     laneState.busy=true;
   }
   function laneLose(){
-    sfxDefeat();
+    sfxDefeat();sfx.lose();
     const lane=getLane();lane.losses=(lane.losses||0)+1;setLane(lane);
     if($('endTitle')){$('endTitle').textContent='DEFEAT';$('endTitle').className='end-title lose'}
     if($('endSub'))$('endSub').textContent='Your king fell.';
@@ -1213,18 +1337,47 @@
     laneBtn.onclick = () => (window.goScreen||goScreenInner)('lanePick');
     laneBtn.innerHTML = '<span class="ico">🛤️</span><span class="lbl">LANE DUEL<span class="sub">Solo lane · towers · spells</span></span><span class="arr">›</span>';
 
+    // Continue pill (added before advPill if there's a saved run)
+    const continuePill = document.createElement('button');
+    continuePill.className = 'exp-continue-pill exp-continue-adv';
+    continuePill.style.display = 'none';
+    continuePill.innerHTML = '<span class="ic">▶</span><span>CONTINUE QUEST<span class="sub">Resume saved run</span></span>';
+    continuePill.onclick = () => {
+      if(typeof window.advResume === 'function'){window.advResume();}
+    };
+
     if(insertAfter){
+      home.insertBefore(continuePill, insertAfter);
       home.insertBefore(advPill, insertAfter);
       home.insertBefore(advBtn, insertAfter);
       home.insertBefore(lanePill, insertAfter);
       home.insertBefore(laneBtn, insertAfter);
     } else {
+      home.appendChild(continuePill);
       home.appendChild(advPill);
       home.appendChild(advBtn);
       home.appendChild(lanePill);
       home.appendChild(laneBtn);
     }
+    refreshContinuePill();
   }
+  function refreshContinuePill(){
+    try{
+      const home = document.getElementById('home');
+      if(!home) return;
+      const pill = home.querySelector('.exp-continue-adv');
+      if(!pill) return;
+      if(hasAdvRun()){
+        const s=loadStore();const r=s.advRun;
+        const sub=pill.querySelector('.sub');
+        if(sub) sub.textContent='Space '+(r.pos||0)+'/25 · '+(r.party?r.party.filter(p=>!p.fainted&&p.hp>0).length:0)+' alive';
+        pill.style.display='flex';
+      } else {
+        pill.style.display='none';
+      }
+    }catch(e){}
+  }
+  window._expRefreshContinuePill = refreshContinuePill;
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', addHomeButtons);
   else addHomeButtons();
 
@@ -1238,6 +1391,7 @@
       orig(id);
       if(id === 'advPick' && typeof window.renderAdvPick === 'function') window.renderAdvPick();
       if(id === 'lanePick' && typeof window.renderLanePick === 'function') window.renderLanePick();
+      if(id === 'home' && typeof window._expRefreshContinuePill === 'function') window._expRefreshContinuePill();
     };
   }
   patchGoScreen();

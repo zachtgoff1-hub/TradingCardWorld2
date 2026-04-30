@@ -1,5 +1,5 @@
-# Arena Hub - v2
+# Arena Hub - v3
 
 Open `index.html` to start the launcher.
 
-Latest version with: PWA fullscreen install banner, iOS link interceptor (so navigating between games stays in standalone mode), enhanced 1v1 combat (status effects, crits, ultimate, item bag), and the visual deck builder with 3 named save slots per mode.
+Latest build with: 5 modes per game (Quick Battle, Quick Board, Story, **Adventure Quest**, **Lane Duel**), shared expansion runtime (`expansion-edition/_expansion-pack.js`), 6 themed games with full rosters, PWA-friendly + desktop-respecting fullscreen, sound effects, save/resume for adventures.

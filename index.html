@@ -525,6 +525,11 @@ window.showProfileModal=showProfileModal;
   const ua=navigator.userAgent;
   const isIOS=/iPhone|iPad|iPod/.test(ua)&&!window.MSStream;
   const isAndroidChrome=/Android/.test(ua)&&/Chrome/.test(ua);
+  // Skip fullscreen + install banner entirely on desktop browsers.
+  // Detection: no touch input AND no mobile UA = desktop.
+  const isTouch=('ontouchstart' in window)||navigator.maxTouchPoints>0;
+  const isMobileUA=isIOS||/Android|Mobile/i.test(ua);
+  if(!isTouch && !isMobileUA) return;
   let bipe=null;
   window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();bipe=e;maybeShowBanner()});
 

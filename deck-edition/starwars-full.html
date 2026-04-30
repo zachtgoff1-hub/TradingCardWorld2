@@ -1127,6 +1127,10 @@ html{background:var(--bg,#06080F)!important}
   const ua=navigator.userAgent;
   const isIOS=/iPhone|iPad|iPod/.test(ua)&&!window.MSStream;
   const isAndroidChrome=/Android/.test(ua)&&/Chrome/.test(ua);
+  // Skip fullscreen + install banner entirely on desktop browsers.
+  const isTouch=('ontouchstart' in window)||navigator.maxTouchPoints>0;
+  const isMobileUA=isIOS||/Android|Mobile/i.test(ua);
+  if(!isTouch && !isMobileUA) return;
   let bipe=null;
   window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();bipe=e;maybeShowBanner()});
   function tryFs(){const el=document.documentElement;const req=el.requestFullscreen||el.webkitRequestFullscreen||el.mozRequestFullScreen||el.msRequestFullscreen;if(!document.fullscreenElement&&!document.webkitFullscreenElement&&req){try{const p=req.call(el);if(p&&p.catch)p.catch(()=>maybeShowBanner())}catch(e){maybeShowBanner()}}}

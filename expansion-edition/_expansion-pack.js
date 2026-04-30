@@ -167,6 +167,115 @@
 `;
   document.head.appendChild(style);
 
+  // === iPhone-friendly home redesign — overrides v4 compact grid ===
+  // Replaces cramped 2-col grid with single-column layout, bigger tap targets,
+  // section dividers, and clearer hierarchy. Apple HIG recommends 44pt min hit
+  // targets; we use ~72px tall buttons.
+  const homeStyle = document.createElement('style');
+  homeStyle.textContent = `
+/* Single-column home layout overriding v4 grid */
+#home.on{display:flex!important;flex-direction:column!important;align-items:stretch!important;padding:18px 14px max(20px,calc(18px + env(safe-area-inset-bottom))) 14px!important;gap:6px!important;overflow-y:auto;justify-content:flex-start!important}
+
+/* Logo block — centered, breathable */
+#home > img{display:block!important;max-height:62px!important;max-width:60%!important;margin:4px auto 6px!important}
+#home > .logo-main{text-align:center!important;font-size:1.7rem!important;letter-spacing:4px!important;margin:4px 0 2px!important;line-height:1.05!important}
+#home > .logo-sub{text-align:center!important;font-size:.95rem!important;letter-spacing:5px!important;margin:0 0 4px!important;line-height:1.05!important}
+#home > .logo-tag{text-align:center!important;font-size:.62rem!important;letter-spacing:2.5px!important;margin:0 0 10px!important;line-height:1.2!important}
+#home > .shield,#home > .pokeball{display:flex!important;width:62px!important;height:62px!important;font-size:28px!important;margin:4px auto 6px!important;border-width:3px!important}
+
+/* Section dividers (mode-pill) — restored as visible labels above each group */
+#home > .mode-pill{
+  display:block!important;
+  width:auto!important;max-width:none!important;
+  padding:7px 12px!important;
+  margin:10px 2px 4px!important;
+  background:linear-gradient(90deg,rgba(255,203,5,.15),transparent)!important;
+  border-left:3px solid var(--gold,#ffcb05)!important;
+  border-radius:0 6px 6px 0!important;
+  font-family:'Black Ops One',cursive!important;
+  font-size:.72rem!important;
+  color:var(--gold,#ffcb05)!important;
+  letter-spacing:2.5px!important;
+  text-transform:uppercase!important;
+  text-align:left!important;
+}
+#home > .mode-pill:first-of-type{margin-top:6px!important}
+
+/* Big iPhone-friendly menu buttons */
+#home > .menu-btn{
+  width:auto!important;
+  max-width:none!important;
+  min-height:68px!important;
+  padding:14px 18px!important;
+  margin:0 0 6px 0!important;
+  font-size:.95rem!important;
+  gap:14px!important;
+  letter-spacing:1.4px!important;
+  border-radius:14px!important;
+  border:2px solid var(--bdr,rgba(255,255,255,.18))!important;
+  display:flex!important;
+  align-items:center!important;
+  background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(0,0,0,.18))!important;
+  box-shadow:0 4px 10px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.06)!important;
+  transition:transform .12s,box-shadow .12s,border-color .12s!important;
+}
+#home > .menu-btn:hover{border-color:var(--gold,#ffcb05)!important;box-shadow:0 4px 14px rgba(255,203,5,.18),inset 0 1px 0 rgba(255,255,255,.08)!important}
+#home > .menu-btn:active{transform:scale(.97)!important;box-shadow:0 2px 5px rgba(0,0,0,.5)!important}
+#home > .menu-btn .ico{font-size:1.85rem!important;width:42px!important;text-align:center!important;flex-shrink:0!important;line-height:1!important}
+#home > .menu-btn .lbl{font-size:.92rem!important;line-height:1.15!important;flex:1!important;min-width:0!important;letter-spacing:1.4px!important;color:#fff!important}
+#home > .menu-btn .sub{font-family:'Share Tech Mono',monospace!important;font-size:.62rem!important;letter-spacing:.4px!important;margin-top:4px!important;display:block!important;opacity:.72!important;color:var(--soft,rgba(255,255,255,.7))!important;text-transform:none!important;line-height:1.3!important}
+#home > .menu-btn .arr{display:inline-block!important;font-size:1.5rem!important;color:var(--gold,#ffcb05)!important;margin-left:6px!important;flex-shrink:0!important}
+
+/* Highlight game-mode buttons (turn battle, board, story, adventure, lane) with gold accent.
+   Utility buttons (decks, profile, roster, rules) get a quieter look. */
+#home > .menu-btn[onclick*="quick-tb"],
+#home > .menu-btn[onclick*="quick-bb"],
+#home > .menu-btn[onclick*="story"],
+#home > .menu-btn[onclick*="advPick"],
+#home > .menu-btn[onclick*="lanePick"],
+#home > .menu-btn.tb-story-btn{
+  border-color:rgba(255,203,5,.45)!important;
+  background:linear-gradient(135deg,rgba(255,203,5,.14),rgba(238,21,21,.06))!important;
+}
+#home > .menu-btn[onclick*="decks"],
+#home > .menu-btn[onclick*="profile"],
+#home > .menu-btn[onclick*="roster"],
+#home > .menu-btn[onclick*="rules"]{
+  border-color:rgba(255,255,255,.14)!important;
+  background:linear-gradient(135deg,rgba(255,255,255,.04),rgba(0,0,0,.2))!important;
+  min-height:60px!important;
+  padding:11px 16px!important;
+}
+
+/* Continue Quest pill — make it pop above adventure button */
+.exp-continue-pill{
+  min-height:64px!important;
+  padding:14px 16px!important;
+  font-size:13px!important;
+  margin:0 0 4px!important;
+}
+
+/* Inline spacers (the existing <div style="height:8px"> between sections) */
+#home > div[style*="height:8px"]{display:block!important;height:14px!important}
+
+/* Smaller iPhones / shorter viewports — still single column, just tighter */
+@media(max-height:720px){
+  #home.on{padding:14px 12px max(16px,calc(14px + env(safe-area-inset-bottom))) 12px!important;gap:5px!important}
+  #home > img{max-height:48px!important;margin:2px auto 4px!important}
+  #home > .logo-main{font-size:1.4rem!important;letter-spacing:3px!important}
+  #home > .logo-sub{font-size:.8rem!important;letter-spacing:4px!important}
+  #home > .logo-tag{font-size:.55rem!important;margin-bottom:6px!important}
+  #home > .menu-btn{min-height:58px!important;padding:11px 14px!important;font-size:.85rem!important;margin-bottom:4px!important}
+  #home > .menu-btn[onclick*="decks"],#home > .menu-btn[onclick*="profile"],#home > .menu-btn[onclick*="roster"],#home > .menu-btn[onclick*="rules"]{min-height:50px!important;padding:8px 14px!important}
+  #home > .menu-btn .ico{font-size:1.55rem!important;width:36px!important}
+  #home > .menu-btn .lbl{font-size:.82rem!important}
+  #home > .menu-btn .sub{font-size:.55rem!important;margin-top:2px!important}
+  #home > .mode-pill{margin:8px 2px 3px!important;font-size:.65rem!important;padding:6px 10px!important}
+  #home > div[style*="height:8px"]{height:8px!important}
+}
+`;
+  document.head.appendChild(homeStyle);
+
   // === HTML screens injection (waits for body) ===
   function injectScreens(){
     if(!document.body) return setTimeout(injectScreens, 50);

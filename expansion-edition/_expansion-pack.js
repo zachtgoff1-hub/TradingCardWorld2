@@ -10,13 +10,13 @@
 #adventure{flex-direction:column;background:radial-gradient(ellipse at top,#1a1f3a 0%,var(--bg) 60%)}
 .adv-top{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(0,0,0,.7);border-bottom:1px solid var(--bdr);font-size:var(--fs-xs);gap:8px;flex-shrink:0}
 .adv-hp-wrap{display:flex;align-items:center;gap:6px;flex:1;min-width:0}
-.adv-hp-lbl{font-family:'Black Ops One',cursive;color:var(--gold);font-size:var(--fs-xs);letter-spacing:1px}
+.adv-hp-lbl{font-family:'Inter',sans-serif;font-weight:800;color:var(--gold);font-size:var(--fs-xs);letter-spacing:1px}
 .adv-hp-bar{flex:1;height:10px;background:rgba(0,0,0,.6);border:1px solid var(--bdr);border-radius:5px;overflow:hidden;max-width:140px}
 .adv-hp-fill{height:100%;background:linear-gradient(90deg,var(--green),#22c55e);transition:width .5s}
 .adv-hp-fill.med{background:linear-gradient(90deg,var(--gold),var(--orange))}
 .adv-hp-fill.low{background:linear-gradient(90deg,var(--red),#dc2626)}
-.adv-spaces{font-family:'Black Ops One',cursive;color:var(--gold);font-size:var(--fs-xs);letter-spacing:1px}
-.adv-inv-btn{padding:5px 10px;background:rgba(255,203,5,.18);border:1px solid var(--gold);border-radius:8px;color:var(--gold);font-family:'Black Ops One',cursive;font-size:var(--fs-xs);cursor:pointer;letter-spacing:.5px}
+.adv-spaces{font-family:'Inter',sans-serif;font-weight:800;color:var(--gold);font-size:var(--fs-xs);letter-spacing:1px}
+.adv-inv-btn{padding:5px 10px;background:rgba(255,203,5,.18);border:1px solid var(--gold);border-radius:8px;color:var(--gold);font-family:'Inter',sans-serif;font-weight:800;font-size:var(--fs-xs);cursor:pointer;letter-spacing:.5px}
 .adv-board-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow-y:auto;padding:8px}
 #advBoardSvg{display:block;width:100%;max-width:520px;height:auto;filter:drop-shadow(0 4px 14px rgba(0,0,0,.5))}
 .adv-tile{transition:transform .3s, filter .3s}
@@ -26,7 +26,7 @@
 .adv-bottom{flex-shrink:0;background:#0a0e18;border-top:3px solid var(--gold);padding:10px;padding-bottom:max(10px,calc(10px + env(safe-area-inset-bottom)))}
 .adv-log{padding:8px 12px;font-size:var(--fs-sm);background:rgba(0,0,0,.55);border-radius:8px;min-height:34px;margin-bottom:10px;color:var(--soft);line-height:1.4}
 .adv-log b{color:var(--gold)}
-.adv-dice-btn{width:100%;padding:18px;background:linear-gradient(135deg,var(--gold),var(--orange));border:3px solid #fff;border-radius:14px;color:#000;font-family:'Black Ops One',cursive;font-size:var(--fs-lg);letter-spacing:3px;cursor:pointer;min-height:62px;box-shadow:0 0 18px rgba(255,203,5,.5)}
+.adv-dice-btn{width:100%;padding:18px;background:linear-gradient(135deg,var(--gold),var(--orange));border:3px solid #fff;border-radius:14px;color:#000;font-family:'Inter',sans-serif;font-weight:800;font-size:var(--fs-lg);letter-spacing:3px;cursor:pointer;min-height:62px;box-shadow:0 0 18px rgba(255,203,5,.5)}
 .adv-dice-btn:active{transform:scale(.97)}
 .adv-dice-btn:disabled{opacity:.45;filter:grayscale(.4)}
 
@@ -39,14 +39,14 @@
 
 .adv-tray{position:fixed;left:0;right:0;bottom:0;background:linear-gradient(180deg,rgba(10,14,24,.95),rgba(10,14,24,.99));border-top:3px solid var(--gold);padding:14px;z-index:9000;transform:translateY(100%);transition:transform .3s;padding-bottom:max(14px,calc(14px + env(safe-area-inset-bottom)))}
 .adv-tray.on{transform:translateY(0)}
-.adv-tray-title{font-family:'Black Ops One',cursive;font-size:var(--fs-base);color:var(--gold);letter-spacing:2px;margin-bottom:10px;text-align:center}
+.adv-tray-title{font-family:'Inter',sans-serif;font-weight:800;font-size:var(--fs-base);color:var(--gold);letter-spacing:2px;margin-bottom:10px;text-align:center}
 .adv-tray-list{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;max-height:42vh;overflow-y:auto}
-.adv-tray-item{padding:10px;background:rgba(255,255,255,.05);border:1px solid var(--bdr);border-radius:10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;font-family:'Black Ops One',cursive;font-size:var(--fs-xs)}
+.adv-tray-item{padding:10px;background:rgba(255,255,255,.05);border:1px solid var(--bdr);border-radius:10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;font-family:'Inter',sans-serif;font-weight:800;font-size:var(--fs-xs)}
 .adv-tray-item:active{transform:scale(.97)}
 .adv-tray-item .ic{font-size:1.6rem}
 .adv-tray-item .nm{color:var(--gold);letter-spacing:.6px}
 .adv-tray-item .ds{font-family:'Share Tech Mono',monospace;font-size:.55rem;color:var(--soft);letter-spacing:.4px}
-.adv-tray-close{display:block;width:100%;margin-top:10px;padding:10px;background:rgba(255,80,80,.18);border:1px solid var(--red);color:#fff;border-radius:8px;font-family:'Black Ops One',cursive;font-size:var(--fs-sm);cursor:pointer}
+.adv-tray-close{display:block;width:100%;margin-top:10px;padding:10px;background:rgba(255,80,80,.18);border:1px solid var(--red);color:#fff;border-radius:8px;font-family:'Inter',sans-serif;font-weight:800;font-size:var(--fs-sm);cursor:pointer}
 
 .adv-fight{position:fixed;inset:0;background:rgba(0,0,0,.94);display:none;flex-direction:column;z-index:8000}
 .adv-fight.on{display:flex}
@@ -56,16 +56,16 @@
 .adv-fight-art img{max-width:90px;max-height:90px;image-rendering:pixelated}
 .adv-fight-art .emoji{font-size:3.5rem}
 .adv-fight-foe .adv-fight-art{border-color:var(--red)}
-.adv-fight-name{font-family:'Black Ops One',cursive;font-size:var(--fs-base);color:#fff;text-align:center}
+.adv-fight-name{font-family:'Inter',sans-serif;font-weight:800;font-size:var(--fs-base);color:#fff;text-align:center}
 .adv-fight-hp-bar{width:120px;height:10px;background:rgba(0,0,0,.7);border:1px solid var(--bdr);border-radius:5px;overflow:hidden}
 .adv-fight-hp-fill{height:100%;background:linear-gradient(90deg,var(--green),#22c55e);transition:width .4s}
-.adv-fight-hp-num{font-family:'Black Ops One',cursive;font-size:var(--fs-xs);color:var(--gold)}
-.adv-fight-vs{font-family:'Black Ops One',cursive;font-size:2rem;color:var(--gold);text-shadow:0 0 14px rgba(255,203,5,.6)}
+.adv-fight-hp-num{font-family:'Inter',sans-serif;font-weight:800;font-size:var(--fs-xs);color:var(--gold)}
+.adv-fight-vs{font-family:'Inter',sans-serif;font-weight:800;font-size:2rem;color:var(--gold);text-shadow:0 0 14px rgba(255,203,5,.6)}
 .adv-fight-controls{flex-shrink:0;background:#0a0e18;border-top:3px solid var(--gold);padding:12px;padding-bottom:max(12px,calc(12px + env(safe-area-inset-bottom)))}
 .adv-fight-log{padding:10px;background:rgba(0,0,0,.55);border-radius:8px;font-size:var(--fs-sm);min-height:46px;line-height:1.4;margin-bottom:10px;color:var(--soft)}
 .adv-fight-log b{color:var(--gold)}
 .adv-fight-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.adv-fight-actions button{padding:14px 8px;background:linear-gradient(160deg,var(--panel),var(--panel2));border:2px solid var(--gold);border-radius:10px;color:#fff;font-family:'Black Ops One',cursive;font-size:var(--fs-sm);cursor:pointer;letter-spacing:1px;min-height:50px}
+.adv-fight-actions button{padding:14px 8px;background:linear-gradient(160deg,var(--panel),var(--panel2));border:2px solid var(--gold);border-radius:10px;color:#fff;font-family:'Inter',sans-serif;font-weight:800;font-size:var(--fs-sm);cursor:pointer;letter-spacing:1px;min-height:50px}
 .adv-fight-actions button:active{transform:scale(.96)}
 .adv-fight-actions button:disabled{opacity:.4}
 .adv-fight-actions button.fight{border-color:var(--red);background:linear-gradient(160deg,#2a0808,#3a0a0a)}
@@ -80,19 +80,19 @@
 .adv-fight-pickrow .ic img{max-width:40px;max-height:40px;image-rendering:pixelated}
 .adv-fight-pickrow .ic .emoji{font-size:1.8rem}
 .adv-fight-pickrow .info{flex:1}
-.adv-fight-pickrow .nm{font-family:'Black Ops One',cursive;font-size:var(--fs-sm);color:#fff}
+.adv-fight-pickrow .nm{font-family:'Inter',sans-serif;font-weight:800;font-size:var(--fs-sm);color:#fff}
 .adv-fight-pickrow .hp-num{font-size:var(--fs-xs);color:var(--soft)}
 
 /* ============================== LANE DUEL (expansion) ============================== */
 #lane{flex-direction:column;background:linear-gradient(180deg,#3a0a0a 0%,#1a0a0a 50%,#0a1a3a 100%)}
 .lane-top{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(0,0,0,.78);border-bottom:1px solid var(--bdr);font-size:var(--fs-xs);gap:6px;flex-shrink:0}
-.lane-top .turn{color:var(--gold);font-family:'Black Ops One',cursive;letter-spacing:1px}
-.lane-top .elx{color:#a855f7;font-family:'Black Ops One',cursive}.lane-top .elx b{color:#fff;font-size:var(--fs-base)}
-.lane-top .end-btn{padding:6px 12px;background:var(--gold);color:#000;border:none;border-radius:8px;font-family:'Black Ops One',cursive;font-size:var(--fs-xs);cursor:pointer;letter-spacing:1px}
+.lane-top .turn{color:var(--gold);font-family:'Inter',sans-serif;font-weight:800;letter-spacing:1px}
+.lane-top .elx{color:#a855f7;font-family:'Inter',sans-serif;font-weight:800}.lane-top .elx b{color:#fff;font-size:var(--fs-base)}
+.lane-top .end-btn{padding:6px 12px;background:var(--gold);color:#000;border:none;border-radius:8px;font-family:'Inter',sans-serif;font-weight:800;font-size:var(--fs-xs);cursor:pointer;letter-spacing:1px}
 .lane-top .end-btn:disabled{opacity:.4}
 .lane-board{flex:1;display:flex;flex-direction:column;gap:3px;padding:6px;overflow-y:auto}
 .lane-tower-row{display:flex;justify-content:center}
-.lane-tower{padding:8px 18px;border-radius:10px;border:2px solid var(--gold);background:linear-gradient(135deg,rgba(255,203,5,.18),rgba(238,21,21,.18));text-align:center;font-family:'Black Ops One',cursive;font-size:var(--fs-sm);color:var(--gold);min-width:200px}
+.lane-tower{padding:8px 18px;border-radius:10px;border:2px solid var(--gold);background:linear-gradient(135deg,rgba(255,203,5,.18),rgba(238,21,21,.18));text-align:center;font-family:'Inter',sans-serif;font-weight:800;font-size:var(--fs-sm);color:var(--gold);min-width:200px}
 .lane-tower.king{font-size:var(--fs-base);min-width:260px}
 .lane-tower.foe{border-color:var(--red);color:var(--red);background:linear-gradient(135deg,rgba(238,21,21,.22),rgba(238,21,21,.1))}
 .lane-tower.dead{opacity:.3;border-style:dashed}
@@ -102,21 +102,21 @@
 .lane-zone{display:flex;justify-content:center;min-height:60px;background:rgba(0,0,0,.32);border:1px dashed rgba(255,255,255,.18);border-radius:10px;padding:6px;position:relative;cursor:pointer;flex-wrap:wrap;gap:5px;align-content:center}
 .lane-zone.deploy{border-color:var(--gold);background:rgba(255,203,5,.08);cursor:pointer}
 .lane-zone.deploy.can{border-style:solid;box-shadow:0 0 10px rgba(255,203,5,.35)}
-.lane-zone .row-lbl{position:absolute;top:2px;left:6px;font-size:.55rem;color:var(--mut);font-family:'Black Ops One',cursive;letter-spacing:.5px;pointer-events:none}
+.lane-zone .row-lbl{position:absolute;top:2px;left:6px;font-size:.55rem;color:var(--mut);font-family:'Inter',sans-serif;font-weight:800;letter-spacing:.5px;pointer-events:none}
 .lane-unit{display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 6px;background:linear-gradient(160deg,var(--panel),var(--panel2));border:2px solid var(--bdr);border-radius:8px;min-width:55px;position:relative}
 .lane-unit.foe{border-color:var(--red)}
 .lane-unit.ply{border-color:var(--gold)}
 .lane-unit .uart{width:32px;height:32px;display:flex;align-items:center;justify-content:center}
 .lane-unit .uart img{max-width:30px;max-height:30px;image-rendering:pixelated}
 .lane-unit .uart .emoji{font-size:1.4rem}
-.lane-unit .uname{font-family:'Black Ops One',cursive;font-size:.55rem;color:#fff;line-height:1;white-space:nowrap;max-width:50px;overflow:hidden;text-overflow:ellipsis}
-.lane-unit .uhp{font-family:'Black Ops One',cursive;font-size:.55rem;color:var(--gold)}
+.lane-unit .uname{font-family:'Inter',sans-serif;font-weight:800;font-size:.55rem;color:#fff;line-height:1;white-space:nowrap;max-width:50px;overflow:hidden;text-overflow:ellipsis}
+.lane-unit .uhp{font-family:'Inter',sans-serif;font-weight:800;font-size:.55rem;color:var(--gold)}
 .lane-unit.frozen{filter:hue-rotate(180deg) brightness(1.2);outline:2px solid var(--cyan)}
 .lane-controls{flex-shrink:0;background:#0a0e18;border-top:3px solid var(--gold);padding:8px;padding-bottom:max(8px,calc(8px + env(safe-area-inset-bottom)))}
 .lane-log{padding:6px 10px;background:rgba(0,0,0,.55);border-radius:8px;font-size:var(--fs-xs);min-height:24px;line-height:1.3;margin-bottom:8px;color:var(--soft)}
 .lane-log b{color:var(--gold)}
 .lane-spell-row{display:flex;gap:6px;margin-bottom:6px}
-.lane-spell{flex:1;padding:8px 4px;background:linear-gradient(135deg,#7c3aed,#3b82f6);border:1px solid #a855f7;border-radius:8px;color:#fff;font-family:'Black Ops One',cursive;font-size:var(--fs-xs);cursor:pointer;display:flex;flex-direction:column;gap:2px;align-items:center;min-height:46px}
+.lane-spell{flex:1;padding:8px 4px;background:linear-gradient(135deg,#7c3aed,#3b82f6);border:1px solid #a855f7;border-radius:8px;color:#fff;font-family:'Inter',sans-serif;font-weight:800;font-size:var(--fs-xs);cursor:pointer;display:flex;flex-direction:column;gap:2px;align-items:center;min-height:46px}
 .lane-spell:active{transform:scale(.96)}
 .lane-spell:disabled{opacity:.4}
 .lane-spell.selected{outline:2px solid var(--gold);outline-offset:1px}
@@ -131,33 +131,33 @@
 .lane-hand-card.cant-afford:active{transform:none}
 .lane-spell.cant-afford{filter:grayscale(.7);opacity:.5;cursor:not-allowed}
 .lane-zone.spell-target{box-shadow:inset 0 0 14px rgba(168,85,247,.4);border-color:#a855f7}
-.lane-top .lane-foe-hand{color:var(--red);font-family:'Black Ops One',cursive;letter-spacing:.5px}
+.lane-top .lane-foe-hand{color:var(--red);font-family:'Inter',sans-serif;font-weight:800;letter-spacing:.5px}
 .lane-top .lane-foe-hand b{color:#fff;font-size:var(--fs-base)}
 .adv-boss-preview{padding:10px 14px;background:linear-gradient(135deg,rgba(168,85,247,.18),rgba(238,21,21,.12));border:2px solid #a855f7;border-radius:12px;margin:10px 14px}
-.adv-bp-label{font-family:'Black Ops One',cursive;font-size:11px;color:#a855f7;letter-spacing:2px;margin-bottom:6px;text-align:center}
+.adv-bp-label{font-family:'Inter',sans-serif;font-weight:800;font-size:11px;color:#a855f7;letter-spacing:2px;margin-bottom:6px;text-align:center}
 .adv-bp-card{display:flex;align-items:center;gap:12px}
 .adv-bp-ico{font-size:2.2rem;flex-shrink:0}
 .adv-bp-info{flex:1;min-width:0}
-.adv-bp-name{font-family:'Black Ops One',cursive;font-size:14px;color:#fff;letter-spacing:1px}
+.adv-bp-name{font-family:'Inter',sans-serif;font-weight:800;font-size:14px;color:#fff;letter-spacing:1px}
 .adv-bp-desc{font-size:11px;color:rgba(255,255,255,.7);margin-top:2px;line-height:1.3}
 @keyframes dmgFloat{0%{opacity:0;transform:translateX(-50%) translateY(0)}15%{opacity:1}100%{opacity:0;transform:translateX(-50%) translateY(-50px)}}
 .lane-hand-card .uart{height:42px;display:flex;align-items:center;justify-content:center}
 .lane-hand-card .uart img{max-width:42px;max-height:42px;image-rendering:pixelated}
 .lane-hand-card .uart .emoji{font-size:1.7rem}
-.lane-hand-card .nm{font-family:'Black Ops One',cursive;font-size:var(--fs-xs);margin-top:3px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.lane-hand-card .ec{position:absolute;top:2px;left:2px;width:22px;height:22px;background:linear-gradient(135deg,#a855f7,#ec4899);border-radius:50%;border:1px solid #fff;display:flex;align-items:center;justify-content:center;font-family:'Black Ops One',cursive;font-size:var(--fs-xs);color:#fff}
-.lane-hand-card .stats{font-family:'Black Ops One',cursive;font-size:.55rem;color:var(--gold);margin-top:2px}
+.lane-hand-card .nm{font-family:'Inter',sans-serif;font-weight:800;font-size:var(--fs-xs);margin-top:3px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lane-hand-card .ec{position:absolute;top:2px;left:2px;width:22px;height:22px;background:linear-gradient(135deg,#a855f7,#ec4899);border-radius:50%;border:1px solid #fff;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-weight:800;font-size:var(--fs-xs);color:#fff}
+.lane-hand-card .stats{font-family:'Inter',sans-serif;font-weight:800;font-size:.55rem;color:var(--gold);margin-top:2px}
 
-.toast{position:fixed;left:50%;top:80px;transform:translateX(-50%);padding:10px 18px;background:rgba(0,0,0,.92);border:1px solid var(--gold);border-radius:10px;color:var(--gold);font-family:'Black Ops One',cursive;font-size:var(--fs-sm);letter-spacing:1px;z-index:9500;animation:toast-pop 2s ease forwards;pointer-events:none}
+.toast{position:fixed;left:50%;top:80px;transform:translateX(-50%);padding:10px 18px;background:rgba(0,0,0,.92);border:1px solid var(--gold);border-radius:10px;color:var(--gold);font-family:'Inter',sans-serif;font-weight:800;font-size:var(--fs-sm);letter-spacing:1px;z-index:9500;animation:toast-pop 2s ease forwards;pointer-events:none}
 @keyframes toast-pop{0%{opacity:0;transform:translate(-50%,-10px)}10%,80%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,-10px)}}
 
 .mini-dice{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9700;align-items:center;justify-content:center;flex-direction:column;gap:12px}
 .mini-dice.on{display:flex}
-.mini-dice .face{width:100px;height:100px;border-radius:14px;border:3px solid var(--gold);background:linear-gradient(135deg,var(--panel),var(--panel2));display:flex;align-items:center;justify-content:center;font-family:'Black Ops One',cursive;font-size:3.6rem;color:var(--gold);animation:dice-spin 1s ease-out forwards}
+.mini-dice .face{width:100px;height:100px;border-radius:14px;border:3px solid var(--gold);background:linear-gradient(135deg,var(--panel),var(--panel2));display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-weight:800;font-size:3.6rem;color:var(--gold);animation:dice-spin 1s ease-out forwards}
 @keyframes dice-spin{0%{transform:rotate(0)}100%{transform:rotate(720deg)}}
-.mini-dice .lbl{color:#fff;font-family:'Black Ops One',cursive;font-size:var(--fs-base);letter-spacing:1px;max-width:80vw;text-align:center}
+.mini-dice .lbl{color:#fff;font-family:'Inter',sans-serif;font-weight:800;font-size:var(--fs-base);letter-spacing:1px;max-width:80vw;text-align:center}
 
-.exp-continue-pill{display:flex;align-items:center;gap:10px;padding:10px 14px;background:linear-gradient(135deg,rgba(34,197,94,.25),rgba(22,163,74,.15));border:2px solid #22c55e;border-radius:14px;width:300px;max-width:92vw;color:#fff;font-family:'Black Ops One',cursive;font-size:13px;cursor:pointer;letter-spacing:1.5px;margin-bottom:10px}
+.exp-continue-pill{display:flex;align-items:center;gap:10px;padding:10px 14px;background:linear-gradient(135deg,rgba(34,197,94,.25),rgba(22,163,74,.15));border:2px solid #22c55e;border-radius:14px;width:300px;max-width:92vw;color:#fff;font-family:'Inter',sans-serif;font-weight:800;font-size:13px;cursor:pointer;letter-spacing:1.5px;margin-bottom:10px}
 .exp-continue-pill:active{transform:scale(.97)}
 .exp-continue-pill .ic{font-size:1.6rem}
 .exp-continue-pill .sub{display:block;font-size:9px;opacity:.85;font-family:'Share Tech Mono',monospace;letter-spacing:.5px;margin-top:2px}
@@ -192,7 +192,7 @@
   background:linear-gradient(90deg,rgba(255,203,5,.15),transparent)!important;
   border-left:3px solid var(--gold,#ffcb05)!important;
   border-radius:0 6px 6px 0!important;
-  font-family:'Black Ops One',cursive!important;
+  font-family:'Inter',sans-serif;font-weight:800!important;
   font-size:.72rem!important;
   color:var(--gold,#ffcb05)!important;
   letter-spacing:2.5px!important;
@@ -352,7 +352,7 @@
       <div class="adv-fight-hp-num" id="advFightPlyHpNum">100/100</div>
     </div>
     <div class="adv-fight-pickactive" id="advFightPick" style="display:none">
-      <div style="font-family:'Black Ops One',cursive;font-size:var(--fs-lg);color:var(--gold);letter-spacing:2px;margin-bottom:14px">CHOOSE A FIGHTER</div>
+      <div style="font-family:'Inter',sans-serif;font-weight:800;font-size:var(--fs-lg);color:var(--gold);letter-spacing:2px;margin-bottom:14px">CHOOSE A FIGHTER</div>
       <div id="advFightPickList" style="display:flex;flex-direction:column;gap:8px;width:100%;max-width:340px"></div>
     </div>
   </div>

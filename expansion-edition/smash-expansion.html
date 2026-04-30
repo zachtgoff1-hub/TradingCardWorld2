@@ -1,0 +1,1596 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Smash Arena Expansion">
+<meta name="theme-color" content="#0c1a3a">
+<link rel="manifest" href="../manifest.json">
+<link rel="apple-touch-icon" href="../assets/smash-icon.png">
+<title>Super Smash Arena — Full Edition Expansion Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#040814;--panel:#0f1830;--panel2:#162342;--bdr:rgba(255,255,255,.12);--soft:rgba(255,255,255,.78);--mut:rgba(255,255,255,.5);--gold:#FFD700;--red:#FF3845;--blue:#4FA9FF;--green:#3DDC84;--brawler:#FF6B35;--sword:#3B82F6;--zoner:#10B981;--speedster:#FBBF24;--magic:#A855F7;--trickster:#EC4899;--fs-base:16px;--fs-sm:13px;--fs-xs:11px;--fs-lg:18px;--fs-xl:22px;--fs-xxl:28px}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;font-size:var(--fs-base)}
+body{background:radial-gradient(ellipse at top,#1a0a3a 0%,var(--bg) 60%);color:#fff;font-family:'Share Tech Mono',monospace;user-select:none;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
+.screen{position:fixed;inset:0;display:none;flex-direction:column}.screen.on{display:flex}
+#home{align-items:center;justify-content:flex-start;padding:24px 20px;text-align:center;background:radial-gradient(circle at 50% 30%,rgba(255,215,0,.12),transparent 60%),var(--bg);overflow-y:auto}
+.launcher-back{align-self:flex-start;padding:10px 16px;background:rgba(255,255,255,.06);border:1px solid var(--bdr);border-radius:10px;color:#fff;font-family:'Black Ops One',cursive;font-size:var(--fs-sm);cursor:pointer;letter-spacing:1px;text-decoration:none;display:inline-flex;align-items:center;gap:6px;margin-bottom:18px}
+.shield{width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,#FFD700 0%,#c89a00 70%,#5a3a00 100%);border:6px solid #fff;display:flex;align-items:center;justify-content:center;font-size:60px;box-shadow:0 0 60px rgba(255,215,0,.5);margin:8px auto 18px;animation:float 3s ease-in-out infinite;position:relative}
+.shield::after{content:'';position:absolute;inset:6px;border-radius:50%;border:2px dashed rgba(255,255,255,.3)}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.logo-main{font-family:'Black Ops One',cursive;font-size:var(--fs-xxl);background:linear-gradient(120deg,#fff,var(--gold),#FF3845);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:5px;line-height:1;margin-bottom:6px}
+.logo-sub{font-family:'Black Ops One',cursive;font-size:var(--fs-xl);color:var(--gold);letter-spacing:6px;margin-bottom:8px}
+.logo-tag{font-size:var(--fs-xs);color:var(--mut);letter-spacing:4px;margin-bottom:24px}
+.menu-btn{display:flex;align-items:center;gap:14px;width:300px;max-width:92vw;min-height:64px;padding:14px 18px;margin-bottom:12px;background:linear-gradient(90deg,rgba(255,215,0,.12),rgba(168,85,247,.08));border:2px solid rgba(255,215,0,.3);border-radius:14px;color:#fff;font-family:'Black Ops One',cursive;font-size:var(--fs-base);letter-spacing:2px;cursor:pointer;text-align:left}
+.menu-btn:active{transform:scale(.97)}.menu-btn .ico{font-size:1.8rem;width:40px;text-align:center}.menu-btn .lbl{flex:1}
+.menu-btn .sub{display:block;font-family:'Share Tech Mono',monospace;font-size:var(--fs-xs);color:var(--soft);margin-top:3px}.menu-btn .arr{font-size:1.6rem;color:var(--gold)}
+.mode-pill{display:inline-block;padding:5px 14px;background:rgba(255,215,0,.15);border:1px solid var(--gold);border-radius:14px;font-family:'Black Ops One',cursive;font-size:var(--fs-xs);color:var(--gold);margin:14px 0 10px}
+.art-status{font-size:var(--fs-xs);color:var(--mut);margin-top:16px;padding:6px 12px;background:rgba(0,0,0,.3);border-radius:8px}
+.art-status.loaded{color:var(--green)}
+.topbar{display:flex;align-items:center;padding:10px 14px;background:rgba(4,8,20,.95);border-bottom:1px solid var(--bdr);gap:8px;flex-shrink:0;min-height:54px}
+.topbar .back{padding:8px 14px;background:rgba(255,255,255,.08);border:1px solid var(--bdr);border-radius:10px;color:#fff;font-family:'Black Ops One',cursive;font-size:var(--fs-sm);cursor:pointer;min-height:36px}
+.topbar .ttl{flex:1;font-family:'Black Ops One',cursive;font-size:var(--fs-base);letter-spacing:2px;color:var(--gold);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.topbar .meta{font-size:var(--fs-xs);color:var(--soft);flex-shrink:0}
+.page-body{flex:1;overflow-y:auto;padding:14px}
+.roster-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding-bottom:30px}
+@media(min-width:600px){.roster-grid{grid-template-columns:repeat(3,1fr)}}
+.hero-card{background:linear-gradient(160deg,var(--panel),var(--panel2));border:2px solid var(--bdr);border-radius:14px;padding:10px;cursor:pointer;position:relative;min-height:170px}
+.hero-card:active{transform:scale(.98)}.hero-card.selected{border-color:var(--gold);box-shadow:0 0 18px rgba(255,215,0,.4)}
+.hero-card .pokeart{display:flex;align-items:center;justify-content:center;height:74px;margin-bottom:6px;background:radial-gradient(circle,rgba(255,255,255,.06),transparent);border-radius:10px}
+.hero-card .pokeart img{max-width:74px;max-height:74px;object-fit:contain;border-radius:6px}
+.hero-card .pokeart .emoji{font-size:2.6rem}
+.hero-card .name{font-family:'Black Ops One',cursive;font-size:var(--fs-sm);text-align:center;margin-bottom:5px;line-height:1.1}
+.hero-card .type-row{display:flex;gap:3px;justify-content:center;flex-wrap:wrap;margin-bottom:6px}
+.type-chip{font-size:var(--fs-xs);padding:3px 8px;border-radius:10px;font-family:'Black Ops One',cursive;color:#fff}
+.type-chip.brawler{background:var(--brawler)}.type-chip.sword{background:var(--sword)}.type-chip.zoner{background:var(--zoner)}.type-chip.speedster{background:var(--speedster);color:#000}.type-chip.magic{background:var(--magic)}.type-chip.trickster{background:var(--trickster)}
+.hero-card .stats{display:grid;grid-template-columns:1fr 1fr;gap:3px;font-size:var(--fs-xs);color:var(--soft)}
+.hero-card .stat{display:flex;justify-content:space-between;background:rgba(0,0,0,.3);padding:3px 6px;border-radius:5px}.hero-card .stat b{color:var(--gold)}
+.hero-card .elixir-badge{position:absolute;top:6px;left:6px;width:26px;height:26px;background:linear-gradient(135deg,#a855f7,#ec4899);border-radius:50%;border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-family:'Black Ops One',cursive;font-size:var(--fs-sm);color:#fff;box-shadow:0 0 8px rgba(168,85,247,.5)}
+
+#tbattle{display:none;flex-direction:column;background:#000}#tbattle.on{display:flex}
+.tb-arena{flex:1;position:relative;background:linear-gradient(180deg,#0a1530 0%,#1a3a6a 50%,#3a6aaf 100%);overflow:hidden;min-height:280px}
+.tb-arena .arena-fx{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(255,215,0,.18),transparent 50%);pointer-events:none}
+.foe-area{position:absolute;top:14px;right:14px;max-width:60%}.ply-area{position:absolute;bottom:14px;left:14px;max-width:60%}
+.hp-card{background:rgba(0,0,0,.7);border:1px solid var(--bdr);border-radius:12px;padding:10px 14px;min-width:200px}
+.hp-card .nm{font-family:'Black Ops One',cursive;font-size:var(--fs-base);display:flex;justify-content:space-between;gap:8px}
+.hp-card .lv{font-size:var(--fs-xs);color:var(--gold)}
+.hp-bar-wrap{display:flex;align-items:center;gap:8px;margin-top:6px}.hp-bar-wrap .lbl{font-size:var(--fs-xs);color:var(--gold);font-family:'Black Ops One',cursive}
+.hp-bar{flex:1;height:12px;background:rgba(0,0,0,.6);border:1px solid var(--bdr);border-radius:6px;overflow:hidden}
+.hp-fill{height:100%;background:linear-gradient(90deg,#3DDC84,#22c55e);border-radius:6px;transition:width .8s}
+.hp-fill.med{background:linear-gradient(90deg,#FFD700,#f59e0b)}.hp-fill.low{background:linear-gradient(90deg,#FF3845,#dc2626)}
+.hp-num{font-size:var(--fs-xs);color:var(--soft);text-align:right;margin-top:4px}
+.tb-sprite{position:absolute;width:130px;height:130px;display:flex;align-items:center;justify-content:center;transition:transform .2s,opacity .3s}
+.tb-sprite img{max-width:100%;max-height:100%;object-fit:contain;filter:drop-shadow(0 6px 12px rgba(0,0,0,.6));border-radius:12px}
+.tb-sprite .emoji{font-size:5rem}
+.foe-sprite{top:50px;right:30%;animation:sf 2.5s ease-in-out infinite}.ply-sprite{bottom:80px;left:30%;animation:sfp 2.5s ease-in-out infinite}
+@keyframes sf{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes sfp{0%,100%{transform:translateY(0) scaleX(-1)}50%{transform:translateY(-8px) scaleX(-1)}}
+.tb-sprite.shake{animation:shk .4s linear}.tb-sprite.ply-sprite.shake{animation:shkp .4s linear}
+@keyframes shk{0%,100%{transform:translateX(0)}25%{transform:translateX(-10px)}75%{transform:translateX(10px)}}
+@keyframes shkp{0%,100%{transform:translateX(0) scaleX(-1)}25%{transform:translateX(-10px) scaleX(-1)}75%{transform:translateX(10px) scaleX(-1)}}
+.tb-sprite.faint{opacity:0;transform:translateY(40px)}.tb-sprite.ply-sprite.faint{opacity:0;transform:translateY(40px) scaleX(-1)}
+.tb-controls{flex-shrink:0;background:#06091a;border-top:3px solid var(--gold)}
+.tb-log{padding:14px;min-height:80px;font-size:var(--fs-base);line-height:1.5;border-bottom:1px solid var(--bdr)}
+.tb-log .effect{color:var(--gold);font-weight:bold}.tb-log .crit{color:var(--red);font-weight:bold}
+.tb-menu{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px}
+.bbtn{padding:16px 8px;background:linear-gradient(160deg,var(--panel),var(--panel2));border:2px solid var(--bdr);border-radius:12px;color:#fff;font-family:'Black Ops One',cursive;font-size:var(--fs-base);letter-spacing:2px;cursor:pointer;min-height:54px}
+.bbtn:active{transform:scale(.96)}.bbtn:disabled{opacity:.4}
+.bbtn.fight{border-color:var(--red)}.bbtn.bag{border-color:var(--gold)}.bbtn.team{border-color:var(--blue)}.bbtn.run{border-color:var(--mut)}
+.move-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px}
+.move-btn{padding:12px 10px;border-radius:12px;border:2px solid var(--bdr);background:var(--panel);color:#fff;text-align:left;cursor:pointer;min-height:74px}
+.move-btn:active{transform:scale(.97)}.move-btn:disabled{opacity:.4}
+.move-btn .mn{font-family:'Black Ops One',cursive;font-size:var(--fs-sm);margin-bottom:5px}
+.move-btn .mt{display:flex;justify-content:space-between;font-size:var(--fs-xs);color:var(--soft);margin-top:3px}.move-btn .mt .pp{color:var(--gold)}
+.move-btn.brawler{border-color:var(--brawler)}.move-btn.sword{border-color:var(--sword)}.move-btn.zoner{border-color:var(--zoner)}.move-btn.speedster{border-color:var(--speedster)}.move-btn.magic{border-color:var(--magic)}.move-btn.trickster{border-color:var(--trickster)}
+.move-btn .matchup{display:inline-block;padding:1px 6px;border-radius:6px;font-size:.55rem;margin-top:4px;font-family:'Black Ops One',cursive}
+.move-btn .matchup.super{background:var(--green);color:#000}.move-btn .matchup.weak{background:var(--mut);color:#000}
+.back-row{padding:0 12px 12px}
+.back-btn{width:100%;padding:12px;background:rgba(255,255,255,.06);border:1px solid var(--bdr);border-radius:10px;color:var(--soft);font-family:'Black Ops One',cursive;font-size:var(--fs-sm);cursor:pointer;min-height:44px}
+.dmg-num{position:absolute;font-family:'Black Ops One',cursive;font-size:1.8rem;color:var(--red);text-shadow:0 0 8px #000,2px 2px 0 #000;animation:dmg-rise 1s ease-out forwards;pointer-events:none;z-index:10}
+.dmg-num.crit{color:var(--gold);font-size:2.2rem}.dmg-num.heal{color:var(--green)}
+@keyframes dmg-rise{0%{opacity:0;transform:translateY(0)}30%{opacity:1}100%{opacity:0;transform:translateY(-50px)}}
+.flash-fx{position:absolute;inset:0;pointer-events:none;opacity:0}.flash-fx.on{animation:flsh .4s}
+@keyframes flsh{0%{opacity:0}30%{opacity:.7;background:#fff}100%{opacity:0}}
+
+#bbattle{display:none;flex-direction:column;background:#000}#bbattle.on{display:flex}
+.bb-status{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(0,0,0,.7);border-bottom:1px solid var(--bdr);font-size:var(--fs-xs);gap:8px}
+.bb-status .turn{color:var(--gold);font-family:'Black Ops One',cursive}
+.bb-status .elixir{color:#a855f7;font-family:'Black Ops One',cursive}.bb-status .elixir b{color:#fff;font-size:var(--fs-base)}
+.bb-status .ph{color:var(--soft)}
+.bb-status .log-btn{background:rgba(255,215,0,.15);border:1px solid var(--gold);color:var(--gold);padding:5px 10px;border-radius:8px;font-family:'Black Ops One',cursive;font-size:var(--fs-xs);cursor:pointer}
+.bb-board{flex:1;display:flex;flex-direction:column;gap:3px;padding:6px;background:linear-gradient(180deg,#1a0a3a 0%,#0a0a2a 50%,#1a3a6a 100%);overflow-y:auto}
+.bb-towers-row{display:grid;grid-template-columns:1fr 1fr;gap:6px}.bb-king-row{display:grid;grid-template-columns:1fr;gap:6px}
+.bb-king{padding:8px 12px;border-radius:10px;border:2px solid var(--gold);background:linear-gradient(135deg,rgba(255,215,0,.18),rgba(255,56,69,.18));text-align:center;font-family:'Black Ops One',cursive;font-size:var(--fs-sm);color:var(--gold)}
+.bb-king.dead{opacity:.3}.bb-king .hpbar{margin-top:4px;height:8px;background:rgba(0,0,0,.5);border-radius:4px;overflow:hidden}
+.bb-king .hpbar div{height:100%;background:var(--gold);border-radius:4px;transition:width .4s}
+.bb-king.foe{border-color:var(--red);color:var(--red)}.bb-king.foe .hpbar div{background:var(--red)}
+.bb-tower{padding:6px 8px;border-radius:10px;border:2px solid var(--gold);background:linear-gradient(135deg,rgba(255,215,0,.14),rgba(0,0,0,.4));text-align:center;font-family:'Black Ops One',cursive;font-size:var(--fs-xs);color:var(--gold)}
+.bb-tower.dead{opacity:.3;border-style:dashed}.bb-tower .hpbar{margin-top:4px;height:6px;background:rgba(0,0,0,.5);border-radius:3px;overflow:hidden}
+.bb-tower .hpbar div{height:100%;background:var(--gold);border-radius:3px;transition:width .4s}
+.bb-tower.foe{border-color:var(--red);color:var(--red)}.bb-tower.foe .hpbar div{background:var(--red)}
+.bb-zone{display:grid;grid-template-columns:1fr 1fr;gap:6px;min-height:62px}
+.bb-zone-cell{background:rgba(0,0,0,.4);border:1px dashed rgba(255,255,255,.15);border-radius:10px;padding:6px;display:flex;flex-wrap:wrap;gap:4px;align-content:flex-start;min-height:56px;position:relative;cursor:pointer}
+.bb-zone-cell.deploy{border-color:var(--gold);background:rgba(255,215,0,.08)}
+.bb-zone-cell.deploy.can{border-style:solid;box-shadow:0 0 10px rgba(255,215,0,.3)}
+.bb-zone-cell .zlbl{position:absolute;top:3px;left:6px;font-size:.55rem;color:var(--mut);font-family:'Black Ops One',cursive;pointer-events:none}
+.bb-zone.neutral{grid-template-columns:1fr;background:linear-gradient(90deg,rgba(255,215,0,.12),rgba(255,56,69,.12));border:2px solid rgba(255,215,0,.3);border-radius:10px;padding:6px}
+.bb-zone.neutral .bb-zone-cell{border:none;background:rgba(0,0,0,.3)}
+.bb-zone-cell.foe{border-color:rgba(255,56,69,.25);background:rgba(255,56,69,.06)}
+.bb-unit{display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 5px 5px;background:linear-gradient(160deg,var(--panel),var(--panel2));border:2px solid var(--bdr);border-radius:8px;min-width:50px;position:relative;cursor:pointer}
+.bb-unit.foe{border-color:var(--red)}.bb-unit.ply{border-color:var(--gold)}
+.bb-unit .uart{width:34px;height:34px;display:flex;align-items:center;justify-content:center}.bb-unit .uart img{max-width:32px;max-height:32px;object-fit:contain;border-radius:4px}
+.bb-unit .uart .emoji{font-size:1.4rem}
+.bb-unit .uw{font-family:'Black Ops One',cursive;font-size:var(--fs-xs);color:var(--gold)}
+.bb-unit .uspd{position:absolute;top:-4px;right:-4px;background:rgba(0,0,0,.85);border-radius:5px;padding:1px 4px;font-size:.5rem}
+.bb-controls{flex-shrink:0;background:#06091a;border-top:3px solid var(--gold);padding:8px;display:flex;flex-direction:column;gap:6px}
+.bb-log{padding:8px 12px;font-size:var(--fs-sm);background:rgba(0,0,0,.5);border-radius:8px;min-height:36px}.bb-log .effect{color:var(--gold)}
+.bb-hand{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
+.bb-hand-card{flex-shrink:0;width:78px;background:linear-gradient(160deg,var(--panel),var(--panel2));border:2px solid var(--bdr);border-radius:10px;padding:6px;text-align:center;cursor:pointer;position:relative;min-height:108px}
+.bb-hand-card:active{transform:scale(.96)}.bb-hand-card.selected{border-color:var(--gold);box-shadow:0 0 12px rgba(255,215,0,.5);transform:translateY(-4px)}
+.bb-hand-card.disabled{opacity:.4}
+.bb-hand-card .uart{height:42px;display:flex;align-items:center;justify-content:center}.bb-hand-card .uart img{max-width:42px;max-height:42px;object-fit:contain;border-radius:4px}
+.bb-hand-card .uart .emoji{font-size:1.7rem}
+.bb-hand-card .nm{font-family:'Black Ops One',cursive;font-size:var(--fs-xs);margin-top:3px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bb-hand-card .ec{position:absolute;top:2px;left:2px;width:22px;height:22px;background:linear-gradient(135deg,#a855f7,#ec4899);border-radius:50%;border:1px solid #fff;display:flex;align-items:center;justify-content:center;font-family:'Black Ops One',cursive;font-size:var(--fs-xs);color:#fff}
+.bb-hand-card .uw-mini{font-family:'Black Ops One',cursive;font-size:var(--fs-xs);color:var(--gold)}
+.bb-action-row{display:flex;gap:8px}
+.bb-action-row button{flex:1;padding:14px;border-radius:10px;font-family:'Black Ops One',cursive;font-size:var(--fs-sm);cursor:pointer;border:2px solid var(--bdr);background:var(--panel);color:#fff;min-height:50px}
+.bb-action-row button.primary{background:var(--gold);color:#000;border-color:var(--gold)}
+.dice-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:9998;align-items:center;justify-content:center;flex-direction:column;gap:14px;padding:20px}.dice-overlay.on{display:flex}
+.dice-3d{width:120px;height:120px;perspective:600px}
+.dice-cube{width:100%;height:100%;position:relative;transform-style:preserve-3d;animation:diceRoll 1s ease-out forwards}
+@keyframes diceRoll{0%{transform:rotateX(0) rotateY(0)}100%{transform:rotateX(720deg) rotateY(540deg)}}
+.dice-face{position:absolute;inset:0;background:linear-gradient(135deg,var(--panel),var(--panel2));border:3px solid var(--gold);border-radius:14px;display:flex;align-items:center;justify-content:center;font-family:'Black Ops One',cursive;font-size:3rem;color:var(--gold)}
+.dice-num{font-family:'Black Ops One',cursive;font-size:3rem;color:var(--gold);text-shadow:0 0 14px rgba(255,215,0,.5)}
+.dice-label{font-family:'Black Ops One',cursive;font-size:var(--fs-base);color:#fff;text-align:center;max-width:90vw}
+.dice-overlay button{padding:12px 32px;background:var(--gold);color:#000;border:none;border-radius:10px;font-family:'Black Ops One',cursive;font-size:var(--fs-sm);cursor:pointer;min-height:48px}
+
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;z-index:9999;padding:16px}.modal.on{display:flex}
+.modal-box{background:linear-gradient(160deg,var(--panel),var(--panel2));border:2px solid var(--gold);border-radius:16px;padding:18px;max-width:420px;width:100%;max-height:92vh;overflow-y:auto}
+.modal-title{font-family:'Black Ops One',cursive;font-size:var(--fs-lg);color:var(--gold);text-align:center;margin-bottom:14px}
+.party-list{display:flex;flex-direction:column;gap:8px}
+.party-row{display:flex;align-items:center;gap:12px;padding:12px;background:rgba(0,0,0,.3);border:1px solid var(--bdr);border-radius:12px;cursor:pointer}
+.party-row.fainted{opacity:.45}.party-row.active-row{border-color:var(--gold)}
+.party-row .ico{width:48px;height:48px;display:flex;align-items:center;justify-content:center}.party-row .ico img{max-width:48px;max-height:48px;object-fit:contain;border-radius:6px}
+.party-row .ico .emoji{font-size:2rem}.party-row .info{flex:1}
+.party-row .nm{font-family:'Black Ops One',cursive;font-size:var(--fs-sm);display:flex;justify-content:space-between}
+.party-row .lv{color:var(--gold);font-size:var(--fs-xs)}.party-row .hp-num{font-size:var(--fs-xs);text-align:right}
+.cd-art{display:flex;align-items:center;justify-content:center;height:140px;background:radial-gradient(circle,rgba(255,255,255,.06),transparent);border-radius:12px;margin-bottom:10px}
+.cd-art img{max-width:140px;max-height:140px;object-fit:contain;border-radius:10px}
+.cd-art .emoji{font-size:4.5rem}
+.cd-name{font-family:'Black Ops One',cursive;font-size:var(--fs-xl);color:#fff;text-align:center;letter-spacing:2px;margin-bottom:6px}
+.cd-types{display:flex;gap:6px;justify-content:center;margin-bottom:14px}
+.cd-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:12px}
+.cd-stat{background:rgba(0,0,0,.4);border:1px solid var(--bdr);border-radius:8px;padding:8px;text-align:center}
+.cd-stat .v{font-family:'Black Ops One',cursive;font-size:var(--fs-base);color:var(--gold);display:block}.cd-stat .k{font-size:var(--fs-xs);color:var(--soft)}
+.cd-section{font-family:'Black Ops One',cursive;color:var(--gold);font-size:var(--fs-sm);margin:14px 0 6px}
+.cd-effect{padding:8px 12px;background:rgba(255,215,0,.08);border-left:3px solid var(--gold);border-radius:6px;font-size:var(--fs-sm);line-height:1.5;margin-bottom:6px}
+.cd-effect.death{border-color:var(--red);background:rgba(255,56,69,.08)}.cd-effect.clash{border-color:#a855f7;background:rgba(168,85,247,.08)}
+.cd-mu{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px;font-size:var(--fs-xs)}
+.cd-mu .row{display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:6px;background:rgba(0,0,0,.3)}
+.cd-mu .row.super{background:rgba(34,197,94,.15);color:#4ade80}.cd-mu .row.weak{background:rgba(239,68,68,.15);color:#f87171}
+.cd-moves-list{display:flex;flex-direction:column;gap:6px;margin-bottom:6px}
+.cd-move{padding:8px 10px;background:rgba(0,0,0,.4);border:1px solid var(--bdr);border-radius:8px}
+.cd-move .mn{font-family:'Black Ops One',cursive;font-size:var(--fs-sm);color:#fff;margin-bottom:3px}
+.cd-move .mt{font-size:var(--fs-xs);color:var(--soft);display:flex;justify-content:space-between}
+.log-list{max-height:60vh;overflow-y:auto;font-size:var(--fs-sm);line-height:1.6}
+.log-entry{padding:8px 10px;border-bottom:1px solid var(--bdr)}.log-entry .turn-no{color:var(--gold);font-family:'Black Ops One',cursive;font-size:var(--fs-xs)}.log-entry .msg{color:var(--soft)}
+.eog-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.eog-stat{padding:10px;background:rgba(0,0,0,.3);border:1px solid var(--bdr);border-radius:10px;text-align:center}
+.eog-stat .k{font-size:var(--fs-xs);color:var(--soft);margin-bottom:4px}.eog-stat .v{font-family:'Black Ops One',cursive;font-size:var(--fs-lg);color:var(--gold)}
+.boss-list{display:flex;flex-direction:column;gap:10px;padding-bottom:30px}
+.boss-card{display:flex;align-items:center;gap:12px;padding:14px;background:linear-gradient(135deg,var(--panel),var(--panel2));border:2px solid var(--bdr);border-radius:14px;cursor:pointer}
+.boss-card.locked{opacity:.4;cursor:not-allowed}.boss-card.cleared{border-color:var(--green)}.boss-card.active-boss{border-color:var(--gold);box-shadow:0 0 16px rgba(255,215,0,.3)}
+.boss-card .num{font-family:'Black Ops One',cursive;font-size:1.6rem;color:var(--gold);width:30px;text-align:center}
+.boss-card .ico{font-size:2.4rem;width:50px;text-align:center}.boss-card .info{flex:1}
+.boss-card .nm{font-family:'Black Ops One',cursive;font-size:var(--fs-base);margin-bottom:3px}.boss-card .desc{font-size:var(--fs-xs);color:var(--soft)}.boss-card .badge{font-size:1.4rem}
+.profile-hero{text-align:center;padding:20px;background:linear-gradient(160deg,var(--panel),var(--panel2));border-radius:14px;border:1px solid var(--bdr);margin-bottom:14px}
+.profile-name{font-family:'Black Ops One',cursive;font-size:var(--fs-xl);color:var(--gold);background:transparent;border:1px solid var(--bdr);border-radius:8px;padding:6px 12px;text-align:center;max-width:240px}
+.profile-rank{font-size:var(--fs-xs);color:var(--soft);letter-spacing:2px;margin-top:8px}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding-bottom:30px}
+.stat-tile{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--bdr);border-radius:12px;padding:14px;text-align:center}
+.stat-tile .v{font-family:'Black Ops One',cursive;font-size:var(--fs-xl);color:var(--gold);display:block}.stat-tile .k{font-size:var(--fs-xs);color:var(--soft);margin-top:3px}
+.deck-tabs{display:flex;gap:6px;padding:10px;background:rgba(0,0,0,.5);border-bottom:1px solid var(--bdr)}
+.deck-tab{flex:1;padding:10px;background:rgba(255,255,255,.04);border:1px solid var(--bdr);border-radius:8px;color:var(--soft);font-family:'Black Ops One',cursive;font-size:var(--fs-xs);cursor:pointer}
+.deck-tab.on{background:var(--gold);color:#000;border-color:var(--gold)}
+.saved-deck{display:flex;align-items:center;gap:10px;padding:12px;background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--bdr);border-radius:12px;margin-bottom:10px}
+.saved-deck .info{flex:1;min-width:0}.saved-deck .nm{font-family:'Black Ops One',cursive;font-size:var(--fs-sm);color:var(--gold);margin-bottom:3px}
+.saved-deck .members{font-size:var(--fs-xs);color:var(--soft);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.saved-deck button{padding:8px 12px;background:rgba(255,255,255,.06);border:1px solid var(--bdr);border-radius:8px;color:#fff;font-family:'Black Ops One',cursive;font-size:var(--fs-xs);cursor:pointer}
+.saved-deck button.load{background:var(--gold);color:#000;border-color:var(--gold)}.saved-deck button.del{background:transparent;color:var(--red);border-color:var(--red)}
+.end-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:10000;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;overflow-y:auto}.end-overlay.on{display:flex}
+.end-title{font-family:'Black Ops One',cursive;font-size:2.8rem;letter-spacing:5px;margin-bottom:14px}.end-title.win{color:var(--gold)}.end-title.lose{color:var(--red)}
+.end-sub{color:var(--soft);font-size:var(--fs-base);margin-bottom:14px}
+.end-btn{padding:16px 32px;margin:6px;background:var(--gold);color:#000;border:none;border-radius:12px;font-family:'Black Ops One',cursive;font-size:var(--fs-base);cursor:pointer;min-height:54px}
+.end-btn.alt{background:rgba(255,255,255,.08);color:#fff;border:1px solid var(--bdr)}
+.select-bar{padding:14px;background:rgba(0,0,0,.4);text-align:center;border-bottom:1px solid var(--bdr)}
+.select-bar .ct{font-family:'Black Ops One',cursive;font-size:var(--fs-base);color:var(--gold)}.select-bar .ct b{color:#fff;font-size:var(--fs-lg)}
+.select-bar .save-btn{margin-top:8px;padding:6px 14px;background:rgba(255,215,0,.12);border:1px solid var(--gold);color:var(--gold);font-family:'Black Ops One',cursive;font-size:var(--fs-xs);border-radius:8px;cursor:pointer}
+.start-bar{padding:14px;background:rgba(0,0,0,.5);display:flex;gap:10px;border-top:1px solid var(--bdr)}
+.start-bar button{flex:1;padding:16px;border-radius:12px;font-family:'Black Ops One',cursive;font-size:var(--fs-base);cursor:pointer;border:none;min-height:54px}
+.start-bar .start-btn{background:var(--gold);color:#000}.start-bar .start-btn:disabled{opacity:.4}
+.start-bar .clear-btn{background:rgba(255,255,255,.08);color:#fff;border:1px solid var(--bdr);flex:0 0 90px}
+.tc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:12px 0}
+.tc-row{padding:10px;background:var(--panel);border:1px solid var(--bdr);border-radius:10px;font-size:var(--fs-xs);text-align:center}
+.tc-row .src{font-family:'Black Ops One',cursive;font-size:var(--fs-sm);margin-bottom:4px}.tc-row .arr{color:var(--gold);margin:4px 0}
+.section-h{font-family:'Black Ops One',cursive;color:var(--gold);font-size:var(--fs-base);margin:18px 0 10px}
+.txt-row{font-size:var(--fs-sm);color:var(--soft);line-height:1.7;margin-bottom:8px}
+</style>
+</head>
+<body>
+
+<div class="screen on" id="home">
+  <a class="launcher-back" href="../index.html" onclick="var t=this,x=new XMLHttpRequest();try{x.open('HEAD','../index.html',false);x.send();if(x.status>=400)t.href='../launcher.html';}catch(e){}">‹ HUB</a>
+  <img src="../assets/smash-logo.webp" alt="Super Smash Bros" style="display:block;max-width:88%;max-height:90px;margin:8px auto 6px;object-fit:contain;filter:drop-shadow(0 4px 12px rgba(0,0,0,.5))" onerror="this.style.display='none'">
+  <div class="shield">⚔️</div>
+  <div class="logo-main">SUPER SMASH</div><div class="logo-sub">ARENA</div><div class="logo-tag">FULL EDITION · TURN · BOARD · STORY</div>
+  <div class="mode-pill">⚔️ TURN BATTLE</div><button class="menu-btn" onclick="goScreen('quick-tb')"><span class="ico">🎮</span><span class="lbl">QUICK BATTLE<span class="sub">Pokemon-style 1v1</span></span><span class="arr">›</span></button>
+  <div class="mode-pill">🗺️ BOARD BATTLE</div><button class="menu-btn" onclick="goScreen('quick-bb')"><span class="ico">🃏</span><span class="lbl">QUICK BOARD<span class="sub">Lanes, towers, dice</span></span><span class="arr">›</span></button>
+  <div class="mode-pill">📖 STORY MODE</div><button class="menu-btn" onclick="goScreen('story')"><span class="ico">🌟</span><span class="lbl">WORLD OF LIGHT<span class="sub">8 boss spirits</span></span><span class="arr">›</span></button>
+  <div style="height:8px"></div>
+  <button class="menu-btn" onclick="goScreen('decks')"><span class="ico">💾</span><span class="lbl">MY DECKS<span class="sub">Save and load decks</span></span><span class="arr">›</span></button>
+  <button class="menu-btn" onclick="goScreen('profile')"><span class="ico">👤</span><span class="lbl">PROFILE<span class="sub">Your stats &amp; rank</span></span><span class="arr">›</span></button>
+  <button class="menu-btn" onclick="goScreen('roster')"><span class="ico">📋</span><span class="lbl">FIGHTER ROSTER<span class="sub">View all fighters</span></span><span class="arr">›</span></button>
+  <button class="menu-btn" onclick="goScreen('rules')"><span class="ico">📖</span><span class="lbl">HOW TO PLAY<span class="sub">All modes explained</span></span><span class="arr">›</span></button>
+  <input type="file" id="originalFile" accept=".html,.htm" style="display:none">
+  <div id="artStatus" style="position:fixed;top:0;left:0;right:0;z-index:200;background:linear-gradient(135deg,rgba(255,215,0,.95),rgba(255,56,69,.95));color:#000;padding:10px 14px;font-family:'Black Ops One',cursive;font-size:12px;text-align:center;letter-spacing:1px;line-height:1.5;border-bottom:2px solid #fff;box-shadow:0 4px 16px rgba(0,0,0,.5)">⏳ Loading artwork…</div>
+</div>
+
+<div class="screen" id="roster"><div class="topbar"><button class="back" onclick="goScreen('home')">‹ BACK</button><div class="ttl">FIGHTER ROSTER</div><div class="meta" id="rosterMeta"></div></div><div class="page-body"><div class="roster-grid" id="rosterGrid"></div></div></div>
+<div class="screen" id="select"><div class="topbar"><button class="back" onclick="cancelSelect()">‹ BACK</button><div class="ttl" id="selTitle">PICK YOUR TEAM</div><div class="meta" id="selMeta"></div></div><div class="select-bar"><div class="ct">SQUAD: <b id="selCount">0</b> / <span id="selMax">6</span></div><button class="save-btn" onclick="saveCurrentDeck()">💾 SAVE AS DECK</button></div><div class="page-body"><div class="roster-grid" id="selectGrid"></div></div><div class="start-bar"><button class="clear-btn" onclick="clearSelect()">CLEAR</button><button class="start-btn" id="startBtn" onclick="startBattle()" disabled>▶ FIGHT</button></div></div>
+<div class="screen" id="decks"><div class="topbar"><button class="back" onclick="goScreen('home')">‹ BACK</button><div class="ttl">MY DECKS</div></div><div class="deck-tabs"><button class="deck-tab on" onclick="setDeckTab('tb')">⚔️ TURN BATTLE</button><button class="deck-tab" onclick="setDeckTab('bb')">🃏 BOARD BATTLE</button></div><div class="page-body"><div id="decksList"></div></div></div>
+<div class="screen" id="profile"><div class="topbar"><button class="back" onclick="goScreen('home')">‹ BACK</button><div class="ttl">PROFILE</div></div><div class="page-body"><div class="profile-hero"><input class="profile-name" id="profileName" maxlength="20" oninput="saveProfileName()"><div class="profile-rank" id="profileRank">⭐ ROOKIE</div></div><div class="stat-grid" id="statGrid"></div><button class="back-btn" onclick="resetStats()">🗑 RESET STATS</button></div></div>
+<div class="screen" id="story"><div class="topbar"><button class="back" onclick="goScreen('home')">‹ BACK</button><div class="ttl">WORLD OF LIGHT</div><div class="meta" id="storyProgress">0/8</div></div><div class="page-body"><div class="boss-list" id="bossList"></div></div></div>
+<div class="screen" id="rules"><div class="topbar"><button class="back" onclick="goScreen('home')">‹ BACK</button><div class="ttl">HOW TO PLAY</div></div><div class="page-body">
+<div class="section-h">⚔️ TURN BATTLE</div><div class="txt-row">Pick a team. Tap moves to see super-effective matchups.</div>
+<div class="section-h">🗺️ BOARD BATTLE</div><div class="txt-row">Build a deck. Deploy with elixir, units advance, D20 combat, towers fire back. Win 2 of 3 enemy towers.</div>
+<div class="section-h">📖 WORLD OF LIGHT</div><div class="txt-row">Defeat 8 boss spirits with custom decks and unique modifiers.</div>
+<div class="section-h">🔄 TYPE CHART</div>
+<div class="tc-grid">
+<div class="tc-row"><div class="src" style="color:var(--brawler)">🥊 BRAWLER</div><div class="arr">→</div><div style="color:var(--zoner)">ZONER</div></div>
+<div class="tc-row"><div class="src" style="color:var(--zoner)">🎯 ZONER</div><div class="arr">→</div><div style="color:var(--magic)">MAGIC</div></div>
+<div class="tc-row"><div class="src" style="color:var(--magic)">🪄 MAGIC</div><div class="arr">→</div><div style="color:var(--speedster)">SPEEDSTER</div></div>
+<div class="tc-row"><div class="src" style="color:var(--speedster)">💨 SPEEDSTER</div><div class="arr">→</div><div style="color:var(--sword)">SWORD</div></div>
+<div class="tc-row"><div class="src" style="color:var(--sword)">⚔ SWORD</div><div class="arr">→</div><div style="color:var(--trickster)">TRICKSTER</div></div>
+<div class="tc-row"><div class="src" style="color:var(--trickster)">🎭 TRICKSTER</div><div class="arr">→</div><div style="color:var(--brawler)">BRAWLER</div></div>
+</div><div style="height:30px"></div>
+</div></div>
+
+<div class="screen" id="tbattle">
+  <div class="topbar"><button class="back" onclick="quitBattle()">⬅ QUIT</button><div class="ttl" id="tbTitle">⚔️ BATTLE</div><div class="meta" id="tbMeta">vs</div></div>
+  <div class="tb-arena"><div class="arena-fx"></div><div class="flash-fx" id="flashFx"></div>
+    <div class="foe-area"><div class="hp-card"><div class="nm"><span id="foeName">FOE</span><span class="lv" id="foeLv">Lv5</span></div><div class="hp-bar-wrap"><span class="lbl">HP</span><div class="hp-bar"><div class="hp-fill" id="foeHpFill" style="width:100%"></div></div></div><div class="hp-num" id="foeHpNum">100/100</div></div></div>
+    <div class="tb-sprite foe-sprite" id="foeSprite"><span class="emoji">🦹</span></div>
+    <div class="tb-sprite ply-sprite" id="plySprite"><span class="emoji">🍄</span></div>
+    <div class="ply-area"><div class="hp-card"><div class="nm"><span id="plyName">YOU</span><span class="lv" id="plyLv">Lv5</span></div><div class="hp-bar-wrap"><span class="lbl">HP</span><div class="hp-bar"><div class="hp-fill" id="plyHpFill" style="width:100%"></div></div></div><div class="hp-num" id="plyHpNum">100/100</div></div></div>
+  </div>
+  <div class="tb-controls"><div class="tb-log" id="tbLog">A challenger appeared!</div>
+    <div id="tbMainMenu" class="tb-menu"><button class="bbtn fight" onclick="showMoves()">⚔️ FIGHT</button><button class="bbtn team" onclick="showSwitch(false)">🔄 TEAM</button><button class="bbtn bag" onclick="useItem()">💼 TOMATO</button><button class="bbtn run" onclick="tryRun()">🏃 RUN</button></div>
+    <div id="tbMoveMenu" style="display:none"><div class="move-grid" id="moveGrid"></div><div class="back-row"><button class="back-btn" onclick="hideMoves()">‹ BACK</button></div></div>
+  </div>
+</div>
+
+<div class="screen" id="bbattle">
+  <div class="topbar"><button class="back" onclick="quitBoard()">⬅ QUIT</button><div class="ttl" id="bbTitle">🃏 BOARD BATTLE</div><div class="meta" id="bbMeta"></div></div>
+  <div class="bb-status"><div class="turn" id="bbTurn">TURN 1</div><div class="ph" id="bbPhase">Deploy</div><button class="log-btn" onclick="showTurnLog()">📜 LOG</button><div class="elixir">⚡ <b id="bbElixir">5</b> / 10</div></div>
+  <div class="bb-board" id="bbBoard"></div>
+  <div class="bb-controls"><div class="bb-log" id="bbLog">Tap a card, then tap your back row to deploy.</div><div class="bb-hand" id="bbHand"></div><div class="bb-action-row"><button id="bbEndDeploy" class="primary" onclick="endDeployPhase()">▶ END TURN</button></div></div>
+</div>
+
+<div class="modal" id="switchModal"><div class="modal-box"><div class="modal-title" id="switchTitle">CHOOSE A FIGHTER</div><div class="party-list" id="partyList"></div><button class="back-btn" id="switchCancel" onclick="closeSwitch()" style="margin-top:14px">CANCEL</button></div></div>
+<div class="modal" id="cardModal"><div class="modal-box"><button class="back-btn" onclick="closeCardModal()" style="margin-bottom:10px">✕ CLOSE</button><div id="cardModalContent"></div></div></div>
+<div class="modal" id="logModal"><div class="modal-box"><div class="modal-title">📜 TURN LOG</div><div class="log-list" id="logListContent"></div><button class="back-btn" onclick="closeLog()" style="margin-top:14px">CLOSE</button></div></div>
+<div class="dice-overlay" id="diceOverlay"><div class="dice-3d"><div class="dice-cube"><div class="dice-face" id="diceFace">?</div></div></div><div class="dice-num" id="diceNum">?</div><div class="dice-label" id="diceLabel">Rolling...</div><button onclick="closeDice()" id="diceContinue" style="display:none">CONTINUE</button></div>
+<div class="end-overlay" id="endOverlay"><div class="end-title" id="endTitle">VICTORY!</div><div class="end-sub" id="endSub">You won.</div><div class="eog-stats" id="eogStats"></div><button class="end-btn" id="endNext" onclick="endNext()">▶ AGAIN</button><button class="end-btn alt" onclick="endHome()">🏠 HOME</button></div>
+
+<script>
+const TYPES=['brawler','sword','zoner','speedster','magic','trickster'];
+const TYPE_ICONS={brawler:'🥊',sword:'⚔',zoner:'🎯',speedster:'💨',magic:'🪄',trickster:'🎭'};
+const TYPE_NAMES={brawler:'BRAWLER',sword:'SWORD',zoner:'ZONER',speedster:'SPEEDSTER',magic:'MAGIC',trickster:'TRICKSTER'};
+const TYPE_CHART={brawler:{zoner:2,trickster:0.5},zoner:{magic:2,brawler:0.5},magic:{speedster:2,zoner:0.5},speedster:{sword:2,magic:0.5},sword:{trickster:2,speedster:0.5},trickster:{brawler:2,sword:0.5}};
+const MOVE_POOLS={
+  brawler:[{n:'Smash Punch',p:50,pp:25,t:'brawler'},{n:'Falcon Punch',p:100,pp:5,t:'brawler'},{n:'Heavy Slam',p:75,pp:10,t:'brawler'},{n:'Body Press',p:65,pp:14,t:'brawler'},{n:'Headbutt',p:45,pp:25,t:'brawler'},{n:'Giant Punch',p:85,pp:8,t:'brawler'},{n:'Donkey Kong',p:90,pp:6,t:'brawler'},{n:'Bowser Bomb',p:95,pp:6,t:'brawler'},{n:'Ganon Punch',p:100,pp:5,t:'brawler'}],
+  sword:[{n:'Slash',p:45,pp:30,t:'sword'},{n:'Spin Attack',p:65,pp:14,t:'sword'},{n:'Sword Beam',p:80,pp:8,t:'sword'},{n:'Shield Breaker',p:70,pp:12,t:'sword'},{n:'Aether',p:85,pp:8,t:'sword'},{n:'Cross Slash',p:90,pp:6,t:'sword'},{n:'Omnislash',p:110,pp:5,t:'sword'},{n:'Skyward Strike',p:75,pp:10,t:'sword'}],
+  zoner:[{n:'Charge Shot',p:70,pp:12,t:'zoner'},{n:'Missile Lock',p:55,pp:18,t:'zoner'},{n:'Bomb Toss',p:45,pp:25,t:'zoner'},{n:'Rock Buster',p:50,pp:24,t:'zoner'},{n:'Mega Buster',p:80,pp:8,t:'zoner'},{n:'Power Beam',p:85,pp:6,t:'zoner'},{n:'Grenade',p:65,pp:15,t:'zoner'},{n:'Trick Arrow',p:60,pp:18,t:'zoner'}],
+  speedster:[{n:'Quick Attack',p:40,pp:30,t:'speedster'},{n:'Spin Dash',p:60,pp:18,t:'speedster'},{n:'Thunder Bolt',p:65,pp:14,t:'speedster'},{n:'Sonic Boom',p:75,pp:10,t:'speedster'},{n:'Falcon Kick',p:70,pp:12,t:'speedster'},{n:'Volt Tackle',p:90,pp:6,t:'speedster'},{n:'Thunder',p:85,pp:8,t:'speedster'},{n:'Light Speed',p:80,pp:8,t:'speedster'}],
+  magic:[{n:'Shadow Ball',p:65,pp:14,t:'magic'},{n:'Psychic',p:75,pp:10,t:'magic'},{n:'Confusion',p:45,pp:25,t:'magic'},{n:'Recover',p:0,pp:6,t:'magic',heal:60},{n:'Hyper Beam',p:110,pp:4,t:'magic'},{n:"Din's Fire",p:70,pp:12,t:'magic'},{n:'Light Pillar',p:85,pp:8,t:'magic'}],
+  trickster:[{n:'Inhale',p:50,pp:20,t:'trickster'},{n:'Final Cutter',p:70,pp:12,t:'trickster'},{n:'Stone Drop',p:80,pp:8,t:'trickster'},{n:'Pac-Toss',p:45,pp:25,t:'trickster'},{n:'Bonus Fruit',p:60,pp:16,t:'trickster'},{n:'Power Pellet',p:90,pp:5,t:'trickster'},{n:'Hammer Drop',p:85,pp:7,t:'trickster'},{n:'Trick Kick',p:55,pp:20,t:'trickster'}],
+};
+const EFFECTS={
+  mario:{deploy:'🍄 Power-up: heals 1w on a friendly unit'},
+  link:{clash:'⚔ Master Sword: bonus 1w'},
+  samus:{clash:'💥 Charge Shot: 1w to enemy tower'},
+  sonic:{deploy:'💨 Sonic dash: jumps to neutral',clash:'💨 Spin: hit a 2nd foe for 1w'},
+  kirby:{clash:'🎈 Inhale: copy target type',deploy:'🎈 Cute: enemies have 25% miss'},
+  dk:{clash:'🦍 Donkey Punch: bonus 1w + push back'},
+  mewtwo:{deploy:'🟣 Aura: heal King 1w',clash:'🟣 Psystrike: bonus 1w'},
+  marth:{clash:'🗡️ Critical: bonus 1w'},
+  megaman:{deploy:'🤖 Buster: 1w to random foe'},
+  falcon:{clash:'🏎️ Falcon Punch: bonus 2w'},
+  pikachu:{clash:'⚡ Volt: 1w to all foes in lane'},
+  pacman:{clash:'🟡 Power Pellet: heal self 1w'},
+  cloud:{clash:'⚔ Limit Break: bonus 2w'},
+  zelda:{deploy:"✨ Din's Fire: 1w to random foe"},
+  fox:{clash:'🦊 Reflector: damage attacker 1w'},
+  bowser:{clash:'🐢 Bomb: bonus 1w + 1w to all foes'},
+  ganondorf:{deploy:'👑 Curse: enemies in lane lose 5 ATK'},
+  ridley:{deploy:'🐉 Skewer: 1w to first foe'},
+  ike:{clash:'⚔ Aether: bonus 1w + heal self'},
+  rosalina:{deploy:'🌟 Luma: spawn shield'},
+  villager:{clash:'🪓 Timber: 2w to a building'},
+  jigglypuff:{clash:'🎶 Sing: target sleeps'},
+  shulk:{clash:'⚔ Monado Buster: bonus 1w'},
+  rob:{deploy:'🤖 Charge: gain 1 elixir'},
+  mrgame:{clash:'2️⃣ Judge: bonus damage'},
+  duckhunt:{clash:'🦆 Trick: confuse target'},
+  inkling:{deploy:'🦑 Splat: marks lane'},
+  palutena:{clash:'🌟 Heavenly Light: heal 1w'},
+  isabelle:{deploy:'🐶 Cheer: friendly +ATK'},
+  banjo:{clash:'🐻 Wonderwing: ignore next damage'},
+  hero:{clash:'⚔ Critical Hit: bonus 1w'},
+  sephiroth:{clash:'⚔ Supernova: bonus 2w'},
+  joker:{clash:'🎴 All-Out: bonus 1w'},
+};
+let ROSTER=[
+  {id:'mario',n:'Mario',fb:'🍄',t:'brawler',elixir:4,hp:240,atk:78,def:80,spd:78,spdIcon:'🧍',moves:['Smash Punch','Heavy Slam','Body Press','Headbutt']},
+  {id:'link',n:'Link',fb:'⚔️',t:'sword',elixir:5,hp:240,atk:82,def:78,spd:75,spdIcon:'🧍',moves:['Slash','Spin Attack','Skyward Strike','Shield Breaker']},
+  {id:'samus',n:'Samus',fb:'🚀',t:'zoner',elixir:5,hp:220,atk:80,def:78,spd:72,spdIcon:'🧍',moves:['Charge Shot','Missile Lock','Power Beam','Bomb Toss']},
+  {id:'sonic',n:'Sonic',fb:'💨',t:'speedster',elixir:4,hp:200,atk:75,def:65,spd:110,spdIcon:'⚡',moves:['Spin Dash','Sonic Boom','Quick Attack','Light Speed']},
+  {id:'kirby',n:'Kirby',fb:'🎈',t:'trickster',elixir:3,hp:220,atk:72,def:75,spd:80,spdIcon:'🧍',moves:['Inhale','Final Cutter','Stone Drop','Hammer Drop']},
+  {id:'dk',n:'Donkey Kong',fb:'🦍',t:'brawler',elixir:6,hp:300,atk:92,def:78,spd:60,spdIcon:'🐢',moves:['Giant Punch','Donkey Kong','Heavy Slam','Body Press']},
+  {id:'mewtwo',n:'Mewtwo',fb:'🟣',t:'magic',elixir:7,hp:240,atk:90,def:70,spd:88,spdIcon:'⚡',moves:['Psychic','Shadow Ball','Confusion','Hyper Beam']},
+  {id:'marth',n:'Marth',fb:'🗡️',t:'sword',elixir:5,hp:220,atk:80,def:72,spd:88,spdIcon:'⚡',moves:['Shield Breaker','Slash','Aether','Cross Slash']},
+  {id:'megaman',n:'Mega Man',fb:'🤖',t:'zoner',elixir:5,hp:210,atk:78,def:75,spd:78,spdIcon:'🧍',moves:['Mega Buster','Rock Buster','Charge Shot','Grenade']},
+  {id:'falcon',n:'Captain Falcon',fb:'🏎️',t:'speedster',elixir:5,hp:220,atk:85,def:70,spd:100,spdIcon:'⚡',moves:['Falcon Kick','Falcon Punch','Quick Attack','Sonic Boom']},
+  {id:'pikachu',n:'Pikachu',fb:'⚡',t:'speedster',elixir:3,hp:190,atk:78,def:65,spd:105,spdIcon:'⚡',moves:['Thunder Bolt','Volt Tackle','Thunder','Quick Attack']},
+  {id:'pacman',n:'Pac-Man',fb:'🟡',t:'trickster',elixir:4,hp:210,atk:75,def:75,spd:82,spdIcon:'🧍',moves:['Pac-Toss','Bonus Fruit','Power Pellet','Trick Kick']},
+  {id:'cloud',n:'Cloud',fb:'⚔️',t:'sword',elixir:6,hp:250,atk:90,def:80,spd:80,spdIcon:'🧍',moves:['Cross Slash','Omnislash','Aether','Sword Beam']},
+  {id:'zelda',n:'Zelda',fb:'👸',t:'magic',elixir:5,hp:220,atk:85,def:70,spd:80,spdIcon:'🧍',moves:["Din's Fire",'Light Pillar','Psychic','Confusion']},
+  {id:'fox',n:'Fox',fb:'🦊',t:'speedster',elixir:4,hp:190,atk:78,def:65,spd:100,spdIcon:'⚡',moves:['Quick Attack','Spin Dash','Sonic Boom','Falcon Kick']},
+  {id:'bowser',n:'Bowser',fb:'🐢',t:'brawler',elixir:7,hp:320,atk:95,def:85,spd:50,spdIcon:'🐢',moves:['Bowser Bomb','Heavy Slam','Body Press','Giant Punch']},
+  {id:'ganondorf',n:'Ganondorf',fb:'👑',t:'brawler',elixir:7,hp:280,atk:100,def:85,spd:55,spdIcon:'🐢',moves:['Ganon Punch','Heavy Slam','Body Press','Donkey Kong']},
+  {id:'ridley',n:'Ridley',fb:'🐉',t:'brawler',elixir:6,hp:260,atk:90,def:80,spd:78,spdIcon:'🧍',moves:['Falcon Punch','Giant Punch','Donkey Kong','Heavy Slam']},
+  {id:'ike',n:'Ike',fb:'⚔️',t:'sword',elixir:5,hp:240,atk:88,def:78,spd:65,spdIcon:'🧍',moves:['Aether','Cross Slash','Slash','Shield Breaker']},
+  {id:'rosalina',n:'Rosalina',fb:'🌟',t:'magic',elixir:5,hp:230,atk:82,def:75,spd:75,spdIcon:'🧍',moves:['Light Pillar',"Din's Fire",'Hyper Beam','Recover']},
+  {id:'villager',n:'Villager',fb:'🪓',t:'trickster',elixir:4,hp:210,atk:75,def:70,spd:78,spdIcon:'🧍',moves:['Pac-Toss','Bonus Fruit','Trick Kick','Hammer Drop']},
+  {id:'jigglypuff',n:'Jigglypuff',fb:'🌸',t:'magic',elixir:3,hp:170,atk:65,def:60,spd:70,spdIcon:'🧍',moves:['Confusion','Recover','Psychic','Shadow Ball']},
+  {id:'shulk',n:'Shulk',fb:'⚔️',t:'sword',elixir:5,hp:230,atk:85,def:75,spd:85,spdIcon:'⚡',moves:['Cross Slash','Omnislash','Aether','Slash']},
+  {id:'rob',n:'R.O.B.',fb:'🤖',t:'zoner',elixir:5,hp:220,atk:80,def:80,spd:70,spdIcon:'🧍',moves:['Charge Shot','Power Beam','Mega Buster','Grenade']},
+  {id:'mrgame',n:'Mr Game & Watch',fb:'2️⃣',t:'trickster',elixir:4,hp:200,atk:78,def:70,spd:85,spdIcon:'⚡',moves:['Hammer Drop','Stone Drop','Pac-Toss','Trick Kick']},
+  {id:'duckhunt',n:'Duck Hunt',fb:'🦆',t:'zoner',elixir:4,hp:200,atk:75,def:65,spd:85,spdIcon:'⚡',moves:['Trick Arrow','Bomb Toss','Grenade','Charge Shot']},
+  {id:'inkling',n:'Inkling',fb:'🦑',t:'zoner',elixir:4,hp:200,atk:78,def:70,spd:88,spdIcon:'⚡',moves:['Charge Shot','Bomb Toss','Grenade','Power Beam']},
+  {id:'palutena',n:'Palutena',fb:'👼',t:'magic',elixir:5,hp:220,atk:85,def:72,spd:85,spdIcon:'⚡',moves:['Light Pillar','Hyper Beam',"Din's Fire",'Recover']},
+  {id:'isabelle',n:'Isabelle',fb:'🐶',t:'trickster',elixir:3,hp:180,atk:65,def:70,spd:80,spdIcon:'🧍',moves:['Trick Kick','Pac-Toss','Bonus Fruit','Hammer Drop']},
+  {id:'banjo',n:'Banjo & Kazooie',fb:'🐻',t:'brawler',elixir:5,hp:240,atk:82,def:75,spd:75,spdIcon:'🧍',moves:['Smash Punch','Heavy Slam','Body Press','Headbutt']},
+  {id:'hero',n:'Hero',fb:'🛡️',t:'sword',elixir:5,hp:230,atk:85,def:75,spd:80,spdIcon:'🧍',moves:['Cross Slash','Omnislash','Slash','Sword Beam']},
+  {id:'snake',n:'Snake',fb:'🪖',t:'zoner',elixir:5,hp:220,atk:85,def:75,spd:75,spdIcon:'🧍',moves:['Grenade','Bomb Toss','Missile Lock','Power Beam']},
+  {id:'lucario',n:'Lucario',fb:'🐺',t:'brawler',elixir:5,hp:230,atk:85,def:75,spd:90,spdIcon:'⚡',moves:['Smash Punch','Body Press','Giant Punch','Heavy Slam']},
+  {id:'greninja',n:'Greninja',fb:'🐸',t:'speedster',elixir:5,hp:210,atk:85,def:65,spd:103,spdIcon:'⚡',moves:['Quick Attack','Spin Dash','Sonic Boom','Falcon Kick']},
+  {id:'sephiroth',n:'Sephiroth',fb:'⚔️',t:'sword',elixir:7,hp:260,atk:100,def:75,spd:90,spdIcon:'⚡',moves:['Omnislash','Cross Slash','Aether','Sword Beam']},
+  {id:'joker',n:'Joker',fb:'🎴',t:'trickster',elixir:5,hp:220,atk:85,def:70,spd:95,spdIcon:'⚡',moves:['Trick Kick','Power Pellet','Hammer Drop','Final Cutter']},
+];
+const BOSSES=[
+  {id:'crazy',n:'Crazy Hand',ico:'🤚',desc:'Glove of Chaos',team:['kirby','jigglypuff','mewtwo'],bonus:'Foe deck cycles faster'},
+  {id:'master',n:'Master Hand',ico:'✋',desc:'God of Smash',team:['mewtwo','rosalina','palutena'],bonus:'Magic moves +25% damage'},
+  {id:'ridley',n:'Ridley',ico:'🐲',desc:'Cunning God of Death',team:['ridley','bowser','dk'],bonus:'Foe starts with +2 elixir'},
+  {id:'ganon',n:'Ganondorf',ico:'👑',desc:'King of Evil',team:['ganondorf','ike','marth'],bonus:'Foe Towers +1 HP'},
+  {id:'bayo',n:'Bayonetta',ico:'💋',desc:'Umbra Witch',team:['palutena','jigglypuff','mewtwo'],bonus:'Foe deals +1w on clash strikes'},
+  {id:'galleom',n:'Galleom',ico:'🤖',desc:'Subspace Sentinel',team:['rob','samus','dk'],bonus:'Foe King +2 HP'},
+  {id:'dharkon',n:'Dharkon',ico:'🐙',desc:'Ruler of Darkness',team:['ganondorf','sephiroth','mewtwo','joker'],bonus:'Foe gains 2 elixir per turn'},
+  {id:'galeem',n:'Galeem',ico:'🌟',desc:'Lord of Light',team:['palutena','sephiroth','mewtwo','rosalina'],bonus:'Foe King +4 HP'},
+];
+let state={team:[],partyTeam:[],partyFoe:[],active:0,foeActive:0,potions:3,busy:false,mode:'tb',bb:null,storyBoss:null};
+let SMASH_ART={};
+
+const STORE_KEY='smash-arena-full';
+function loadStore(){try{return JSON.parse(localStorage.getItem(STORE_KEY))||{}}catch(e){return{}}}
+function saveStore(s){localStorage.setItem(STORE_KEY,JSON.stringify(s))}
+function getStats(){const s=loadStore();return s.stats||{tbWins:0,tbLosses:0,bbWins:0,bbLosses:0,storyCleared:0,totalDmg:0,totalTurns:0,favHero:null,heroUses:{}}}
+function setStats(stats){const s=loadStore();s.stats=stats;saveStore(s)}
+function getProfile(){const s=loadStore();return s.profile||{name:'Fighter'}}
+function setProfile(p){const s=loadStore();s.profile=p;saveStore(s)}
+function getDecks(mode){const s=loadStore();return (s.decks&&s.decks[mode])||[]}
+function setDecks(mode,decks){const s=loadStore();s.decks=s.decks||{};s.decks[mode]=decks;saveStore(s)}
+function getStoryProgress(){const s=loadStore();return s.story||{cleared:0}}
+function setStoryProgress(p){const s=loadStore();s.story=p;saveStore(s)}
+
+let audioCtx=null;
+function audio(){if(!audioCtx)audioCtx=new (window.AudioContext||window.webkitAudioContext)();return audioCtx}
+function tone(freq,dur,type='sine',vol=0.15){try{const ctx=audio();const osc=ctx.createOscillator();const gain=ctx.createGain();osc.connect(gain);gain.connect(ctx.destination);osc.type=type;osc.frequency.value=freq;gain.gain.setValueAtTime(vol,ctx.currentTime);gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+dur);osc.start(ctx.currentTime);osc.stop(ctx.currentTime+dur)}catch(e){}}
+function sfxClick(){tone(800,0.05,'square',0.1)}function sfxSelect(){tone(660,0.08,'sine',0.12)}
+function sfxDeploy(){tone(440,0.06);setTimeout(()=>tone(660,0.06),60);setTimeout(()=>tone(880,0.08),120)}
+function sfxHit(){tone(180,0.12,'sawtooth',0.18);tone(120,0.18,'sawtooth',0.12)}
+function sfxCrit(){tone(150,0.08,'sawtooth',0.2);setTimeout(()=>tone(80,0.2,'sawtooth',0.15),60)}
+function sfxHeal(){tone(523,0.08);setTimeout(()=>tone(659,0.08),80);setTimeout(()=>tone(784,0.12),160)}
+function sfxFaint(){tone(400,0.15,'triangle',0.15);setTimeout(()=>tone(200,0.25,'triangle',0.1),100)}
+function sfxDice(){for(let i=0;i<6;i++)setTimeout(()=>tone(800+Math.random()*400,0.04,'square',0.06),i*100)}
+function sfxDiceLand(){tone(880,0.1,'square',0.18);setTimeout(()=>tone(660,0.12,'square',0.12),100)}
+function sfxTowerHit(){tone(110,0.18,'sawtooth',0.2);setTimeout(()=>tone(70,0.25,'sawtooth',0.12),100)}
+function sfxVictory(){tone(523,0.15);setTimeout(()=>tone(659,0.15),150);setTimeout(()=>tone(784,0.15),300);setTimeout(()=>tone(1047,0.3),450)}
+function sfxDefeat(){tone(330,0.2,'triangle',0.15);setTimeout(()=>tone(247,0.2,'triangle',0.13),200);setTimeout(()=>tone(196,0.4,'triangle',0.1),400)}
+
+function $(id){return document.getElementById(id)}
+function goScreenInner(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));$(id).classList.add('on');if(id==='roster')renderRoster();if(id==='profile')renderProfile();if(id==='story')renderStory();if(id==='decks')renderDecks()}
+function goScreen(id){sfxClick();if(id==='quick-tb'){openSelect('tb');return}if(id==='quick-bb'){openSelect('bb');return}goScreenInner(id)}
+function artHTML(p){if(SMASH_ART[p.id])return `<img src="${SMASH_ART[p.id]}" alt="${p.n}" loading="lazy">`;return `<span class="emoji">${p.fb||'❓'}</span>`}
+
+function mapSmashClass(cls){const m={heavy:'brawler',brawler:'brawler',swordfighter:'sword',sword:'sword',speedster:'speedster',zoner:'zoner',gunner:'zoner',magic:'magic',mage:'magic',mystic:'magic',trickster:'trickster',grappler:'brawler',pikmin:'trickster',mii:'trickster',mii_brawler:'brawler',mii_swordfighter:'sword',mii_gunner:'zoner',common:'brawler'};return m[cls]||'trickster'}
+
+function processSmashText(text){
+  function pluck(s,key){const re2=new RegExp(key+":(?:'([^']+)'|\"([^\"]+)\"|(-?\\d+))");const m2=s.match(re2);if(!m2)return null;return m2[1]||m2[2]||m2[3]||null}
+  const found=[];
+  let pos=0;
+  while(pos<text.length){
+    const idStart=text.indexOf("id:'",pos);
+    if(idStart===-1)break;
+    const idEnd=text.indexOf("'",idStart+4);
+    if(idEnd===-1)break;
+    const id=text.substring(idStart+4,idEnd);
+    if(!/^[a-z_0-9]+$/.test(id)){pos=idEnd+1;continue}
+    const imgStart=text.indexOf("img:'data:image",idEnd);
+    if(imgStart===-1||imgStart-idEnd>200000){pos=idEnd+1;continue}
+    const imgEnd=text.indexOf("'",imgStart+5);
+    if(imgEnd===-1)break;
+    const img=text.substring(imgStart+5,imgEnd);
+    const block=text.substring(idStart,imgStart);
+    SMASH_ART[id]=img;
+    const name=pluck(block,'name')||id.replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+    const cls=pluck(block,'cls')||'brawler';
+    const cost=parseInt(pluck(block,'cost')||'4');
+    const hp=parseInt(pluck(block,'hp')||'5');
+    const atk=parseInt(pluck(block,'atk')||'2');
+    const spd=parseInt(pluck(block,'spd')||'70');
+    const icon=pluck(block,'icon')||'🥊';
+    const sig=pluck(block,'sig')||'';
+    const t=mapSmashClass(cls);
+    const myHp=80+hp*30, myAtk=60+atk*8, mySpd=spd, myDef=Math.max(50,90-spd/2);
+    const moves=MOVE_POOLS[t]?MOVE_POOLS[t].slice(0,4).map(x=>x.n):MOVE_POOLS.brawler.slice(0,4).map(x=>x.n);
+    found.push({id,n:name,fb:icon,t,elixir:cost,hp:myHp,atk:myAtk,def:myDef,spd:mySpd,spdIcon:mySpd>=85?'⚡':mySpd>=60?'🧍':'🐢',moves,sig});
+    pos=imgEnd+1;
+  }
+  if(found.length>0){
+    ROSTER.length=0;ROSTER.push(...found);
+    if($('artStatus')){$('artStatus').innerHTML=`✓ Loaded ${found.length} fighters with artwork! <span style="opacity:.6">Cached.</span> <button onclick="document.getElementById('artStatus').style.display='none'" style="margin-left:8px;padding:4px 10px;background:rgba(0,0,0,.3);border:1px solid #000;color:#000;font-family:'Black Ops One',cursive;font-size:10px;border-radius:6px;cursor:pointer">✕ DISMISS</button>`;setTimeout(()=>{const s=$('artStatus');if(s)s.style.display='none'},4000)}
+    try{localStorage.setItem('smash-art-cache',JSON.stringify({art:SMASH_ART,roster:ROSTER,ver:1}))}catch(e){console.warn('Cache failed',e)}
+    if(document.querySelector('#roster.on'))renderRoster();
+    if(document.querySelector('#select.on'))renderSelect();
+    return true;
+  }
+  return false;
+}
+function loadCachedSmash(){try{const c=localStorage.getItem('smash-art-cache');if(!c)return false;const d=JSON.parse(c);if(!d.art||!d.roster)return false;Object.assign(SMASH_ART,d.art);ROSTER.length=0;ROSTER.push(...d.roster);if($('artStatus'))$('artStatus').style.display='none';return true}catch(e){return false}}
+async function tryFetchSmash(){try{const res=await fetch('../smash(3).html');if(!res.ok)return false;const text=await res.text();return processSmashText(text)}catch(e){return false}}
+function tryXhrSmash(){return new Promise(resolve=>{try{const x=new XMLHttpRequest();x.open('GET','../smash(3).html',true);x.responseType='text';x.onload=()=>{if(x.status===200||x.status===0&&x.responseText){resolve(processSmashText(x.responseText))}else resolve(false)};x.onerror=()=>resolve(false);x.send()}catch(e){resolve(false)}})}
+function tryIframeSmash(){return new Promise(resolve=>{try{const f=document.createElement('iframe');f.style.cssText='position:absolute;left:-9999px;width:1px;height:1px';f.src='../smash(3).html';let resolved=false;const finish=(v)=>{if(resolved)return;resolved=true;try{f.remove()}catch(e){}resolve(v)};f.onload=()=>{setTimeout(()=>{try{const doc=f.contentDocument||f.contentWindow.document;if(!doc){finish(false);return}const text=doc.documentElement.outerHTML;finish(processSmashText(text))}catch(e){finish(false)}},800)};f.onerror=()=>finish(false);document.body.appendChild(f);setTimeout(()=>finish(false),5000)}catch(e){resolve(false)}})}
+function loadSmashFromFile(file){const reader=new FileReader();reader.onload=(e)=>{if($('artStatus'))$('artStatus').innerHTML='⏳ Reading file…';const success=processSmashText(e.target.result);if(!success&&$('artStatus'))$('artStatus').innerHTML='⚠ Could not parse file. Make sure it\'s the original smash(3).html file.'};reader.onerror=()=>{if($('artStatus'))$('artStatus').innerHTML='⚠ Could not read file.'};reader.readAsText(file)}
+async function autoLoadSmash(){
+  if(loadCachedSmash())return true;
+  if($('artStatus'))$('artStatus').innerHTML='⏳ Loading artwork…';
+  if(await tryFetchSmash())return true;
+  if(await tryXhrSmash())return true;
+  if(await tryIframeSmash())return true;
+  return false;
+}
+setTimeout(()=>{
+  const fi=$('originalFile');
+  if(fi)fi.addEventListener('change',e=>{if(e.target.files[0])loadSmashFromFile(e.target.files[0])});
+  document.body.addEventListener('dragover',e=>{e.preventDefault();e.dataTransfer.dropEffect='copy'});
+  document.body.addEventListener('drop',e=>{e.preventDefault();if(e.dataTransfer.files[0])loadSmashFromFile(e.dataTransfer.files[0])});
+  autoLoadSmash().then(success=>{
+    if(!success&&$('artStatus'))$('artStatus').innerHTML='📂 Tap below to load real Smash artwork from your <b>smash(3).html</b> file (one-time, cached on device — nothing leaves your computer)<br><button onclick="document.getElementById(\'originalFile\').click()" style="margin-top:8px;padding:10px 16px;background:var(--gold);color:#000;border:none;font-family:\'Black Ops One\',cursive;font-size:12px;border-radius:8px;cursor:pointer">📂 PICK smash(3).html</button><br><span style="font-size:10px;color:var(--mut);margin-top:6px;display:block">Or drag the file anywhere on this page</span>';
+  });
+},100);
+
+function buildHero(template,lv){lv=lv||5;const moves=(template.moves||[]).map(name=>{for(const t of TYPES){const m=MOVE_POOLS[t].find(x=>x.n===name);if(m)return{...m,ppMax:m.pp,ppNow:m.pp}}return{n:name,p:50,pp:20,ppMax:20,ppNow:20,t:template.t}});const scale=1+(lv-5)*0.04;return{id:template.id,n:template.n,fb:template.fb,t:template.t,lv,hpMax:Math.round(template.hp*scale),hp:Math.round(template.hp*scale),atk:Math.round(template.atk*scale),def:Math.round(template.def*scale),spd:template.spd,elixir:template.elixir||3,spdIcon:template.spdIcon||'🧍',wounds:0,woundsMax:Math.max(2,Math.min(7,Math.round(template.hp/40))),moves,fainted:false,effects:EFFECTS[template.id]||{},dmgDealt:0}}
+function rnd(a,b){return Math.random()*(b-a)+a}
+function effect(at,dt){const r=(TYPE_CHART[at]||{})[dt];return r==null?1:r}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
+
+function recordHeroUse(id){const stats=getStats();stats.heroUses=stats.heroUses||{};stats.heroUses[id]=(stats.heroUses[id]||0)+1;let max=0,fav=null;for(const k in stats.heroUses){if(stats.heroUses[k]>max){max=stats.heroUses[k];fav=k}}stats.favHero=fav;setStats(stats)}
+function recordWin(mode){const s=getStats();s[mode+'Wins']=(s[mode+'Wins']||0)+1;setStats(s)}
+function recordLoss(mode){const s=getStats();s[mode+'Losses']=(s[mode+'Losses']||0)+1;setStats(s)}
+function addDmg(n){const s=getStats();s.totalDmg=(s.totalDmg||0)+n;setStats(s)}
+function addTurns(n){const s=getStats();s.totalTurns=(s.totalTurns||0)+n;setStats(s)}
+
+function renderRoster(){$('rosterMeta').textContent=`${ROSTER.length} fighters`;const grid=$('rosterGrid');grid.innerHTML='';ROSTER.forEach(h=>{const el=document.createElement('div');el.className='hero-card';el.onclick=()=>{sfxSelect();showCardDetail(h)};el.innerHTML=`<div class="elixir-badge">${h.elixir}</div><div class="pokeart">${artHTML(h)}</div><div class="name">${h.n}</div><div class="type-row"><span class="type-chip ${h.t}">${TYPE_ICONS[h.t]} ${TYPE_NAMES[h.t]}</span></div><div class="stats"><div class="stat"><span>HP</span><b>${h.hp}</b></div><div class="stat"><span>ATK</span><b>${h.atk}</b></div><div class="stat"><span>SPD</span><b>${h.spd}${h.spdIcon}</b></div><div class="stat"><span>WND</span><b>${Math.max(2,Math.min(7,Math.round(h.hp/40)))}</b></div></div>`;grid.appendChild(el)})}
+
+function showCardDetail(h){const eff=EFFECTS[h.id]||{};const beats=Object.keys(TYPE_CHART[h.t]||{}).filter(t=>TYPE_CHART[h.t][t]>1);const weakTo=TYPES.filter(t=>(TYPE_CHART[t]||{})[h.t]>1);const muSuper=beats.map(t=>`<div class="row super">${TYPE_ICONS[t]} ${TYPE_NAMES[t]} 2×</div>`).join('');const muWeak=weakTo.map(t=>`<div class="row weak">${TYPE_ICONS[t]} ${TYPE_NAMES[t]} → us 2×</div>`).join('');const movesHTML=(h.moves||[]).map(name=>{let m=null;for(const t of TYPES){const f=MOVE_POOLS[t].find(x=>x.n===name);if(f){m=f;break}}if(!m)return'';const tag=m.heal?`HEAL ${m.heal}`:`PWR ${m.p}`;return `<div class="cd-move"><div class="mn" style="color:var(--${m.t})">${m.n}</div><div class="mt"><span>${TYPE_ICONS[m.t]} ${TYPE_NAMES[m.t]}</span><span>${tag} · PP ${m.pp}</span></div></div>`}).join('');const wounds=Math.max(2,Math.min(7,Math.round(h.hp/40)));$('cardModalContent').innerHTML=`<div class="cd-art">${artHTML(h)}</div><div class="cd-name">${h.n}</div><div class="cd-types"><span class="type-chip ${h.t}">${TYPE_ICONS[h.t]} ${TYPE_NAMES[h.t]}</span></div><div class="cd-stats"><div class="cd-stat"><span class="v">${h.hp}</span><span class="k">HP</span></div><div class="cd-stat"><span class="v">${h.atk}</span><span class="k">ATK</span></div><div class="cd-stat"><span class="v">${h.def}</span><span class="k">DEF</span></div><div class="cd-stat"><span class="v">${h.spd}${h.spdIcon}</span><span class="k">SPD</span></div><div class="cd-stat"><span class="v">${h.elixir}⚡</span><span class="k">COST</span></div><div class="cd-stat"><span class="v">${wounds}w</span><span class="k">WOUNDS</span></div></div>${eff.deploy?`<div class="cd-section">⚡ ON DEPLOY</div><div class="cd-effect">${eff.deploy}</div>`:''}${eff.death?`<div class="cd-section">💀 ON DEATH</div><div class="cd-effect death">${eff.death}</div>`:''}${eff.clash?`<div class="cd-section">🎲 CLASH STRIKE</div><div class="cd-effect clash">${eff.clash}</div>`:''}<div class="cd-section">⚔ TYPE MATCHUPS</div><div class="cd-mu">${muSuper||'<div class="row">No super-effective</div>'}${muWeak||'<div class="row">No weaknesses</div>'}</div><div class="cd-section">🥊 MOVES</div><div class="cd-moves-list">${movesHTML}</div>`;$('cardModal').classList.add('on')}
+function closeCardModal(){$('cardModal').classList.remove('on');sfxClick()}
+
+let selectMode='tb';let selectingTeam=[];
+function openSelect(mode,bossId){selectMode=mode;selectingTeam=[];if(mode==='tb'){$('selTitle').textContent='PICK YOUR TEAM';$('selMeta').textContent=bossId?`vs ${BOSSES.find(b=>b.id===bossId).n}`:'Turn Battle';$('selMax').textContent='6';$('startBtn').textContent='▶ FIGHT'}else{$('selTitle').textContent='BUILD YOUR DECK';$('selMeta').textContent=bossId?`vs ${BOSSES.find(b=>b.id===bossId).n}`:'Board Battle';$('selMax').textContent='12';$('startBtn').textContent='🃏 START'}goScreenInner('select');renderSelect()}
+function renderSelect(){const max=selectMode==='tb'?6:12;const grid=$('selectGrid');grid.innerHTML='';ROSTER.forEach(h=>{const sel=selectingTeam.includes(h.id);const el=document.createElement('div');el.className='hero-card'+(sel?' selected':'');el.onclick=()=>{sfxSelect();const i=selectingTeam.indexOf(h.id);if(i>=0)selectingTeam.splice(i,1);else if(selectingTeam.length<max)selectingTeam.push(h.id);renderSelect()};el.innerHTML=`<div class="elixir-badge">${h.elixir}</div><div class="pokeart">${artHTML(h)}</div><div class="name">${h.n}</div><div class="type-row"><span class="type-chip ${h.t}">${TYPE_ICONS[h.t]} ${TYPE_NAMES[h.t]}</span></div><div class="stats"><div class="stat"><span>HP</span><b>${h.hp}</b></div><div class="stat"><span>SPD</span><b>${h.spd}${h.spdIcon}</b></div></div>`;const info=document.createElement('button');info.textContent='i';info.style.cssText='position:absolute;top:6px;right:6px;width:26px;height:26px;border-radius:50%;background:rgba(0,0,0,.6);border:1px solid var(--bdr);color:var(--gold);font-family:Black Ops One,cursive;font-size:13px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:5';info.onclick=(ev)=>{ev.stopPropagation();showCardDetail(h)};el.appendChild(info);grid.appendChild(el)});$('selCount').textContent=selectingTeam.length;$('startBtn').disabled=selectingTeam.length===0}
+function clearSelect(){selectingTeam=[];renderSelect();sfxClick()}
+function cancelSelect(){if(state.storyBoss)goScreenInner('story');else goScreenInner('home')}
+function startBattle(){if(selectingTeam.length===0)return;sfxClick();selectingTeam.forEach(recordHeroUse);if(selectMode==='tb')startTurnBattle();else startBoardBattle()}
+
+let currentDeckTab='tb';
+function setDeckTab(tab){currentDeckTab=tab;document.querySelectorAll('.deck-tab').forEach(b=>b.classList.remove('on'));event.target.classList.add('on');renderDecks();sfxClick()}
+function saveCurrentDeck(){if(selectingTeam.length===0){alert('Select at least one fighter first.');return}const name=prompt('Deck name?','My '+(selectMode==='tb'?'Team':'Deck'));if(!name)return;const decks=getDecks(selectMode);if(decks.length>=5){if(!confirm('You have 5 decks. Replace oldest?'))return;decks.shift()}decks.push({name,members:selectingTeam.slice(),date:Date.now()});setDecks(selectMode,decks);alert('Deck saved!');sfxHeal()}
+function renderDecks(){const list=$('decksList');const decks=getDecks(currentDeckTab);if(decks.length===0){list.innerHTML='<div class="txt-row" style="text-align:center;padding:30px">No saved decks yet.</div>';return}list.innerHTML=decks.slice().reverse().map((d,idx)=>{const realIdx=decks.length-1-idx;const memberNames=d.members.map(id=>{const r=ROSTER.find(x=>x.id===id);return r?r.n:'?'}).join(', ');return `<div class="saved-deck"><div class="info"><div class="nm">${d.name}</div><div class="members">${d.members.length} cards: ${memberNames}</div></div><button class="load" onclick="loadDeck(${realIdx},'${currentDeckTab}')">LOAD</button><button class="del" onclick="deleteDeck(${realIdx},'${currentDeckTab}')">✕</button></div>`}).join('')}
+function loadDeck(idx,mode){const decks=getDecks(mode);const d=decks[idx];if(!d)return;selectMode=mode;selectingTeam=d.members.filter(id=>ROSTER.find(r=>r.id===id));openSelect(mode);selectingTeam=d.members.filter(id=>ROSTER.find(r=>r.id===id));renderSelect();sfxSelect()}
+function deleteDeck(idx,mode){if(!confirm('Delete this deck?'))return;const decks=getDecks(mode);decks.splice(idx,1);setDecks(mode,decks);renderDecks();sfxClick()}
+
+function renderProfile(){const p=getProfile(),s=getStats();$('profileName').value=p.name||'Fighter';const total=(s.tbWins||0)+(s.bbWins||0)+(s.storyCleared||0);let rank='⭐ ROOKIE FIGHTER';if(total>=5)rank='🥉 BRONZE BRAWLER';if(total>=10)rank='🥈 SILVER BRAWLER';if(total>=20)rank='🥇 GOLD CHALLENGER';if(total>=40)rank='💎 ELITE FIGHTER';if(total>=80)rank='👑 SMASH CHAMPION';$('profileRank').textContent=rank;const fav=s.favHero?ROSTER.find(r=>r.id===s.favHero):null;const tiles=[{k:'TB WINS',v:s.tbWins||0},{k:'TB LOSSES',v:s.tbLosses||0},{k:'BOARD WINS',v:s.bbWins||0},{k:'BOARD LOSSES',v:s.bbLosses||0},{k:'BOSSES BEATEN',v:`${s.storyCleared||0} / ${BOSSES.length}`},{k:'TOTAL DAMAGE',v:s.totalDmg||0},{k:'TURNS PLAYED',v:s.totalTurns||0},{k:'FAVORITE',v:fav?fav.n:'—'}];$('statGrid').innerHTML=tiles.map(t=>`<div class="stat-tile"><span class="v">${t.v}</span><span class="k">${t.k}</span></div>`).join('')}
+function saveProfileName(){const p=getProfile();p.name=$('profileName').value;setProfile(p)}
+function resetStats(){if(!confirm('Reset all stats?'))return;setStats({tbWins:0,tbLosses:0,bbWins:0,bbLosses:0,storyCleared:0,totalDmg:0,totalTurns:0,favHero:null,heroUses:{}});setStoryProgress({cleared:0});renderProfile();sfxClick()}
+
+function renderStory(){const prog=getStoryProgress();$('storyProgress').textContent=`${prog.cleared}/${BOSSES.length}`;const list=$('bossList');list.innerHTML=BOSSES.map((b,i)=>{const locked=i>prog.cleared;const cleared=i<prog.cleared;const cls=locked?'locked':cleared?'cleared':'active-boss';return `<div class="boss-card ${cls}" onclick="${locked?'':`startStory('${b.id}')`}"><div class="num">${i+1}</div><div class="ico">${b.ico}</div><div class="info"><div class="nm">${b.n}</div><div class="desc">${b.desc} • ${b.team.length} fighters • ${b.bonus}</div></div><div class="badge">${cleared?'✅':locked?'🔒':'⚔️'}</div></div>`}).join('')}
+function startStory(bossId){sfxClick();const boss=BOSSES.find(b=>b.id===bossId);state.storyBoss=boss;openSelect('bb',bossId)}
+
+let battleStartTime=0,battleTurns=0;
+function startTurnBattle(){const lv=10;state.partyTeam=selectingTeam.map(id=>buildHero(ROSTER.find(r=>r.id===id),lv));const pool=[...ROSTER].sort(()=>Math.random()-0.5).slice(0,3);state.partyFoe=pool.map(t=>buildHero(t,lv));state.active=0;state.foeActive=0;state.potions=3;state.busy=false;state.mode='tb';state.storyBoss=null;battleStartTime=Date.now();battleTurns=0;$('tbTitle').textContent='⚔️ QUICK BATTLE';$('tbMeta').textContent='Random opponent';goScreenInner('tbattle');refreshTb();log(`A wild ${state.partyFoe[0].n} appeared!`);setTimeout(()=>log(`Go, ${state.partyTeam[0].n}!`),1300)}
+function refreshTb(){const ply=state.partyTeam[state.active],foe=state.partyFoe[state.foeActive];$('plyName').textContent=ply.n;$('plyLv').textContent=`Lv${ply.lv}`;$('plySprite').innerHTML=artHTML(ply);$('plyHpNum').textContent=`${ply.hp}/${ply.hpMax}`;setHp('ply',ply.hp/ply.hpMax);$('foeName').textContent=foe.n;$('foeLv').textContent=`Lv${foe.lv}`;$('foeSprite').innerHTML=artHTML(foe);$('foeHpNum').textContent=`${foe.hp}/${foe.hpMax}`;setHp('foe',foe.hp/foe.hpMax);$('plySprite').classList.remove('shake','faint');$('foeSprite').classList.remove('shake','faint');if(ply.hp<=0)$('plySprite').classList.add('faint');if(foe.hp<=0)$('foeSprite').classList.add('faint');renderMoves()}
+function setHp(side,frac){frac=Math.max(0,Math.min(1,frac));const fill=$(side+'HpFill');fill.style.width=(frac*100).toFixed(1)+'%';fill.classList.remove('med','low');if(frac<.25)fill.classList.add('low');else if(frac<.5)fill.classList.add('med')}
+function renderMoves(){const ply=state.partyTeam[state.active],foe=state.partyFoe[state.foeActive];const grid=$('moveGrid');grid.innerHTML='';ply.moves.forEach((m,i)=>{const eff=effect(m.t,foe.t),stab=m.t===ply.t;const tag=m.heal?`HEAL ${m.heal}`:`PWR ${m.p}${stab?' +S':''}`;let mu='';if(eff>1)mu='<span class="matchup super">SUPER ✓</span>';else if(eff<1&&eff>0)mu='<span class="matchup weak">WEAK ✗</span>';const b=document.createElement('button');b.className=`move-btn ${m.t}`;b.disabled=m.ppNow<=0||state.busy;b.onclick=()=>useMove(i);b.innerHTML=`<div class="mn">${m.n} ${mu}</div><div class="mt"><span>${TYPE_ICONS[m.t]} ${TYPE_NAMES[m.t]}</span><span>${tag}</span></div><div class="mt"><span class="pp">PP ${m.ppNow}/${m.ppMax}</span></div>`;grid.appendChild(b)})}
+function showMoves(){sfxClick();$('tbMainMenu').style.display='none';$('tbMoveMenu').style.display='block';renderMoves()}
+function hideMoves(){sfxClick();$('tbMainMenu').style.display='grid';$('tbMoveMenu').style.display='none'}
+function log(msg){$('tbLog').innerHTML=msg}
+
+async function useMove(idx){if(state.busy)return;state.busy=true;hideMoves();battleTurns++;const ply=state.partyTeam[state.active],foe=state.partyFoe[state.foeActive],move=ply.moves[idx];if(move.ppNow<=0){state.busy=false;return}move.ppNow--;const fmIdx=chooseFoeMove(),fm=foe.moves[fmIdx];const plyFirst=ply.spd>foe.spd||(ply.spd===foe.spd&&Math.random()<0.5);if(plyFirst){await runAction(ply,foe,move,'ply');if(foe.hp<=0){await onFoeFaint();return}await runAction(foe,ply,fm,'foe');foe.moves[fmIdx].ppNow=Math.max(0,foe.moves[fmIdx].ppNow-1);if(ply.hp<=0){await onPlyFaint();return}}else{await runAction(foe,ply,fm,'foe');foe.moves[fmIdx].ppNow=Math.max(0,foe.moves[fmIdx].ppNow-1);if(ply.hp<=0){await onPlyFaint();return}await runAction(ply,foe,move,'ply');if(foe.hp<=0){await onFoeFaint();return}}refreshTb();state.busy=false}
+function chooseFoeMove(){const foe=state.partyFoe[state.foeActive],ply=state.partyTeam[state.active];const scored=foe.moves.map((m,i)=>{if(m.ppNow<=0)return{i,score:-1};if(m.heal)return{i,score:foe.hp/foe.hpMax<.4?90:10};return{i,score:m.p*effect(m.t,ply.t)+Math.random()*5}});scored.sort((a,b)=>b.score-a.score);if(scored[1]&&scored[1].score>0&&Math.random()<0.25)return scored[1].i;return scored[0].i}
+async function runAction(att,def,move,side){log(`<b>${att.n}</b> used <span class="effect">${move.n}</span>!`);await sleep(700);if(move.heal){const heal=Math.min(move.heal,att.hpMax-att.hp);att.hp+=heal;log(`<b>${att.n}</b> healed <span class="effect">${heal}</span> HP!`);showDmg(side,heal,false,true);sfxHeal();setHp(side,att.hp/att.hpMax);$(side==='ply'?'plyHpNum':'foeHpNum').textContent=`${att.hp}/${att.hpMax}`;await sleep(800);return}const eff=effect(move.t,def.t),stab=move.t===att.t?1.25:1,crit=Math.random()<0.0625?1.5:1,variance=rnd(0.85,1);const base=((2*att.lv/5+2)*move.p*att.atk/Math.max(1,def.def))/35+2;let dmg=Math.max(1,Math.round(base*eff*stab*crit*variance));def.hp=Math.max(0,def.hp-dmg);att.dmgDealt=(att.dmgDealt||0)+dmg;const oS=side==='ply'?'foe':'ply';$('flashFx').classList.add('on');setTimeout(()=>$('flashFx').classList.remove('on'),400);$(oS==='ply'?'plySprite':'foeSprite').classList.add('shake');setTimeout(()=>$(oS==='ply'?'plySprite':'foeSprite').classList.remove('shake'),400);showDmg(oS,dmg,crit>1,false);if(crit>1)sfxCrit();else sfxHit();setHp(oS,def.hp/def.hpMax);$(oS==='ply'?'plyHpNum':'foeHpNum').textContent=`${def.hp}/${def.hpMax}`;let msg=`Dealt <b>${dmg}</b> damage`;if(crit>1)msg=`<span class="crit">A critical hit!</span> `+msg;if(eff>1)msg+=` — <span class="effect">It's super effective!</span>`;else if(eff<1&&eff>0)msg+=` — <span class="effect">It's not very effective…</span>`;log(msg);await sleep(900)}
+function showDmg(side,amt,crit,heal){const arena=document.querySelector('.tb-arena'),sp=$(side==='ply'?'plySprite':'foeSprite');const r=sp.getBoundingClientRect(),ar=arena.getBoundingClientRect();const el=document.createElement('div');el.className='dmg-num'+(crit?' crit':'')+(heal?' heal':'');el.textContent=(heal?'+':'-')+amt;el.style.left=(r.left-ar.left+r.width/2-20)+'px';el.style.top=(r.top-ar.top-10)+'px';arena.appendChild(el);setTimeout(()=>el.remove(),1100)}
+async function onFoeFaint(){const foe=state.partyFoe[state.foeActive];log(`<b>${foe.n}</b> was KO'd!`);$('foeSprite').classList.add('faint');sfxFaint();await sleep(1100);const next=state.partyFoe.findIndex(f=>f.hp>0);if(next<0)return await battleWon();state.foeActive=next;log(`Foe sent <b>${state.partyFoe[next].n}</b>!`);refreshTb();state.busy=false}
+async function onPlyFaint(){const ply=state.partyTeam[state.active];log(`<b>${ply.n}</b> was KO'd!`);$('plySprite').classList.add('faint');sfxFaint();await sleep(1100);const alive=state.partyTeam.findIndex(p=>p.hp>0);if(alive<0)return await battleLost();showSwitch(true)}
+function showSwitch(forced){$('switchTitle').textContent=forced?'CHOOSE YOUR NEXT FIGHTER':'SWITCH FIGHTER';$('switchCancel').style.display=forced?'none':'block';const list=$('partyList');list.innerHTML='';state.partyTeam.forEach((p,i)=>{const isA=i===state.active,ko=p.hp<=0;const row=document.createElement('div');row.className='party-row'+(ko?' fainted':'')+(isA?' active-row':'');const frac=p.hp/p.hpMax,c=frac<.25?'low':frac<.5?'med':'';row.innerHTML=`<div class="ico">${artHTML(p)}</div><div class="info"><div class="nm"><span>${p.n}</span><span class="lv">Lv${p.lv}</span></div><div class="hp-bar"><div class="hp-fill ${c}" style="width:${frac*100}%"></div></div><div class="hp-num">${p.hp}/${p.hpMax}${isA?' • ACTIVE':''}${ko?" • KO'D":''}</div></div>`;if(!ko&&!isA)row.onclick=()=>doSwitch(i,forced);list.appendChild(row)});$('switchModal').classList.add('on')}
+function closeSwitch(){$('switchModal').classList.remove('on');sfxClick()}
+async function doSwitch(idx,forced){closeSwitch();const old=state.partyTeam[state.active];state.active=idx;const next=state.partyTeam[idx];sfxSelect();if(!forced)state.busy=true;log(`Come back, <b>${old.n}</b>!`);await sleep(700);log(`Go, <b>${next.n}</b>!`);refreshTb();await sleep(800);if(forced){state.busy=false;return}const foe=state.partyFoe[state.foeActive],fmIdx=chooseFoeMove();await runAction(foe,next,foe.moves[fmIdx],'foe');foe.moves[fmIdx].ppNow=Math.max(0,foe.moves[fmIdx].ppNow-1);if(next.hp<=0){await onPlyFaint();return}refreshTb();state.busy=false}
+function useItem(){if(state.busy)return;sfxClick();if(state.potions<=0){log('No more Maxim Tomatoes!');return}const ply=state.partyTeam[state.active];if(ply.hp>=ply.hpMax){log(`${ply.n} is at full HP!`);return}state.busy=true;state.potions--;const heal=Math.min(80,ply.hpMax-ply.hp);ply.hp+=heal;log(`Used Maxim Tomato! +${heal} HP. (${state.potions} left)`);showDmg('ply',heal,false,true);sfxHeal();setHp('ply',ply.hp/ply.hpMax);$('plyHpNum').textContent=`${ply.hp}/${ply.hpMax}`;setTimeout(async()=>{const foe=state.partyFoe[state.foeActive],fmIdx=chooseFoeMove();await runAction(foe,ply,foe.moves[fmIdx],'foe');foe.moves[fmIdx].ppNow=Math.max(0,foe.moves[fmIdx].ppNow-1);if(ply.hp<=0){await onPlyFaint();return}refreshTb();state.busy=false},900)}
+function tryRun(){sfxClick();log(`Got away safely!`);setTimeout(()=>goScreenInner('home'),900)}
+function quitBattle(){if(confirm('Quit battle?')){sfxClick();goScreenInner('home')}}
+
+function showEndStats(stats){const html=stats.map(s=>`<div class="eog-stat"><div class="k">${s.k}</div><div class="v">${s.v}</div></div>`).join('');$('eogStats').innerHTML=html}
+async function battleWon(){await sleep(400);sfxVictory();const totalDmg=state.partyTeam.reduce((s,p)=>s+(p.dmgDealt||0),0);const mvp=state.partyTeam.slice().sort((a,b)=>(b.dmgDealt||0)-(a.dmgDealt||0))[0];addDmg(totalDmg);addTurns(battleTurns);recordWin('tb');showEndStats([{k:'TURNS',v:battleTurns},{k:'DAMAGE',v:totalDmg},{k:'MVP',v:mvp?mvp.n:'—'},{k:'TIME',v:Math.round((Date.now()-battleStartTime)/1000)+'s'}]);$('endTitle').textContent='VICTORY!';$('endTitle').className='end-title win';$('endSub').textContent='You won!';$('endNext').textContent='▶ AGAIN';$('endNext').onclick=()=>{$('endOverlay').classList.remove('on');openSelect('tb')};$('endOverlay').classList.add('on')}
+async function battleLost(){await sleep(400);sfxDefeat();recordLoss('tb');addTurns(battleTurns);showEndStats([{k:'TURNS',v:battleTurns},{k:'TIME',v:Math.round((Date.now()-battleStartTime)/1000)+'s'}]);$('endTitle').textContent='DEFEAT';$('endTitle').className='end-title lose';$('endSub').textContent='Try again, fighter.';$('endNext').textContent='↻ RETRY';$('endNext').onclick=()=>{$('endOverlay').classList.remove('on');openSelect('tb')};$('endOverlay').classList.add('on')}
+function endHome(){sfxClick();$('endOverlay').classList.remove('on');goScreenInner('home')}
+function endNext(){}
+
+let turnLogEntries=[];
+function startBoardBattle(){const deck=[...selectingTeam];while(deck.length<8){deck.push(ROSTER[Math.floor(Math.random()*ROSTER.length)].id)}let foeDeck;let foeStartElixir=5;let foeKingHp=8;let foeTowerHp=5;if(state.storyBoss){foeDeck=state.storyBoss.team.slice().filter(id=>ROSTER.find(r=>r.id===id));if(foeDeck.length===0)foeDeck=[...ROSTER].sort(()=>Math.random()-0.5).slice(0,4).map(r=>r.id);while(foeDeck.length<8){foeDeck.push(foeDeck[Math.floor(Math.random()*foeDeck.length)])}if(state.storyBoss.bonus.includes('+2 elixir'))foeStartElixir=7;if(state.storyBoss.bonus.includes('Towers +1 HP'))foeTowerHp=6;if(state.storyBoss.bonus.includes('King +2 HP'))foeKingHp=10;if(state.storyBoss.bonus.includes('King +4 HP'))foeKingHp=12}else{foeDeck=[...ROSTER].sort(()=>Math.random()-0.5).slice(0,8).map(r=>r.id)}state.bb={deck:shuffle(deck.slice()),foeDeck:shuffle(foeDeck),hand:[],foeHand:[],elixir:5,foeElixir:foeStartElixir,zones:{ply:[[[],[]],[[],[]]],foe:[[[],[]],[[],[]]]},neutral:[[],[]],towers:{ply:[5,5],foe:[foeTowerHp,foeTowerHp]},king:{ply:8,foe:foeKingHp},kingActive:{ply:false,foe:false},turn:1,phase:'deploy',whoseTurn:'ply',selectedCard:null,busy:false,statusEffects:[],startTime:Date.now(),deploysCount:0,dmgDealt:0};turnLogEntries=[];drawCards('ply',4);drawCards('foe',4);goScreenInner('bbattle');$('bbTitle').textContent=state.storyBoss?`📖 ${state.storyBoss.n.toUpperCase()}`:'🃏 BOARD BATTLE';$('bbMeta').textContent=state.storyBoss?state.storyBoss.desc:'Quick Match';bbLog(state.storyBoss?`Boss: ${state.storyBoss.bonus}`:'Turn 1 — deploy from your hand.');recordLog(1,'Battle begins!');refreshBoard()}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function drawCards(side,n){const bb=state.bb;const deck=side==='ply'?bb.deck:bb.foeDeck;const hand=side==='ply'?bb.hand:bb.foeHand;for(let i=0;i<n&&hand.length<4;i++){if(deck.length===0){const refill=side==='ply'?selectingTeam.slice():(state.storyBoss?state.storyBoss.team.slice():[...ROSTER].sort(()=>Math.random()-0.5).slice(0,8).map(r=>r.id));deck.push(...shuffle(refill))}hand.push(deck.shift())}}
+function bbLog(msg){$('bbLog').innerHTML=msg;recordLog(state.bb?.turn||1,msg)}
+function recordLog(turn,msg){const plain=msg.replace(/<[^>]+>/g,'');turnLogEntries.push({turn,msg:plain})}
+function showTurnLog(){sfxClick();const list=$('logListContent');if(!turnLogEntries.length){list.innerHTML='<div class="log-entry"><div class="msg">No actions yet.</div></div>'}else list.innerHTML=turnLogEntries.slice().reverse().map(e=>`<div class="log-entry"><div class="turn-no">TURN ${e.turn}</div><div class="msg">${e.msg}</div></div>`).join('');$('logModal').classList.add('on')}
+function closeLog(){$('logModal').classList.remove('on');sfxClick()}
+
+function refreshBoard(){const bb=state.bb;$('bbTurn').textContent=`TURN ${bb.turn} — ${bb.whoseTurn==='ply'?'YOUR':'FOE'} ${bb.phase.toUpperCase()}`;$('bbPhase').textContent={deploy:'Deploy',advance:'Advance',combat:'Combat',tower:'Towers',end:'End'}[bb.phase]||bb.phase;$('bbElixir').textContent=bb.elixir;const board=$('bbBoard');board.innerHTML='';const kingMaxF=state.storyBoss?.bonus.includes('King +4 HP')?12:state.storyBoss?.bonus.includes('King +2 HP')?10:8;const towerMaxF=state.storyBoss?.bonus.includes('Towers +1 HP')?6:5;const kF=document.createElement('div');kF.className='bb-king-row';kF.innerHTML=`<div class="bb-king foe ${bb.king.foe<=0?'dead':''}">👑 FOE KING ${bb.king.foe}/${kingMaxF} ${bb.kingActive.foe?'🔥':''}<div class="hpbar"><div style="width:${Math.max(0,bb.king.foe/kingMaxF*100)}%"></div></div></div>`;board.appendChild(kF);const tF=document.createElement('div');tF.className='bb-towers-row';tF.innerHTML=[0,1].map(l=>{const hp=bb.towers.foe[l];return `<div class="bb-tower foe ${hp<=0?'dead':''}">🏰 TOWER ${'AB'[l]} ${Math.max(0,hp)}/${towerMaxF}<div class="hpbar"><div style="width:${Math.max(0,hp)/towerMaxF*100}%"></div></div></div>`}).join('');board.appendChild(tF);board.appendChild(buildZoneRow('foe',0,'BACK'));board.appendChild(buildZoneRow('foe',1,'FRONT'));const nz=document.createElement('div');nz.className='bb-zone neutral';const nc=document.createElement('div');nc.className='bb-zone-cell';nc.innerHTML=`<div class="zlbl" style="position:relative;text-align:center;color:var(--gold)">⚔ NEUTRAL ZONE ⚔</div>`;[0,1].forEach(l=>{bb.neutral[l].forEach(u=>nc.appendChild(buildUnitEl(u,l)))});nz.appendChild(nc);board.appendChild(nz);board.appendChild(buildZoneRow('ply',1,'FRONT'));board.appendChild(buildZoneRow('ply',0,'BACK'));const tP=document.createElement('div');tP.className='bb-towers-row';tP.innerHTML=[0,1].map(l=>{const hp=bb.towers.ply[l];return `<div class="bb-tower ${hp<=0?'dead':''}">🏰 YOUR TOWER ${'AB'[l]} ${Math.max(0,hp)}/5<div class="hpbar"><div style="width:${Math.max(0,hp)/5*100}%"></div></div></div>`}).join('');board.appendChild(tP);const kP=document.createElement('div');kP.className='bb-king-row';kP.innerHTML=`<div class="bb-king ${bb.king.ply<=0?'dead':''}">👑 YOUR KING ${bb.king.ply}/8 ${bb.kingActive.ply?'🔥':''}<div class="hpbar"><div style="width:${Math.max(0,bb.king.ply/8*100)}%"></div></div></div>`;board.appendChild(kP);const hand=$('bbHand');hand.innerHTML='';bb.hand.forEach((id,idx)=>{const card=ROSTER.find(r=>r.id===id);const el=document.createElement('div');const canPlay=bb.elixir>=card.elixir&&bb.phase==='deploy'&&bb.whoseTurn==='ply';el.className='bb-hand-card'+(bb.selectedCard===idx?' selected':'')+(canPlay?'':' disabled');el.innerHTML=`<div class="ec">${card.elixir}</div><div class="uart">${artHTML(card)}</div><div class="nm">${card.n}</div><div class="uw-mini">${Math.max(2,Math.min(7,Math.round(card.hp/40)))}w ${card.spdIcon||'🧍'}</div>`;el.onclick=(e)=>{if(e.shiftKey){showCardDetail(card);return}if(!canPlay){showCardDetail(card);return}sfxSelect();bb.selectedCard=bb.selectedCard===idx?null:idx;refreshBoard()};let pressTimer;el.addEventListener('touchstart',()=>{pressTimer=setTimeout(()=>showCardDetail(card),550)},{passive:true});el.addEventListener('touchend',()=>clearTimeout(pressTimer));el.addEventListener('touchmove',()=>clearTimeout(pressTimer));hand.appendChild(el)});$('bbEndDeploy').style.display=(bb.whoseTurn==='ply'&&bb.phase==='deploy')?'block':'none'}
+function buildZoneRow(side,row,label){const bb=state.bb;const zoneEl=document.createElement('div');zoneEl.className='bb-zone';[0,1].forEach(lane=>{const cell=document.createElement('div');const isPlyBack=side==='ply'&&row===0;const canDeploy=isPlyBack&&bb.whoseTurn==='ply'&&bb.phase==='deploy'&&bb.selectedCard!=null;cell.className='bb-zone-cell'+(side==='foe'?' foe':'')+(isPlyBack?' deploy':'')+(canDeploy?' can':'');const lbl=document.createElement('div');lbl.className='zlbl';lbl.textContent=`${side==='foe'?'FOE':'YOUR'} ${label} ${'AB'[lane]}`;cell.appendChild(lbl);bb.zones[side][row][lane].forEach(u=>cell.appendChild(buildUnitEl(u,lane)));if(canDeploy)cell.onclick=()=>deployToBack(lane);zoneEl.appendChild(cell)});return zoneEl}
+function buildUnitEl(unit,lane){const el=document.createElement('div');el.className='bb-unit '+(unit.side==='foe'?'foe':'ply');const wL=unit.woundsMax-unit.wounds;el.innerHTML=`<div class="uart">${artHTML(unit)}</div><div class="uw">${wL}/${unit.woundsMax}w</div><div class="uspd">${unit.spdIcon||'🧍'}</div>`;el.onclick=(e)=>{e.stopPropagation();const r=ROSTER.find(x=>x.id===unit.id)||unit;showCardDetail(r)};return el}
+async function deployToBack(lane){const bb=state.bb;if(bb.selectedCard==null)return;const id=bb.hand[bb.selectedCard],card=ROSTER.find(r=>r.id===id);if(bb.elixir<card.elixir){bbLog(`Not enough elixir!`);return}sfxDeploy();bb.elixir-=card.elixir;bb.hand.splice(bb.selectedCard,1);drawCards('ply',1);bb.deploysCount++;const unit=buildUnit(card,'ply',lane);bb.zones.ply[0][lane].push(unit);bb.selectedCard=null;bbLog(`Deployed <b>${card.n}</b> to your Back ${'AB'[lane]} (–${card.elixir}⚡).`);refreshBoard();await runOnDeploy(unit);refreshBoard()}
+function buildUnit(card,side,lane){return{id:card.id,n:card.n,fb:card.fb,t:card.t,hp:card.hp,hpMax:card.hp,atk:card.atk,def:card.def,spd:card.spd,spdIcon:card.spdIcon||'🧍',elixir:card.elixir,wounds:0,woundsMax:Math.max(2,Math.min(7,Math.round(card.hp/40))),side,lane,effects:EFFECTS[card.id]||{},isBuilding:card.spdIcon==='🐢'&&card.def>card.atk}}
+
+async function runOnDeploy(unit){const eff=unit.effects?.deploy;if(!eff)return;const bb=state.bb;bbLog(`⚡ <b>${unit.n}</b> ON DEPLOY: ${eff}`);await sleep(400);switch(unit.id){
+  case 'mario':{const allies=bb.zones.ply[0][unit.lane].concat(bb.zones.ply[1][unit.lane]);const wounded=allies.filter(u=>u.wounds>0);if(wounded.length){wounded[0].wounds--;bbLog(`🍄 ${wounded[0].n} healed!`)}break}
+  case 'sonic':{const i=bb.zones.ply[0][unit.lane].indexOf(unit);if(i>=0){bb.zones.ply[0][unit.lane].splice(i,1);bb.neutral[unit.lane].push(unit);bbLog(`💨 Dashed!`)}break}
+  case 'kirby':bb.statusEffects.push({type:'sing',lane:unit.lane,side:unit.side,ttl:1});bbLog(`🎈 Cute aura!`);break;
+  case 'mewtwo':if(bb.king.ply<8){bb.king.ply++;bbLog(`🟣 King healed!`)}break;
+  case 'megaman':{const targets=bb.zones.foe[1][unit.lane].concat(bb.neutral[unit.lane].filter(u=>u.side==='foe'));if(targets.length){const t=targets[Math.floor(Math.random()*targets.length)];t.wounds++;bbLog(`🤖 ${t.n} took 1w!`)}break}
+  case 'zelda':{const targets=bb.zones.foe[1][unit.lane].concat(bb.neutral[unit.lane].filter(u=>u.side==='foe'));if(targets.length){const t=targets[Math.floor(Math.random()*targets.length)];t.wounds++;bbLog(`✨ ${t.n} took 1w!`)}break}
+  case 'ganondorf':bb.zones.foe[0][unit.lane].concat(bb.zones.foe[1][unit.lane]).concat(bb.neutral[unit.lane].filter(u=>u.side==='foe')).forEach(u=>u.atk-=5);bbLog(`👑 Curse: enemies -5 ATK!`);break;
+  case 'ridley':{const targets=bb.zones.foe[1][unit.lane];if(targets.length){targets[0].wounds++;bbLog(`🐉 Skewer!`)}break}
+  case 'rosalina':bb.statusEffects.push({type:'shield',target:unit,ttl:2});bbLog(`🌟 Luma shield!`);break;
+  case 'rob':bb.elixir=Math.min(10,bb.elixir+1);bbLog(`🤖 +1 elixir!`);break;
+  case 'inkling':bb.statusEffects.push({type:'splat',lane:unit.lane,side:unit.side,ttl:2});bbLog(`🦑 Lane splatted!`);break;
+  case 'isabelle':bb.zones.ply[0][unit.lane].concat(bb.zones.ply[1][unit.lane]).forEach(u=>u.atk+=5);bbLog(`🐶 Cheer!`);break;
+}}
+async function runOnDeath(unit,attacker){const eff=unit.effects?.death;if(!eff)return;bbLog(`💀 <b>${unit.n}</b> ON DEATH: ${eff}`);await sleep(400)}
+async function runOnClash(att,def){const eff=att.effects?.clash;if(!eff)return;const bb=state.bb;bbLog(`⚡ <b>${att.n}</b> CLASH STRIKE: ${eff}`);await sleep(400);switch(att.id){
+  case 'pikachu':bb.neutral[att.lane].forEach(u=>{if(u.side!==att.side&&u!==def)u.wounds++});bbLog(`⚡ Volt!`);break;
+  case 'samus':bb.towers.foe[att.lane]=Math.max(0,bb.towers.foe[att.lane]-1);bbLog(`💥 Tower 1w!`);break;
+  case 'falcon':case 'cloud':case 'sephiroth':case 'bowser':def.wounds=Math.min(def.woundsMax,def.wounds+2);bbLog(`Bonus 2w!`);break;
+  case 'link':case 'marth':case 'shulk':case 'hero':case 'joker':case 'ike':def.wounds++;bbLog(`Bonus 1w!`);break;
+  case 'dk':{const i=bb.neutral[att.lane].indexOf(def);if(i>=0){bb.neutral[att.lane].splice(i,1);bb.zones.foe[1][att.lane].push(def);bbLog(`Pushed!`)}def.wounds++;break}
+  case 'sonic':{const others=bb.neutral[att.lane].filter(u=>u.side!==att.side&&u!==def&&u.wounds<u.woundsMax);if(others.length){others[0].wounds++;bbLog(`💨 Bonus hit!`)}break}
+  case 'mewtwo':def.wounds++;bbLog(`🟣 Bonus 1w!`);break;
+  case 'jigglypuff':case 'duckhunt':bb.statusEffects.push({type:'frozen',target:def,ttl:1});bbLog(`💤 Sleeps!`);break;
+  case 'fox':if(att.wounds>0)att.wounds--;bbLog(`🦊 Reflected!`);break;
+  case 'pacman':case 'palutena':if(att.wounds>0){att.wounds--;bbLog(`Healed self!`)}break;
+  case 'mrgame':{const r=Math.floor(Math.random()*9)+1;def.wounds+=Math.max(1,Math.floor(r/3));bbLog(`2️⃣ Judge: ${r}!`);break}
+  case 'banjo':bb.statusEffects.push({type:'shield',target:att,ttl:1});bbLog(`🐻 Wonderwing!`);break;
+  case 'kirby':bbLog(`🎈 Copied type!`);break;
+  case 'villager':bbLog(`🪓 Timber!`);break;
+}}
+
+async function endDeployPhase(){const bb=state.bb;if(bb.busy)return;bb.busy=true;sfxClick();await sleep(300);bbLog(`Foe is thinking…`);await foeDeploy();await sleep(400);bb.phase='advance';refreshBoard();bbLog(`Units advance.`);await sleep(700);await advanceUnits();bb.statusEffects=bb.statusEffects.map(s=>({...s,ttl:s.ttl-1})).filter(s=>s.ttl>0);refreshBoard();await sleep(500);bb.phase='combat';refreshBoard();bbLog(`Combat — D20s!`);await sleep(500);await combatPhase();refreshBoard();await sleep(400);bb.phase='tower';refreshBoard();bbLog(`Towers attack.`);await sleep(400);await towerPhase();refreshBoard();await sleep(400);if(checkBoardWin())return;bb.turn++;const elxGain=state.storyBoss?.bonus.includes('2 elixir per turn')?2:1;bb.elixir=Math.min(10,bb.elixir+1);bb.foeElixir=Math.min(10,bb.foeElixir+elxGain);drawCards('ply',1);drawCards('foe',1);bb.phase='deploy';bb.whoseTurn='ply';bb.busy=false;bbLog(`Turn ${bb.turn} — your deploy. Elixir: ${bb.elixir}.`);refreshBoard()}
+async function foeDeploy(){const bb=state.bb;let attempts=0;while(attempts<3){attempts++;const playable=bb.foeHand.map((id,i)=>({id,i,c:ROSTER.find(r=>r.id===id)})).filter(x=>x.c.elixir<=bb.foeElixir);if(playable.length===0)break;if(Math.random()<0.3)break;const pick=playable[Math.floor(Math.random()*playable.length)];bb.foeElixir-=pick.c.elixir;bb.foeHand.splice(pick.i,1);drawCards('foe',1);const lane=Math.floor(Math.random()*2);const unit=buildUnit(pick.c,'foe',lane);bb.zones.foe[0][lane].push(unit);bbLog(`Foe deployed <b>${pick.c.n}</b>!`);await runOnDeploy(unit);refreshBoard();await sleep(450)}}
+async function advanceUnits(){const bb=state.bb;['ply','foe'].forEach(side=>{[0,1].forEach(lane=>{const front=bb.zones[side][1][lane];front.forEach(u=>{if(!u.isBuilding)bb.neutral[lane].push(u)});bb.zones[side][1][lane]=front.filter(u=>u.isBuilding);const back=bb.zones[side][0][lane];back.forEach(u=>{if(!u.isBuilding)bb.zones[side][1][lane].push(u)});bb.zones[side][0][lane]=back.filter(u=>u.isBuilding)})})}
+async function combatPhase(){const bb=state.bb;for(let lane=0;lane<2;lane++){const fighters=bb.neutral[lane].slice();for(const u of fighters){if(u.wounds>=u.woundsMax)continue;if(bb.statusEffects.some(s=>s.type==='frozen'&&s.target===u)){bbLog(`💤 ${u.n} skips!`);await sleep(400);continue}if(bb.statusEffects.some(s=>s.type==='sing'&&s.lane===lane&&s.side!==u.side)&&Math.random()<0.5){bbLog(`🎈 ${u.n} missed!`);await sleep(400);continue}const enemies=fighters.filter(x=>x.side!==u.side&&x.wounds<x.woundsMax);if(enemies.length===0)continue;const target=enemies[Math.floor(Math.random()*enemies.length)];await rollCombat(u,target,lane);await sleep(400);await cleanupNeutral()}}}
+async function rollCombat(att,def,lane){const bb=state.bb;sfxDice();return new Promise(resolve=>{showDice('D20',null,async(n)=>{sfxDiceLand();let w=0,label='';if(n===1){w=0;label='💨 MISS'}else if(n<=8){w=1;label='🗡️ WEAK HIT'}else if(n<=16){w=2;label='⚔️ HIT'}else if(n<=19){w=3;label='💥 CRITICAL'}else{w=3;label='⚡ CLASH STRIKE'}const eff=effect(att.t,def.t);if(eff>1){w=Math.min(def.woundsMax-def.wounds,w+1);label+=' SUPER!'}else if(eff<1&&eff>0&&w>0){w=Math.max(0,w-1);label+=' resisted'}if(state.storyBoss?.bonus.includes('Magic moves +25%')&&att.t==='magic')w=Math.min(def.woundsMax-def.wounds,w+1);if(state.storyBoss?.bonus.includes('+1w on clash strikes')&&n===20&&att.side==='foe')w=Math.min(def.woundsMax-def.wounds,w+1);if(bb.statusEffects.some(s=>s.type==='shield'&&s.target===def)){w=Math.max(0,w-1);label+=' SHIELDED';bb.statusEffects=bb.statusEffects.filter(s=>!(s.type==='shield'&&s.target===def))}if(bb.statusEffects.some(s=>s.type==='splat'&&s.lane===lane&&s.side===att.side)){w=Math.min(def.woundsMax-def.wounds,w+1);label+=' SPLATTED'}def.wounds+=w;bb.dmgDealt+=w;$('diceLabel').textContent=`${att.n} → ${def.n}: ${label}`;$('diceContinue').style.display='block';bbLog(`<b>${att.n}</b> rolled ${n}: ${label} on ${def.n}.`);if(n===20)await runOnClash(att,def);$('diceContinue').onclick=()=>{closeDice();resolve()};setTimeout(()=>{if($('diceOverlay').classList.contains('on')){closeDice();resolve()}},1500)})})}
+function showDice(type,fixedN,cb){$('diceOverlay').classList.add('on');$('diceFace').textContent='?';$('diceNum').textContent='?';$('diceLabel').textContent=`Rolling ${type}...`;$('diceContinue').style.display='none';const max={D20:20,D6:6,D8:8,D12:12}[type]||20;setTimeout(()=>{const n=fixedN!=null?fixedN:Math.floor(Math.random()*max)+1;$('diceFace').textContent=n;$('diceNum').textContent=n;cb(n)},800)}
+function closeDice(){$('diceOverlay').classList.remove('on')}
+async function cleanupNeutral(){const bb=state.bb;for(let lane=0;lane<2;lane++){const dying=bb.neutral[lane].filter(u=>u.wounds>=u.woundsMax);for(const u of dying){bbLog(`<b>${u.n}</b> KO'd!`);sfxFaint();await runOnDeath(u,null)}bb.neutral[lane]=bb.neutral[lane].filter(u=>u.wounds<u.woundsMax)}}
+async function towerPhase(){const bb=state.bb;for(let lane=0;lane<2;lane++){if(bb.towers.ply[lane]>0){const t=findClosestEnemyToTower('ply',lane);if(t){t.wounds++;bbLog(`Your Tower hit ${t.n}!`);sfxTowerHit();await sleep(350)}}if(bb.towers.foe[lane]>0){const t=findClosestEnemyToTower('foe',lane);if(t){t.wounds++;bbLog(`Foe Tower hit ${t.n}!`);sfxTowerHit();await sleep(350)}}}await cleanupAll();for(let lane=0;lane<2;lane++){for(const u of bb.neutral[lane]){if(u.wounds>=u.woundsMax)continue;const ets=u.side==='ply'?'foe':'ply';if(bb.towers[ets][lane]>0){await new Promise(resolve=>{showDice('D6',null,n=>{sfxDiceLand();const dmg=Math.max(1,Math.floor(n/2));bb.towers[ets][lane]=Math.max(0,bb.towers[ets][lane]-dmg);$('diceLabel').textContent=`${u.n} sieges Tower for ${dmg}w!`;$('diceContinue').style.display='block';bbLog(`<b>${u.n}</b> sieged ${ets==='foe'?'Foe':'Your'} Tower ${'AB'[lane]} ${dmg}w!`);sfxTowerHit();$('diceContinue').onclick=()=>{closeDice();resolve()};setTimeout(()=>{if($('diceOverlay').classList.contains('on')){closeDice();resolve()}},1500)})});await sleep(200)}else if(bb.king[ets]>0){await new Promise(resolve=>{showDice('D6',null,n=>{sfxDiceLand();const dmg=Math.max(1,Math.floor(n/2));bb.king[ets]=Math.max(0,bb.king[ets]-dmg);$('diceLabel').textContent=`${u.n} hits KING for ${dmg}w!`;$('diceContinue').style.display='block';bbLog(`<b>${u.n}</b> hit King ${dmg}w!`);sfxTowerHit();$('diceContinue').onclick=()=>{closeDice();resolve()};setTimeout(()=>{if($('diceOverlay').classList.contains('on')){closeDice();resolve()}},1500)})});await sleep(200)}}}['ply','foe'].forEach(s=>{if(!bb.kingActive[s]&&(bb.towers[s][0]<=0||bb.towers[s][1]<=0)){bb.kingActive[s]=true;bbLog(`${s==='foe'?'Foe ':'Your '}King AWAKENED!`)}if(bb.kingActive[s]){const e=s==='ply'?'foe':'ply';for(let lane=0;lane<2;lane++){const tg=bb.neutral[lane].find(u=>u.side===e&&u.wounds<u.woundsMax);if(tg){tg.wounds++;bbLog(`${s==='foe'?'Foe':'Your'} KING blasted ${tg.n}!`);break}}}});await cleanupAll()}
+function findClosestEnemyToTower(side,lane){const bb=state.bb;const e=side==='ply'?'foe':'ply';for(const u of bb.neutral[lane]){if(u.side===e&&u.wounds<u.woundsMax)return u}for(const u of bb.zones[e][1][lane]){if(u.wounds<u.woundsMax)return u}for(const u of bb.zones[e][0][lane]){if(u.wounds<u.woundsMax)return u}return null}
+async function cleanupAll(){const bb=state.bb;for(const side of ['ply','foe']){for(let row=0;row<2;row++){for(let lane=0;lane<2;lane++){const dying=bb.zones[side][row][lane].filter(u=>u.wounds>=u.woundsMax);for(const u of dying)await runOnDeath(u,null);bb.zones[side][row][lane]=bb.zones[side][row][lane].filter(u=>u.wounds<u.woundsMax)}}}for(let lane=0;lane<2;lane++)bb.neutral[lane]=bb.neutral[lane].filter(u=>u.wounds<u.woundsMax)}
+function checkBoardWin(){const bb=state.bb;const fT=bb.towers.foe.filter(t=>t<=0).length,pT=bb.towers.ply.filter(t=>t<=0).length;if(bb.king.foe<=0||fT>=2){boardWin();return true}if(bb.king.ply<=0||pT>=2){boardLose();return true}return false}
+function boardWin(){sfxVictory();const bb=state.bb;recordWin('bb');addDmg(bb.dmgDealt);addTurns(bb.turn);if(state.storyBoss){const idx=BOSSES.findIndex(b=>b.id===state.storyBoss.id);const prog=getStoryProgress();if(idx>=prog.cleared){prog.cleared=idx+1;setStoryProgress(prog);const stats=getStats();stats.storyCleared=Math.max(stats.storyCleared||0,prog.cleared);setStats(stats)}}showEndStats([{k:'TURNS',v:bb.turn},{k:'DEPLOYS',v:bb.deploysCount},{k:'DAMAGE',v:bb.dmgDealt},{k:'TIME',v:Math.round((Date.now()-bb.startTime)/1000)+'s'}]);$('endTitle').textContent='VICTORY!';$('endTitle').className='end-title win';$('endSub').textContent=state.storyBoss?`You defeated ${state.storyBoss.n}!`:'You stormed the foe stronghold!';$('endNext').textContent=state.storyBoss?'▶ NEXT':'▶ AGAIN';$('endNext').onclick=()=>{$('endOverlay').classList.remove('on');if(state.storyBoss){const idx=BOSSES.findIndex(b=>b.id===state.storyBoss.id);if(idx<BOSSES.length-1){state.storyBoss=BOSSES[idx+1];openSelect('bb',state.storyBoss.id)}else goScreenInner('story')}else openSelect('bb')};$('endOverlay').classList.add('on')}
+function boardLose(){sfxDefeat();const bb=state.bb;recordLoss('bb');addTurns(bb.turn);showEndStats([{k:'TURNS',v:bb.turn},{k:'DEPLOYS',v:bb.deploysCount},{k:'DAMAGE',v:bb.dmgDealt},{k:'TIME',v:Math.round((Date.now()-bb.startTime)/1000)+'s'}]);$('endTitle').textContent='DEFEAT';$('endTitle').className='end-title lose';$('endSub').textContent='Your towers fell.';$('endNext').textContent='↻ RETRY';$('endNext').onclick=()=>{$('endOverlay').classList.remove('on');openSelect('bb',state.storyBoss?.id)};$('endOverlay').classList.add('on')}
+function quitBoard(){if(confirm('Quit board battle?')){sfxClick();goScreenInner('home')}}
+
+renderRoster();
+</script>
+
+<!-- ============================================================ -->
+<!-- DECK BUILDER ENHANCEMENT — visual preview, randomizer, slots  -->
+<!-- ============================================================ -->
+<style>
+.deck-preview-wrap{background:rgba(0,0,0,.35);border-bottom:1px solid var(--bdr)}
+.deck-preview{display:flex;gap:6px;padding:8px 12px;overflow-x:auto;min-height:78px;scrollbar-width:thin}
+.deck-preview .empty{color:var(--soft);font-size:11px;font-family:'Black Ops One',cursive;align-self:center;width:100%;text-align:center;opacity:.7;padding:18px 4px}
+.deck-preview .pick{flex:0 0 auto;width:60px;border:1px solid var(--bdr);border-radius:8px;background:rgba(255,255,255,.04);padding:4px;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;position:relative;transition:transform .12s}
+.deck-preview .pick:hover{background:rgba(255,80,80,.18);border-color:var(--red);transform:translateY(-2px)}
+.deck-preview .pick:hover .x{display:flex}
+.deck-preview .pick .x{display:none;position:absolute;inset:0;align-items:center;justify-content:center;font-size:20px;color:#fff;background:rgba(220,38,38,.8);border-radius:8px;font-family:'Black Ops One',cursive}
+.deck-preview .pick .pa{width:50px;height:50px;display:flex;align-items:center;justify-content:center;background:#0a0a18;border-radius:6px;overflow:hidden}
+.deck-preview .pick .pa img{width:100%;height:100%;object-fit:contain}
+.deck-preview .pick .pa .emoji{font-size:26px}
+.deck-preview .pick .nm{font-family:'Black Ops One',cursive;font-size:8px;color:#fff;text-align:center;line-height:1.05;max-width:56px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.deck-preview .pick .ex{position:absolute;top:-3px;left:-3px;background:#7c3aed;color:#fff;font-family:'Black Ops One',cursive;font-size:9px;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid #000}
+.deck-stats{display:flex;gap:10px;padding:6px 12px;background:rgba(0,0,0,.5);font-size:9px;font-family:'Black Ops One',cursive;color:var(--soft);flex-wrap:wrap;border-top:1px solid var(--bdr)}
+.deck-stats div{white-space:nowrap}
+.deck-stats b{color:var(--gold);font-weight:normal}
+.rnd-btn{margin-top:6px;padding:6px 14px;background:linear-gradient(160deg,#7c3aed,#3b82f6);border:1px solid #6366f1;border-radius:8px;color:#fff;font-family:'Black Ops One',cursive;font-size:11px;cursor:pointer;letter-spacing:1px}
+.rnd-btn:hover{filter:brightness(1.15)}
+.slot-row{display:flex;gap:8px;align-items:center;padding:10px 12px;background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--bdr);border-radius:12px;margin-bottom:10px;flex-wrap:wrap}
+.slot-row .lbl{font-family:'Black Ops One',cursive;font-size:10px;color:var(--gold);min-width:46px}
+.slot-row .info{flex:1;min-width:160px}
+.slot-row .nm-input{width:100%;background:rgba(0,0,0,.35);border:1px solid var(--bdr);color:#fff;padding:6px 8px;border-radius:6px;font-family:'Black Ops One',cursive;font-size:11px;letter-spacing:.5px}
+.slot-row .summary{font-size:10px;color:var(--soft);margin-top:4px;font-family:'Black Ops One',cursive;letter-spacing:.3px}
+.slot-row .empty-msg{flex:1;color:var(--soft);font-size:11px;font-style:italic;opacity:.7;font-family:'Black Ops One',cursive;letter-spacing:.3px}
+.slot-row .slot-btn{padding:6px 10px;background:rgba(255,255,255,.06);border:1px solid var(--bdr);border-radius:6px;color:#fff;font-family:'Black Ops One',cursive;font-size:10px;cursor:pointer;letter-spacing:.5px}
+.slot-row .slot-btn.save{background:linear-gradient(160deg,#16a34a,#15803d);border-color:#15803d}
+.slot-row .slot-btn.load{background:var(--gold);color:#000;border-color:var(--gold)}
+.slot-row .slot-btn.del{color:var(--red);border-color:var(--red);background:transparent}
+.slot-row .slot-btn:hover{filter:brightness(1.1)}
+</style>
+<script>
+(function(){
+  function init(){
+    if(typeof renderSelect!=='function'||typeof selectingTeam==='undefined'||typeof ROSTER==='undefined'){setTimeout(init,80);return}
+    if(!document.getElementById('deckPreview')){
+      const grid=document.getElementById('selectGrid');
+      if(grid){
+        const wrap=document.createElement('div');
+        wrap.className='deck-preview-wrap';
+        wrap.innerHTML='<div class="deck-preview" id="deckPreview"></div><div class="deck-stats" id="deckStats"></div>';
+        grid.parentNode.insertBefore(wrap,grid);
+      }
+    }
+    const selectBar=document.querySelector('#select .select-bar');
+    if(selectBar&&!document.getElementById('rndBtn')){
+      const btn=document.createElement('button');
+      btn.id='rndBtn';btn.className='rnd-btn';btn.innerHTML='🎲 RANDOMIZE';btn.onclick=randomizeDeck;
+      selectBar.appendChild(btn);
+    }
+    const _origRender=renderSelect;
+    window.renderSelect=function(){_origRender.apply(this,arguments);updateDeckPreview()};
+    window.saveCurrentDeck=function(){
+      if(!selectingTeam||selectingTeam.length===0){alert('Pick at least one card first.');return}
+      currentDeckTab=selectMode;
+      goScreenInner('decks');
+      const tabs=document.querySelectorAll('.deck-tab');
+      tabs.forEach(b=>b.classList.remove('on'));
+      const want=selectMode==='tb'?'turn':'board';
+      const targetTab=Array.from(tabs).find(b=>b.textContent.toLowerCase().includes(want));
+      if(targetTab)targetTab.classList.add('on');
+      renderDecks();
+    };
+    window.renderDecks=function(){
+      const list=document.getElementById('decksList');
+      if(!list)return;
+      const decks=getDecks(currentDeckTab);
+      const hasCurrent=selectingTeam&&selectingTeam.length>0&&selectMode===currentDeckTab;
+      const slots=[0,1,2];
+      let html='';
+      if(hasCurrent){
+        const summary=summarizeDeck(selectingTeam);
+        html+='<div class="slot-row" style="border-color:var(--gold);background:linear-gradient(160deg,rgba(255,203,5,.1),rgba(255,203,5,.04))"><div class="lbl">CURRENT</div><div class="info"><div style="font-family:Black Ops One,cursive;font-size:11px;color:var(--gold)">Building now</div><div class="summary">'+summary+'</div></div></div>';
+      }
+      html+=slots.map(i=>{
+        const d=decks[i];
+        if(d&&d.members&&d.members.length){
+          const summary=summarizeDeck(d.members);
+          const nameEsc=(d.name||'').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+          let buttons='<button class="slot-btn load" onclick="loadSlot('+i+')">▶ LOAD</button>';
+          if(hasCurrent)buttons+='<button class="slot-btn save" onclick="saveSlot('+i+')">💾 OVERWRITE</button>';
+          buttons+='<button class="slot-btn del" onclick="clearSlot('+i+')">✕</button>';
+          return '<div class="slot-row"><div class="lbl">SLOT '+(i+1)+'</div><div class="info"><input class="nm-input" value="'+nameEsc+'" onchange="renameSlot('+i+',this.value)"><div class="summary">'+summary+'</div></div>'+buttons+'</div>';
+        } else {
+          if(hasCurrent){
+            return '<div class="slot-row"><div class="lbl">SLOT '+(i+1)+'</div><div class="empty-msg">Empty — click SAVE to fill this slot</div><button class="slot-btn save" onclick="saveSlot('+i+')">💾 SAVE HERE</button></div>';
+          } else {
+            return '<div class="slot-row"><div class="lbl">SLOT '+(i+1)+'</div><div class="empty-msg">Empty — build a deck first</div></div>';
+          }
+        }
+      }).join('');
+      list.innerHTML=html;
+    };
+    if(document.querySelector('#decks.on'))renderDecks();
+    if(document.querySelector('#select.on'))updateDeckPreview();
+  }
+  function updateDeckPreview(){
+    const preview=document.getElementById('deckPreview');
+    if(!preview)return;
+    const maxEl=document.getElementById('selMax');
+    const max=maxEl?(parseInt(maxEl.textContent)||6):6;
+    if(!selectingTeam||selectingTeam.length===0){
+      preview.innerHTML='<div class="empty">No cards selected — pick from the roster below or hit 🎲 RANDOMIZE</div>';
+      const stats=document.getElementById('deckStats');if(stats)stats.innerHTML='';
+      return;
+    }
+    preview.innerHTML=selectingTeam.map((id,idx)=>{
+      const r=ROSTER.find(x=>x.id===id);
+      if(!r)return '';
+      const art=(typeof artHTML==='function')?artHTML(r):('<span class="emoji">'+(r.fb||'?')+'</span>');
+      const elixBadge=(r.elixir!=null)?('<div class="ex">'+r.elixir+'</div>'):'';
+      const safeName=(r.n||'').replace(/</g,'&lt;');
+      return '<div class="pick" onclick="removeFromDeck('+idx+')" title="Click to remove">'+elixBadge+'<div class="pa">'+art+'</div><div class="nm">'+safeName+'</div><div class="x">REMOVE</div></div>';
+    }).join('');
+    const stats=document.getElementById('deckStats');
+    if(stats){
+      const cards=selectingTeam.map(id=>ROSTER.find(x=>x.id===id)).filter(Boolean);
+      const totalHP=cards.reduce((a,c)=>a+(c.hp||0),0);
+      const totalATK=cards.reduce((a,c)=>a+(c.atk||0),0);
+      const elixCards=cards.filter(c=>c.elixir!=null);
+      const elixSum=elixCards.reduce((a,c)=>a+c.elixir,0);
+      const avgElix=elixCards.length?(elixSum/elixCards.length).toFixed(1):'—';
+      const types={};cards.forEach(c=>{const k=c.t||'?';types[k]=(types[k]||0)+1});
+      const typeStr=Object.entries(types).sort((a,b)=>b[1]-a[1]).map(e=>e[0]+':'+e[1]).join(' · ');
+      stats.innerHTML='<div>HP <b>'+totalHP+'</b></div><div>ATK <b>'+totalATK+'</b></div><div>AVG ELIX <b>'+avgElix+'</b></div><div>TYPES <b>'+(typeStr||'—')+'</b></div><div style="margin-left:auto">PICKED <b>'+selectingTeam.length+'/'+max+'</b></div>';
+    }
+  }
+  window.removeFromDeck=function(idx){selectingTeam.splice(idx,1);renderSelect();if(typeof sfxClick==='function')sfxClick()};
+  window.randomizeDeck=function(){
+    if(!ROSTER||ROSTER.length===0)return;
+    const maxEl=document.getElementById('selMax');
+    const max=maxEl?(parseInt(maxEl.textContent)||6):6;
+    const pool=ROSTER.slice().sort(()=>Math.random()-0.5);
+    selectingTeam=pool.slice(0,Math.min(max,pool.length)).map(r=>r.id);
+    renderSelect();
+    if(typeof sfxSelect==='function')sfxSelect();
+  };
+  window.summarizeDeck=function(members){
+    const cards=members.map(id=>ROSTER.find(x=>x.id===id)).filter(Boolean);
+    if(cards.length===0)return 'Empty deck';
+    const elixCards=cards.filter(c=>c.elixir!=null);
+    const elix=elixCards.reduce((a,c)=>a+c.elixir,0);
+    const avg=elixCards.length?(elix/elixCards.length).toFixed(1):'—';
+    const types={};cards.forEach(c=>{const k=c.t||'?';types[k]=(types[k]||0)+1});
+    const top=Object.entries(types).sort((a,b)=>b[1]-a[1]).slice(0,2).map(e=>e[0]).join('+');
+    return cards.length+' cards · avg '+avg+' elixir · '+(top||'mixed');
+  };
+  function defaultDeckName(mode,i){return (mode==='tb'?'Turn Deck ':'Board Deck ')+(i+1)}
+  window.saveSlot=function(i){
+    const decks=getDecks(currentDeckTab);
+    while(decks.length<=i)decks.push(null);
+    const existing=decks[i];
+    decks[i]={name:(existing&&existing.name)||defaultDeckName(currentDeckTab,i),members:selectingTeam.slice(),date:Date.now()};
+    setDecks(currentDeckTab,decks);
+    renderDecks();
+    if(typeof sfxHeal==='function')sfxHeal();
+  };
+  window.loadSlot=function(i){
+    const decks=getDecks(currentDeckTab);
+    const d=decks[i];if(!d||!d.members)return;
+    selectMode=currentDeckTab;
+    openSelect(currentDeckTab);
+    selectingTeam=d.members.filter(id=>ROSTER.find(r=>r.id===id));
+    renderSelect();
+    if(typeof sfxSelect==='function')sfxSelect();
+  };
+  window.clearSlot=function(i){
+    if(!confirm('Clear slot '+(i+1)+'?'))return;
+    const decks=getDecks(currentDeckTab);
+    decks[i]=null;
+    setDecks(currentDeckTab,decks);
+    renderDecks();
+    if(typeof sfxClick==='function')sfxClick();
+  };
+  window.renameSlot=function(i,name){
+    const decks=getDecks(currentDeckTab);
+    if(decks[i]){decks[i].name=(name||'').trim()||defaultDeckName(currentDeckTab,i);setDecks(currentDeckTab,decks)}
+  };
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+
+<!-- ============================================================ -->
+<!-- COMBAT ENHANCEMENT v2 + SAFE-AREA fix                         -->
+<!-- ============================================================ -->
+<style>
+html{background:var(--bg,#06080F)!important}
+@supports(height:100dvh){html,body{height:100dvh!important}}
+.launcher-back{margin-top:max(0px,env(safe-area-inset-top))!important}
+.topbar{padding-top:max(14px,calc(10px + env(safe-area-inset-top)))!important;padding-left:max(14px,calc(8px + env(safe-area-inset-left)))!important;padding-right:max(14px,calc(8px + env(safe-area-inset-right)))!important}
+.start-bar,.tb-controls,.bb-bottom,.bag-actions{padding-bottom:max(14px,calc(8px + env(safe-area-inset-bottom)))!important}
+@keyframes ult-pulse{0%,100%{box-shadow:0 0 8px gold,inset 0 0 6px rgba(255,255,255,.3)}50%{box-shadow:0 0 22px gold,0 0 38px orange,inset 0 0 6px rgba(255,255,255,.3)}}
+.ult-btn{animation:ult-pulse 1s infinite;background:linear-gradient(135deg,#ffcb05,#ff6600)!important;border:2px solid gold!important;color:#000!important}
+.status-icons{position:absolute;top:6px;display:flex;gap:3px;z-index:5;flex-wrap:wrap;max-width:140px}
+.status-icons .se{background:rgba(0,0,0,.75);padding:2px 6px;border-radius:8px;font-size:9px;font-family:'Black Ops One',cursive;color:#fff;border:1px solid rgba(255,255,255,.2);white-space:nowrap}
+.ult-meter{position:absolute;bottom:6px;font-size:9px;color:#fff;background:rgba(0,0,0,.7);padding:2px 6px;border-radius:8px;font-family:'Black Ops One',cursive;border:1px solid rgba(255,203,5,.3);min-width:54px;text-align:center}
+.ult-meter.full{background:linear-gradient(135deg,gold,orange);color:#000;border-color:gold;animation:ult-pulse 1s infinite}
+.bag-overlay{position:absolute;inset:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;z-index:200;padding:20px}
+.bag-card{background:linear-gradient(160deg,#1f1830,#0a0a18);border:2px solid var(--gold);border-radius:14px;padding:18px;max-width:340px;width:100%;font-family:'Black Ops One',cursive;box-shadow:0 12px 40px rgba(0,0,0,.7)}
+.bag-card .ti{color:var(--gold);font-size:15px;margin-bottom:14px;text-align:center;letter-spacing:1px}
+.bag-item{width:100%;display:flex;align-items:center;gap:10px;padding:10px;margin-bottom:8px;background:rgba(255,203,5,.1);border:1px solid var(--bdr);border-radius:8px;color:#fff;font-family:'Black Ops One',cursive;font-size:11px;cursor:pointer;text-align:left}
+.bag-item:disabled{opacity:.4;cursor:not-allowed;background:rgba(255,255,255,.04)}
+.bag-item:not(:disabled):hover{filter:brightness(1.15)}
+.bag-item .desc{font-size:9px;opacity:.7;margin-top:2px;font-family:'Share Tech Mono',monospace;letter-spacing:.3px}
+.bag-item .ct{color:var(--gold);font-size:13px}
+.bag-close{width:100%;padding:8px;margin-top:6px;background:rgba(255,80,80,.15);border:1px solid var(--red);border-radius:8px;color:#fff;font-family:'Black Ops One',cursive;font-size:11px;cursor:pointer}
+</style>
+<script>
+(function(){
+  const inStandalone=window.navigator.standalone||window.matchMedia('(display-mode: standalone)').matches||window.matchMedia('(display-mode: fullscreen)').matches;
+  if(inStandalone){
+    document.addEventListener('click',function(e){
+      let t=e.target;while(t&&t.tagName!=='A')t=t.parentElement;
+      if(!t)return;
+      const href=t.getAttribute('href');
+      if(!href||href.startsWith('#')||href.startsWith('mailto:')||href.startsWith('tel:')||href.startsWith('javascript:'))return;
+      if(t.target==='_blank')return;
+      try{const u=new URL(t.href);if(u.origin!==location.origin)return}catch(_){return}
+      e.preventDefault();
+      const dest=t.href;
+      setTimeout(function(){window.location.href=dest},0);
+    },true);
+    return;
+  }
+  const ua=navigator.userAgent;
+  const isIOS=/iPhone|iPad|iPod/.test(ua)&&!window.MSStream;
+  const isAndroidChrome=/Android/.test(ua)&&/Chrome/.test(ua);
+  let bipe=null;
+  window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();bipe=e;maybeShowBanner()});
+  function tryFs(){const el=document.documentElement;const req=el.requestFullscreen||el.webkitRequestFullscreen||el.mozRequestFullScreen||el.msRequestFullscreen;if(!document.fullscreenElement&&!document.webkitFullscreenElement&&req){try{const p=req.call(el);if(p&&p.catch)p.catch(()=>maybeShowBanner())}catch(e){maybeShowBanner()}}}
+  function tap(){if(isIOS)maybeShowBanner();else{tryFs();setTimeout(maybeShowBanner,1800)}}
+  document.addEventListener('click',tap,{once:true,passive:true});
+  document.addEventListener('touchstart',tap,{once:true,passive:true});
+  if(isIOS)setTimeout(maybeShowBanner,1800);
+  function maybeShowBanner(){
+    if(localStorage.getItem('pwaPromptDismissed_v1'))return;
+    if(document.getElementById('pwaBanner'))return;
+    const b=document.createElement('div');b.id='pwaBanner';
+    b.style.cssText='position:fixed;left:8px;right:8px;bottom:max(8px,env(safe-area-inset-bottom));background:linear-gradient(135deg,#1f1830,#0a0a18);border:2px solid #ffcb05;border-radius:14px;padding:12px 14px;color:#fff;font-family:\'Black Ops One\',cursive;z-index:99999;box-shadow:0 8px 32px rgba(0,0,0,.6)';
+    let inst='';
+    if(isIOS)inst='<div style="font-size:10px;opacity:.9;margin-top:5px;line-height:1.45">iPhone Safari blocks fullscreen by default. Tap <b style="color:#ffcb05">⬆ Share</b> at the bottom of the screen → <b style="color:#ffcb05">Add to Home Screen</b> to play with NO browser bars.</div>';
+    else if(isAndroidChrome){if(bipe)inst='<button id="pwaInstall" style="margin-top:8px;padding:8px 14px;background:#ffcb05;color:#000;border:none;border-radius:8px;font-family:Black Ops One,cursive;font-size:11px;cursor:pointer;letter-spacing:1px">⬇ INSTALL APP</button>';else inst='<div style="font-size:10px;opacity:.9;margin-top:5px;line-height:1.45">Tap <b style="color:#ffcb05">⋮ menu</b> → <b style="color:#ffcb05">Install app</b> or <b style="color:#ffcb05">Add to Home screen</b> for fullscreen play.</div>'}
+    else inst='<div style="font-size:10px;opacity:.9;margin-top:5px;line-height:1.45">Add this page to your Home Screen for true fullscreen play.</div>';
+    b.innerHTML='<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px"><div style="flex:1;min-width:0"><div style="color:#ffcb05;font-size:12px;letter-spacing:1.5px">📱 GO FULLSCREEN</div>'+inst+'</div><button id="pwaClose" style="background:transparent;border:1px solid rgba(255,255,255,.5);color:#fff;border-radius:6px;width:28px;height:28px;font-size:14px;cursor:pointer;flex-shrink:0;font-family:inherit">✕</button></div>';
+    document.body.appendChild(b);
+    document.getElementById('pwaClose').onclick=()=>{b.remove();try{localStorage.setItem('pwaPromptDismissed_v1','1')}catch(e){}};
+    const ib=document.getElementById('pwaInstall');if(ib&&bipe)ib.onclick=async()=>{try{bipe.prompt();await bipe.userChoice;b.remove()}catch(e){}};
+  }
+})();
+
+(function(){
+  function init(){
+    if(typeof startTurnBattle!=='function'||typeof state==='undefined'||typeof runAction!=='function'||typeof useMove!=='function'){setTimeout(init,120);return}
+    const _origStartTb=startTurnBattle;
+    window.startTurnBattle=function(){_origStartTb.apply(this,arguments);patchHeroes();ensureCombatUI()};
+    function patchHeroes(){
+      if(!state.partyTeam)return;
+      const fix=(h)=>{h.lv=50;h.atk=Math.round((h.atk||60)*1.25);h.hpMax=Math.round((h.hpMax||100)*1.15);h.hp=h.hpMax;h.ult=0;h.ultMax=100;h.statusEffects=[]};
+      state.partyTeam.forEach(fix);state.partyFoe.forEach(fix);
+      state.tbBag={potion:3,energy:2,shield:2,antidote:2};
+      if(typeof refreshTb==='function')refreshTb();
+    }
+    function ensureCombatUI(){
+      const arena=document.querySelector('.tb-arena');if(!arena)return;
+      if(!document.getElementById('statusPly')){
+        const ui=document.createElement('div');
+        ui.innerHTML='<div id="statusPly" class="status-icons" style="left:8px"></div><div id="statusFoe" class="status-icons" style="right:8px"></div><div id="ultPly" class="ult-meter" style="left:8px">⚡ 0%</div><div id="ultFoe" class="ult-meter" style="right:8px">⚡ 0%</div>';
+        while(ui.firstChild)arena.appendChild(ui.firstChild);
+      }
+      updateBagButton();
+    }
+    function updateBagButton(){
+      const bagBtn=document.querySelector('#tbMainMenu .bbtn.bag');
+      if(bagBtn&&state.tbBag){const total=Object.values(state.tbBag).reduce((a,b)=>a+b,0);bagBtn.innerHTML='🎒 BAG ('+total+')'}
+    }
+    window.runAction=async function(att,def,move,side){
+      const oS=side==='ply'?'foe':'ply';
+      log('<b>'+att.n+'</b> used <span class="effect">'+move.n+'</span>!');
+      await sleep(700);
+      const stunIdx=(att.statusEffects||[]).findIndex(s=>s.t==='stun'||s.t==='freeze');
+      if(stunIdx>=0){const eff=att.statusEffects[stunIdx];log('<b>'+att.n+'</b> is '+(eff.t==='freeze'?'frozen':'stunned')+' and can\'t move!');att.statusEffects.splice(stunIdx,1);renderStatusEffects();await sleep(800);return}
+      if(move.heal){const heal=Math.min(Math.round(move.heal*1.4),att.hpMax-att.hp);att.hp+=heal;log('<b>'+att.n+'</b> healed <span class="effect">'+heal+'</span> HP!');showDmg(side,heal,false,true);if(typeof sfxHeal==='function')sfxHeal();setHp(side,att.hp/att.hpMax);const hn=$(side==='ply'?'plyHpNum':'foeHpNum');if(hn)hn.textContent=att.hp+'/'+att.hpMax;await sleep(800);return}
+      const lv=att.lv||50;const eff=effect(move.t,def.t);const stab=move.t===att.t?1.25:1;const isCrit=Math.random()<0.15;const crit=isCrit?1.7:1;const variance=0.85+Math.random()*0.15;
+      const base=((2*lv/5+2)*move.p*att.atk/Math.max(1,def.def))/35+2;
+      let dmg=Math.max(1,Math.round(base*eff*stab*crit*variance));
+      if((att.statusEffects||[]).find(s=>s.t==='atkUp'))dmg=Math.round(dmg*1.35);
+      if((def.statusEffects||[]).find(s=>s.t==='shield'))dmg=Math.round(dmg*0.55);
+      def.hp=Math.max(0,def.hp-dmg);att.dmgDealt=(att.dmgDealt||0)+dmg;
+      const ultGain=Math.min(28,Math.max(8,Math.round(dmg/3)));
+      att.ult=Math.min(100,(att.ult||0)+ultGain);def.ult=Math.min(100,(def.ult||0)+Math.round(ultGain*0.55));
+      const ff=$('flashFx');if(ff){ff.classList.add('on');setTimeout(()=>ff.classList.remove('on'),400)}
+      const oSpr=$(oS==='ply'?'plySprite':'foeSprite');if(oSpr){oSpr.classList.add('shake');setTimeout(()=>oSpr.classList.remove('shake'),400)}
+      showDmg(oS,dmg,isCrit,false);
+      if(isCrit&&typeof sfxCrit==='function')sfxCrit();else if(typeof sfxHit==='function')sfxHit();
+      setHp(oS,def.hp/def.hpMax);
+      const hn2=$(oS==='ply'?'plyHpNum':'foeHpNum');if(hn2)hn2.textContent=def.hp+'/'+def.hpMax;
+      let sMsg='';if(def.hp>0){sMsg=applyStatusFromMove(att,def,move)}
+      let msg='Dealt <b>'+dmg+'</b> damage';
+      if(isCrit)msg='<span class="crit">⚡ CRITICAL!</span> '+msg;
+      if(eff>1)msg+=' — <span class="effect">Super effective!</span>';else if(eff<1&&eff>0)msg+=' — <span class="effect">Not very effective…</span>';
+      log(msg);if(sMsg)setTimeout(()=>log(sMsg),700);
+      renderStatusEffects();updateUltDisplay();await sleep(900);
+    };
+    function applyStatusFromMove(att,def,move){
+      let chance=0,status=null;const t=(move.t||'').toLowerCase();
+      if(['fire','mage','flame','psychic','radiation'].includes(t)){chance=0.22;status={t:'burn',turns:3,dot:0.07,label:'🔥 BURN'}}
+      else if(['poison','beast','dark','venom','grass'].includes(t)){chance=0.18;status={t:'poison',turns:3,dot:0.06,label:'☠️ POISON'}}
+      else if(['electric','archer','tech','sound','flying'].includes(t)){chance=0.13;status={t:'stun',turns:1,label:'⚡ STUN'}}
+      else if(['ice','water'].includes(t)){chance=0.12;status={t:'freeze',turns:1,label:'❄️ FROZEN'}}
+      else{chance=0.07;status={t:'stun',turns:1,label:'⚡ STUN'}}
+      if(Math.random()<chance&&status){def.statusEffects=def.statusEffects||[];if(!def.statusEffects.find(s=>s.t===status.t)){def.statusEffects.push(Object.assign({},status));return '<span class="effect">'+def.n+' got '+status.label+'!</span>'}}
+      return '';
+    }
+    function tickStatus(h,side){
+      if(!h.statusEffects||h.statusEffects.length===0)return;
+      let dot=0;const labels=[];
+      h.statusEffects=h.statusEffects.filter(s=>{if(s.dot){dot+=Math.round(h.hpMax*s.dot);labels.push(s.label)}s.turns--;return s.turns>0});
+      if(dot>0){h.hp=Math.max(0,h.hp-dot);showDmg(side,dot,false,false);log('<b>'+h.n+'</b> took <span class="effect">'+dot+'</span> from '+labels.join(' & ')+'!');setHp(side,h.hp/h.hpMax);const hn=$(side==='ply'?'plyHpNum':'foeHpNum');if(hn)hn.textContent=h.hp+'/'+h.hpMax}
+      renderStatusEffects();
+    }
+    function renderStatusEffects(){
+      ['Ply','Foe'].forEach(s=>{const cont=document.getElementById('status'+s);if(!cont)return;const h=s==='Ply'?(state.partyTeam&&state.partyTeam[state.active]):(state.partyFoe&&state.partyFoe[state.foeActive]);if(!h){cont.innerHTML='';return}cont.innerHTML=(h.statusEffects||[]).map(e=>'<span class="se">'+e.label+' '+e.turns+'</span>').join('')});
+    }
+    function updateUltDisplay(){
+      const ply=state.partyTeam&&state.partyTeam[state.active];const foe=state.partyFoe&&state.partyFoe[state.foeActive];
+      const pE=document.getElementById('ultPly');const fE=document.getElementById('ultFoe');
+      if(pE&&ply){pE.textContent='⚡ '+(ply.ult||0)+'%';pE.classList.toggle('full',ply.ult>=100)}
+      if(fE&&foe){fE.textContent='⚡ '+(foe.ult||0)+'%';fE.classList.toggle('full',foe.ult>=100)}
+      ensureUltButton();
+    }
+    function ensureUltButton(){
+      const ply=state.partyTeam&&state.partyTeam[state.active];if(!ply)return;
+      const grid=document.getElementById('moveGrid');if(!grid)return;
+      let btn=document.getElementById('ultMoveBtn');
+      if(ply.ult>=100&&!btn){btn=document.createElement('button');btn.id='ultMoveBtn';btn.className='move-btn ult-btn';btn.style.gridColumn='1/-1';btn.innerHTML='<div class="mn">⭐ ULTIMATE STRIKE</div><div class="mt"><span>2.5x DMG · IGNORE DEF</span><span class="pp">⚡ 100%</span></div>';btn.onclick=useUltimate;grid.insertBefore(btn,grid.firstChild)}
+      else if(ply.ult<100&&btn){btn.remove()}
+    }
+    window.useUltimate=async function(){
+      if(state.busy)return;const ply=state.partyTeam[state.active];if(!ply||ply.ult<100)return;const foe=state.partyFoe[state.foeActive];
+      state.busy=true;hideMoves();ply.ult=0;
+      const ultMove={n:ply.n.toUpperCase()+"'S WRATH",p:130,pp:99,ppMax:99,ppNow:99,t:ply.t};
+      const origDef=foe.def;foe.def=Math.max(20,Math.round(foe.def*0.45));battleTurns++;
+      await runAction(ply,foe,ultMove,'ply');
+      foe.def=origDef;
+      if(foe.hp<=0){await onFoeFaint();return}
+      const fmIdx=chooseFoeMove(),fm=foe.moves[fmIdx];
+      await runAction(foe,ply,fm,'foe');foe.moves[fmIdx].ppNow=Math.max(0,foe.moves[fmIdx].ppNow-1);
+      if(ply.hp<=0){await onPlyFaint();return}
+      refreshTb();state.busy=false;
+    };
+    window.useItem=function(){if(state.busy)return;if(typeof sfxClick==='function')sfxClick();showBag()};
+    function showBag(){
+      const bag=state.tbBag||{};
+      const items=[{k:'potion',n:'🧪 POTION',d:'Heal +60 HP',c:bag.potion||0},{k:'energy',n:'⚡ ENERGY DRINK',d:'+35% ATK · 2 turns',c:bag.energy||0},{k:'shield',n:'🛡️ IRON SHIELD',d:'-45% DMG · 2 turns',c:bag.shield||0},{k:'antidote',n:'💊 ANTIDOTE',d:'Cure all status',c:bag.antidote||0}];
+      const old=document.getElementById('bagOverlay');if(old)old.remove();
+      const ov=document.createElement('div');ov.id='bagOverlay';ov.className='bag-overlay';
+      ov.innerHTML='<div class="bag-card"><div class="ti">🎒 ITEM BAG</div>'+items.map(it=>'<button class="bag-item" '+(it.c===0?'disabled':'')+' onclick="applyItem(\''+it.k+'\')"><div style="flex:1"><div>'+it.n+' <span class="ct">×'+it.c+'</span></div><div class="desc">'+it.d+'</div></div></button>').join('')+'<button class="bag-close" onclick="document.getElementById(\'bagOverlay\').remove()">✕ CLOSE</button></div>';
+      const arena=document.querySelector('.tb-arena')||document.body;arena.appendChild(ov);
+    }
+    window.applyItem=async function(k){
+      const bag=state.tbBag||{};if((bag[k]||0)<=0)return;
+      const ov=document.getElementById('bagOverlay');if(ov)ov.remove();
+      bag[k]--;const ply=state.partyTeam[state.active];const foe=state.partyFoe[state.foeActive];
+      state.busy=true;battleTurns++;
+      if(k==='potion'){const heal=Math.min(60,ply.hpMax-ply.hp);ply.hp+=heal;log('<b>'+ply.n+'</b> drank a Potion! +'+heal+' HP');showDmg('ply',heal,false,true);if(typeof sfxHeal==='function')sfxHeal();setHp('ply',ply.hp/ply.hpMax);$('plyHpNum').textContent=ply.hp+'/'+ply.hpMax}
+      else if(k==='energy'){ply.statusEffects=ply.statusEffects||[];ply.statusEffects.push({t:'atkUp',turns:2,label:'⚡ ATK+'});log('<b>'+ply.n+'</b> chugged Energy Drink! Attack rising!');if(typeof sfxHeal==='function')sfxHeal()}
+      else if(k==='shield'){ply.statusEffects=ply.statusEffects||[];ply.statusEffects.push({t:'shield',turns:2,label:'🛡️ SHIELD'});log('<b>'+ply.n+'</b> raised an Iron Shield!');if(typeof sfxHeal==='function')sfxHeal()}
+      else if(k==='antidote'){const had=(ply.statusEffects||[]).filter(s=>['burn','poison','stun','freeze'].includes(s.t)).length;ply.statusEffects=(ply.statusEffects||[]).filter(s=>!['burn','poison','stun','freeze'].includes(s.t));log('<b>'+ply.n+'</b> used Antidote! '+(had?'Status cleared!':'Nothing to cure.'));if(typeof sfxHeal==='function')sfxHeal()}
+      await sleep(900);renderStatusEffects();updateBagButton();updateUltDisplay();
+      const fmIdx=chooseFoeMove(),fm=foe.moves[fmIdx];
+      await runAction(foe,ply,fm,'foe');foe.moves[fmIdx].ppNow=Math.max(0,foe.moves[fmIdx].ppNow-1);
+      if(ply.hp<=0){await onPlyFaint();return}
+      refreshTb();state.busy=false;
+    };
+    const _origUseMove=useMove;
+    window.useMove=async function(idx){
+      if(state.busy)return;const ply=state.partyTeam[state.active];const foe=state.partyFoe[state.foeActive];
+      tickStatus(ply,'ply');if(ply.hp<=0){await onPlyFaint();return}
+      tickStatus(foe,'foe');if(foe.hp<=0){await onFoeFaint();return}
+      await _origUseMove.apply(this,arguments);updateUltDisplay();renderStatusEffects();updateBagButton();
+    };
+    const _origRefresh=refreshTb;
+    window.refreshTb=function(){_origRefresh.apply(this,arguments);renderStatusEffects();updateUltDisplay();updateBagButton()};
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+
+<!-- BOARD MODE PATCH — tower-blocking + hand info button -->
+<style>
+.bb-hand-card .info-btn{position:absolute;top:2px;right:2px;width:18px;height:18px;border-radius:50%;background:rgba(0,0,0,.75);border:1px solid var(--gold);color:var(--gold);font-family:'Black Ops One',cursive;font-size:11px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:5;padding:0;line-height:1;font-weight:bold}
+.bb-hand-card .info-btn:hover{background:var(--gold);color:#000}
+</style>
+<script>
+(function(){
+  function init(){
+    if(typeof refreshBoard!=='function'||typeof towerPhase!=='function'||typeof state==='undefined'||typeof ROSTER==='undefined'){setTimeout(init,120);return}
+    window.towerPhase=async function(){
+      const bb=state.bb;
+      for(let lane=0;lane<2;lane++){
+        if(bb.towers.ply[lane]>0){const t=findClosestEnemyToTower('ply',lane);if(t){t.wounds++;bbLog(`Your Tower hit ${t.n}!`);if(typeof sfxTowerHit==='function')sfxTowerHit();await sleep(350)}}
+        if(bb.towers.foe[lane]>0){const t=findClosestEnemyToTower('foe',lane);if(t){const blocked=bb.statusEffects.some(s=>s.type==='tower-shield'&&s.lane===lane&&s.side==='ply');if(!blocked){t.wounds++;bbLog(`Foe Tower hit ${t.n}!`);if(typeof sfxTowerHit==='function')sfxTowerHit();await sleep(350)}else bbLog(`🛡 Tower shield blocked!`)}}
+      }
+      await cleanupAll();
+      for(let lane=0;lane<2;lane++){
+        for(const u of bb.neutral[lane].slice()){
+          if(u.wounds>=u.woundsMax)continue;
+          const ets=u.side==='ply'?'foe':'ply';
+          const enemiesInLane=bb.neutral[lane].filter(x=>x.side===ets&&x.wounds<x.woundsMax);
+          if(enemiesInLane.length>0){bbLog(`🛡 <b>${u.n}</b> blocked — ${enemiesInLane[0].n} stands in the way!`);await sleep(350);continue}
+          if(bb.towers[ets][lane]>0){
+            await new Promise(resolve=>{showDice('D6',null,n=>{if(typeof sfxDiceLand==='function')sfxDiceLand();const dmg=Math.max(1,Math.floor(n/2));bb.towers[ets][lane]=Math.max(0,bb.towers[ets][lane]-dmg);$('diceLabel').textContent=`${u.n} sieges Tower for ${dmg}w!`;$('diceContinue').style.display='block';bbLog(`<b>${u.n}</b> sieged ${ets==='foe'?'Foe':'Your'} Tower ${'AB'[lane]} ${dmg}w!`);if(typeof sfxTowerHit==='function')sfxTowerHit();$('diceContinue').onclick=()=>{closeDice();resolve()};setTimeout(()=>{if($('diceOverlay').classList.contains('on')){closeDice();resolve()}},1500)})});
+            await sleep(200);
+          } else if(bb.king[ets]>0){
+            await new Promise(resolve=>{showDice('D6',null,n=>{if(typeof sfxDiceLand==='function')sfxDiceLand();const dmg=Math.max(1,Math.floor(n/2));bb.king[ets]=Math.max(0,bb.king[ets]-dmg);$('diceLabel').textContent=`${u.n} hits KING for ${dmg}w!`;$('diceContinue').style.display='block';bbLog(`<b>${u.n}</b> hit King ${dmg}w!`);if(typeof sfxTowerHit==='function')sfxTowerHit();$('diceContinue').onclick=()=>{closeDice();resolve()};setTimeout(()=>{if($('diceOverlay').classList.contains('on')){closeDice();resolve()}},1500)})});
+            await sleep(200);
+          }
+        }
+      }
+      ['ply','foe'].forEach(s=>{
+        if(!bb.kingActive[s]&&(bb.towers[s][0]<=0||bb.towers[s][1]<=0)){bb.kingActive[s]=true;bbLog(`${s==='foe'?'Foe ':'Your '}King AWAKENED!`)}
+        if(bb.kingActive[s]){const e=s==='ply'?'foe':'ply';for(let lane=0;lane<2;lane++){const tg=bb.neutral[lane].find(u=>u.side===e&&u.wounds<u.woundsMax);if(tg){tg.wounds++;bbLog(`${s==='foe'?'Foe':'Your'} KING blasted ${tg.n}!`);break}}}
+      });
+      await cleanupAll();
+    };
+    const _origRefreshBoard=refreshBoard;
+    window.refreshBoard=function(){_origRefreshBoard.apply(this,arguments);injectHandInfoButtons()};
+    function injectHandInfoButtons(){
+      const handEl=document.getElementById('bbHand');if(!handEl)return;
+      handEl.querySelectorAll('.bb-hand-card').forEach((cardEl,idx)=>{
+        if(cardEl.querySelector('.info-btn'))return;
+        const ib=document.createElement('button');ib.className='info-btn';ib.textContent='i';ib.title='Card details';
+        ib.onclick=(e)=>{e.stopPropagation();e.preventDefault();const id=state.bb&&state.bb.hand?state.bb.hand[idx]:null;const card=id?ROSTER.find(r=>r.id===id):null;if(card&&typeof showCardDetail==='function')showCardDetail(card)};
+        cardEl.appendChild(ib);
+      });
+    }
+    injectHandInfoButtons();
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+
+<!-- GAME CONTROLS — speed, pause, mute, unstick + roster balance -->
+<style>
+#gameControls{position:fixed;top:max(8px,calc(env(safe-area-inset-top) + 4px));right:8px;z-index:9000;display:flex;gap:4px;font-family:'Black Ops One',cursive;flex-direction:column;align-items:flex-end;pointer-events:none}
+#gameControls > div,#gameControls button{pointer-events:auto}
+.gc-btn{padding:6px 9px;background:rgba(0,0,0,.78);border:1px solid var(--gold,#ffcb05);color:var(--gold,#ffcb05);border-radius:8px;font-family:'Black Ops One',cursive;font-size:11px;cursor:pointer;min-width:36px;letter-spacing:.5px}
+.gc-btn:active{transform:scale(.94)}
+.gc-btn.unstick{background:rgba(220,38,38,.9);border-color:#fff;color:#fff;font-size:10px;letter-spacing:1px;animation:gc-pulse 1s infinite}
+@keyframes gc-pulse{0%,100%{box-shadow:0 0 6px rgba(220,38,38,.5)}50%{box-shadow:0 0 14px rgba(220,38,38,.95)}}
+</style>
+<script>
+(function(){
+  const PREFS_KEY='arena-prefs-v1';
+  const prefs=(()=>{try{return JSON.parse(localStorage.getItem(PREFS_KEY))||{}}catch(e){return{}}})();
+  if(prefs.speed==null)prefs.speed=1;if(prefs.muted==null)prefs.muted=false;
+  let paused=false,pauseResolvers=[],lastLogTime=Date.now();
+  function savePrefs(){try{localStorage.setItem(PREFS_KEY,JSON.stringify(prefs))}catch(e){}}
+  function init(){
+    if(typeof sleep!=='function'||typeof state==='undefined'){setTimeout(init,150);return}
+    const _origSleep=sleep;
+    window.sleep=function(ms){const adjusted=Math.max(20,Math.round(ms/Math.max(0.25,prefs.speed||1)));return new Promise(resolve=>{const fire=()=>{if(paused)pauseResolvers.push(fire);else setTimeout(resolve,adjusted)};fire()})};
+    if(typeof tone==='function'){const _o=tone;window.tone=function(){if(prefs.muted)return;return _o.apply(this,arguments)}}
+    if(typeof bbLog==='function'){const _o=bbLog;window.bbLog=function(){lastLogTime=Date.now();return _o.apply(this,arguments)}}
+    if(typeof log==='function'){const _o=log;window.log=function(){lastLogTime=Date.now();return _o.apply(this,arguments)}}
+    if(typeof ROSTER!=='undefined'&&Array.isArray(ROSTER)){
+      const ELIXIR_WOUNDS={0:2,1:2,2:3,3:3,4:4,5:4,6:5,7:5,8:6,9:6,10:7};
+      ROSTER.forEach(card=>{
+        if(card._balanced||card.elixir==null)return;
+        card._balanced=true;
+        const cap=ELIXIR_WOUNDS[card.elixir]||5;
+        const baseHp=card.hp||140;
+        const currentWounds=Math.max(2,Math.min(7,Math.round(baseHp/40)));
+        if(currentWounds>cap){card.hp=cap*40;card.hpMax=card.hp}
+        if(card.elixir<=2&&card.atk)card.atk=Math.round(card.atk*1.1);
+      });
+    }
+    buildUI();
+    setInterval(()=>{const ub=document.getElementById('ctrlUnstick');if(!ub)return;const stuck=state&&state.bb&&state.bb.busy&&(Date.now()-lastLogTime>12000);ub.style.display=stuck?'block':'none'},2000);
+  }
+  function buildUI(){
+    if(document.getElementById('gameControls'))return;
+    const c=document.createElement('div');c.id='gameControls';
+    c.innerHTML='<div style="display:flex;gap:4px"><button id="ctrlSpeed" class="gc-btn" title="Speed">'+prefs.speed+'x</button><button id="ctrlPause" class="gc-btn" title="Pause">⏸</button><button id="ctrlMute" class="gc-btn" title="Sound" style="font-size:14px">'+(prefs.muted?'🔇':'🔊')+'</button></div><button id="ctrlUnstick" class="gc-btn unstick" style="display:none;margin-top:4px">⚠ UNSTICK</button>';
+    document.body.appendChild(c);
+    document.getElementById('ctrlSpeed').onclick=()=>{const speeds=[0.5,1,2];const idx=speeds.indexOf(prefs.speed);prefs.speed=speeds[(idx+1)%speeds.length];savePrefs();document.getElementById('ctrlSpeed').textContent=prefs.speed+'x'};
+    document.getElementById('ctrlPause').onclick=()=>{paused=!paused;document.getElementById('ctrlPause').textContent=paused?'▶':'⏸';if(!paused){const all=pauseResolvers.slice();pauseResolvers=[];all.forEach((r,i)=>setTimeout(r,i*30))}};
+    document.getElementById('ctrlMute').onclick=()=>{prefs.muted=!prefs.muted;savePrefs();document.getElementById('ctrlMute').textContent=prefs.muted?'🔇':'🔊'};
+    document.getElementById('ctrlUnstick').onclick=()=>{if(state&&state.bb){state.bb.busy=false;state.bb.phase='deploy';state.bb.whoseTurn='ply';if(typeof bbLog==='function')bbLog('⚙️ Force-unstuck — your turn.');if(typeof refreshBoard==='function')refreshBoard()}if(state)state.busy=false;lastLogTime=Date.now();document.getElementById('ctrlUnstick').style.display='none'};
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+
+<!-- SPELL CARDS + 1v1 ANIMATED EFFECTS -->
+<style>
+.spell-badge{position:absolute;bottom:1px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#7c3aed,#3b82f6);color:#fff;border:1px solid #ffcb05;border-radius:6px;padding:1px 5px;font-size:7px;font-family:'Black Ops One',cursive;letter-spacing:.5px;white-space:nowrap;z-index:6;pointer-events:none}
+.bb-hand-card.is-spell{border-color:#7c3aed;box-shadow:0 0 8px rgba(124,58,237,.4)}
+.spell-target{outline:3px dashed gold!important;outline-offset:-2px;cursor:crosshair!important;animation:t-pulse 1s ease-in-out infinite;position:relative;z-index:5}
+@keyframes t-pulse{0%,100%{outline-color:gold;filter:brightness(1)}50%{outline-color:#fff;filter:brightness(1.35)}}
+#spellTip{animation:s-tip 1.5s ease-in-out infinite}
+@keyframes s-tip{0%,100%{transform:translateX(-50%) scale(1)}50%{transform:translateX(-50%) scale(1.06)}}
+@keyframes spell-flash{0%{opacity:0;transform:scale(.4)}30%{opacity:1;transform:scale(1.3)}100%{opacity:0;transform:scale(1.7)}}
+@keyframes fx-blast{0%{opacity:0;transform:scale(.3)}30%{opacity:1;transform:scale(1.3)}100%{opacity:0;transform:scale(1.9)}}
+.fx-blast{position:absolute;inset:-12px;border-radius:50%;pointer-events:none;animation:fx-blast .7s ease-out forwards;z-index:9}
+@keyframes fx-heal{0%{opacity:0;transform:scale(.8)}40%{opacity:1;transform:scale(1.15)}100%{opacity:0;transform:scale(1.4)}}
+.fx-heal{position:absolute;inset:-10px;border-radius:50%;pointer-events:none;animation:fx-heal 1s ease-out forwards;z-index:9;background:radial-gradient(circle,rgba(34,197,94,.65),transparent 70%);box-shadow:0 0 28px rgba(34,197,94,.85)}
+</style>
+<script>
+(function(){
+  function init(){
+    if(typeof state==='undefined'||typeof ROSTER==='undefined'||typeof refreshBoard!=='function'){setTimeout(init,150);return}
+    if(window._spellsInited)return;window._spellsInited=true;
+    const title=(document.title||'').toLowerCase();
+    const game=title.includes('pokemon')?'pokemon':title.includes('marvel')?'marvel':title.includes('smash')?'smash':'clash';
+    const SP={'fireball':'damage','lightning':'damage','arrows':'splash','tornado':'pull','rocket':'rocket','freeze':'freeze','earthquake':'splash','rage':'buff','log':'pull','snowball':'damage','zap':'damage','poison':'splash','heal spell':'heal','mirror':'damage','graveyard':'summon','goblin barrel':'summon','inferno cast':'damage'};
+    const SW={'fireball':3,'lightning':3,'arrows':1,'tornado':0,'rocket':5,'freeze':0,'earthquake':2,'rage':0,'log':1,'snowball':1,'zap':1,'poison':1,'heal spell':2,'mirror':2,'graveyard':0,'goblin barrel':0,'inferno cast':4};
+    ROSTER.forEach(c=>{if(c.isSpell)return;const n=(c.n||'').toLowerCase();for(const k in SP)if(n.includes(k)){c.isSpell=true;c.spellType=SP[k];c.spellW=SW[k];break}});
+    const NS={
+      pokemon:[
+        {id:'spl_thunder',n:'THUNDERBOLT',fb:'⚡',t:'electric',elixir:3,hp:80,atk:60,def:50,spd:99,spdIcon:'⚡',isSpell:true,spellType:'damage',spellW:3,moves:['Thunder']},
+        {id:'spl_potion',n:'HYPER POTION',fb:'🧪',t:'normal',elixir:2,hp:80,atk:30,def:50,spd:60,spdIcon:'🧍',isSpell:true,spellType:'heal',spellW:2,moves:['Heal Pulse']},
+        {id:'spl_roar',n:'DRAGON ROAR',fb:'🐉',t:'flying',elixir:1,hp:80,atk:30,def:30,spd:90,spdIcon:'⚡',isSpell:true,spellType:'pull',spellW:0,moves:['Push Back']},
+        {id:'spl_quake',n:'EARTHQUAKE',fb:'🌋',t:'ground',elixir:4,hp:80,atk:60,def:50,spd:60,spdIcon:'🐢',isSpell:true,spellType:'splash',spellW:2,moves:['Quake']}
+      ],
+      marvel:[
+        {id:'spl_repulsor',n:'STARK REPULSOR',fb:'💥',t:'tech',elixir:3,hp:80,atk:60,def:50,spd:99,spdIcon:'⚡',isSpell:true,spellType:'damage',spellW:3,moves:['Beam']},
+        {id:'spl_web',n:'WEB SHOT',fb:'🕸️',t:'tech',elixir:2,hp:80,atk:30,def:50,spd:80,spdIcon:'⚡',isSpell:true,spellType:'freeze',spellW:0,moves:['Web Snare']},
+        {id:'spl_heal',n:'HEALING FACTOR',fb:'💚',t:'mutant',elixir:2,hp:80,atk:30,def:50,spd:60,spdIcon:'🧍',isSpell:true,spellType:'heal',spellW:2,moves:['Heal']},
+        {id:'spl_bomb',n:'PUMPKIN BOMB',fb:'🎃',t:'tech',elixir:4,hp:80,atk:60,def:50,spd:80,spdIcon:'🧍',isSpell:true,spellType:'splash',spellW:2,moves:['Bomb']}
+      ],
+      smash:[
+        {id:'spl_smashball',n:'SMASH BALL',fb:'💎',t:'magic',elixir:4,hp:80,atk:80,def:50,spd:99,spdIcon:'⚡',isSpell:true,spellType:'damage',spellW:4,moves:['Final Smash']},
+        {id:'spl_pokeball',n:'POKE BALL',fb:'🔴',t:'magic',elixir:2,hp:80,atk:30,def:50,spd:80,spdIcon:'⚡',isSpell:true,spellType:'splash',spellW:1,moves:['Random']},
+        {id:'spl_heart',n:'HEART CONTAINER',fb:'❤️',t:'magic',elixir:2,hp:80,atk:30,def:50,spd:60,spdIcon:'🧍',isSpell:true,spellType:'heal',spellW:2,moves:['Heal']},
+        {id:'spl_bumper',n:'BUMPER',fb:'🎾',t:'speedster',elixir:1,hp:80,atk:30,def:30,spd:90,spdIcon:'⚡',isSpell:true,spellType:'pull',spellW:0,moves:['Knockback']}
+      ]
+    };
+    if(game!=='clash'&&NS[game])ROSTER.push(...NS[game]);
+    if(typeof deployToBack==='function'){
+      const _origDeploy=deployToBack;
+      window.deployToBack=function(lane){
+        const idx=state.bb&&state.bb.selectedCard;
+        if(idx!=null){const c=ROSTER.find(r=>r.id===state.bb.hand[idx]);if(c&&c.isSpell){bbLog('✨ '+c.n+' is a spell — tap an enemy/ally as the target.');return}}
+        return _origDeploy.apply(this,arguments);
+      };
+    }
+    const _origRefresh=refreshBoard;
+    window.refreshBoard=function(){_origRefresh.apply(this,arguments);decorateSpells();setupSpellTargeting()};
+    function decorateSpells(){
+      document.querySelectorAll('#bbHand .bb-hand-card').forEach((el,idx)=>{
+        const id=state.bb&&state.bb.hand?state.bb.hand[idx]:null;
+        const c=id?ROSTER.find(r=>r.id===id):null;
+        el.classList.toggle('is-spell',!!(c&&c.isSpell));
+        if(c&&c.isSpell&&!el.querySelector('.spell-badge')){const b=document.createElement('div');b.className='spell-badge';b.textContent='✨ SPELL';el.appendChild(b)}
+      });
+    }
+    function setupSpellTargeting(){
+      document.querySelectorAll('.spell-target').forEach(el=>el.classList.remove('spell-target'));
+      const ot=document.getElementById('spellTip');if(ot)ot.remove();
+      const idx=state.bb?state.bb.selectedCard:null;
+      if(idx==null)return;
+      const id=state.bb.hand[idx];const c=ROSTER.find(r=>r.id===id);
+      if(!c||!c.isSpell)return;
+      const isHeal=['heal','buff'].includes(c.spellType);
+      const t=document.createElement('div');t.id='spellTip';
+      t.style.cssText='position:fixed;top:max(64px,calc(env(safe-area-inset-top) + 64px));left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#7c3aed,#3b82f6);border:2px solid gold;border-radius:12px;padding:8px 16px;color:#fff;font-family:Black Ops One,cursive;font-size:11px;z-index:8500;pointer-events:none;text-align:center;letter-spacing:.8px;box-shadow:0 8px 20px rgba(0,0,0,.5)';
+      t.innerHTML='✨ '+c.n+'<br><span style="font-size:9px;opacity:.85">TAP '+(isHeal?'AN ALLY':'AN ENEMY')+' TARGET</span>';
+      document.body.appendChild(t);
+      const sels=isHeal?['.bb-unit.ply','.bb-tower:not(.foe)','.bb-king:not(.foe)']:['.bb-unit.foe','.bb-tower.foe','.bb-king.foe'];
+      document.querySelectorAll(sels.join(',')).forEach(el=>{if(el.classList.contains('dead'))return;el.classList.add('spell-target');el.onclick=(e)=>{e.stopPropagation();castSpell(c,el,idx)}});
+    }
+    async function castSpell(card,el,idx){
+      const bb=state.bb;
+      if(bb.busy)return;
+      if(bb.elixir<card.elixir){bbLog('⚡ Need '+card.elixir+' elixir');return}
+      bb.busy=true;bb.elixir-=card.elixir;
+      bb.hand.splice(idx,1);bb.selectedCard=null;
+      bb.deploysCount=(bb.deploysCount||0)+1;
+      bbLog('✨ <b>'+card.n+'</b> cast!');
+      if(typeof sfxDeploy==='function')sfxDeploy();
+      flashSpellAt(el,card.spellType);
+      const tgt=findTargetFromEl(el);
+      if(tgt)await applySpell(card,tgt);
+      const tip=document.getElementById('spellTip');if(tip)tip.remove();
+      bb.busy=false;drawCards('ply',1);
+      if(typeof checkBoardWin==='function'&&checkBoardWin())return;
+      refreshBoard();
+    }
+    function findTargetFromEl(el){
+      const bb=state.bb;
+      if(el.classList.contains('bb-king'))return{type:'king',side:el.classList.contains('foe')?'foe':'ply'};
+      if(el.classList.contains('bb-tower')){const row=el.parentElement;const idx=Array.from(row.children).indexOf(el);return{type:'tower',lane:idx,side:el.classList.contains('foe')?'foe':'ply'}}
+      if(el.classList.contains('bb-unit')){const side=el.classList.contains('ply')?'ply':'foe';for(let lane=0;lane<2;lane++)for(const u of bb.neutral[lane])if(u.side===side&&u.wounds<u.woundsMax)return{type:'unit',unit:u,lane};for(let lane=0;lane<2;lane++)for(let row=0;row<2;row++)for(const u of bb.zones[side][row][lane])if(u.wounds<u.woundsMax)return{type:'unit',unit:u,lane}}
+      return null;
+    }
+    async function applySpell(card,tgt){
+      const bb=state.bb;const w=card.spellW||2;
+      switch(card.spellType){
+        case 'damage':case 'rocket':case 'lightning':
+          if(tgt.type==='unit'){tgt.unit.wounds=Math.min(tgt.unit.woundsMax,tgt.unit.wounds+w);bb.dmgDealt+=w;bbLog('🔥 '+w+'w to '+tgt.unit.n)}
+          else if(tgt.type==='tower'){bb.towers[tgt.side][tgt.lane]=Math.max(0,bb.towers[tgt.side][tgt.lane]-w);bb.dmgDealt+=w;bbLog('💥 Tower hit '+w+'!')}
+          else if(tgt.type==='king'){bb.king[tgt.side]=Math.max(0,bb.king[tgt.side]-w);bb.dmgDealt+=w;bbLog('💥 KING '+w+'!')}
+          break;
+        case 'splash':
+          if(tgt.type==='unit'){for(const u of bb.neutral[tgt.lane])if(u.side==='foe'&&u.wounds<u.woundsMax){u.wounds=Math.min(u.woundsMax,u.wounds+w);bb.dmgDealt+=w}bbLog('💥 Lane '+'AB'[tgt.lane]+' splash!')}
+          else if(tgt.type==='tower'){bb.towers[tgt.side][tgt.lane]=Math.max(0,bb.towers[tgt.side][tgt.lane]-w);bbLog('💥 Tower splash')}
+          break;
+        case 'freeze':if(tgt.type==='unit'){bb.statusEffects.push({type:'frozen',target:tgt.unit,ttl:2});bbLog('🧊 '+tgt.unit.n+' frozen 2 turns!')}break;
+        case 'pull':if(tgt.type==='unit'){for(let l=0;l<2;l++){const i=bb.neutral[l].indexOf(tgt.unit);if(i>=0){bb.neutral[l].splice(i,1);bb.zones.foe[1][l].push(tgt.unit);bbLog('🌪 '+tgt.unit.n+' pushed back!');break}}}break;
+        case 'heal':
+          if(tgt.type==='unit'){tgt.unit.wounds=Math.max(0,tgt.unit.wounds-w);bbLog('💚 '+tgt.unit.n+' healed '+w+'w!')}
+          else if(tgt.type==='tower'){bb.towers.ply[tgt.lane]=Math.min(5,bb.towers.ply[tgt.lane]+w);bbLog('💚 Tower healed!')}
+          else if(tgt.type==='king'){bb.king.ply=Math.min(8,bb.king.ply+w);bbLog('💚 King healed!')}
+          break;
+        case 'buff':if(tgt.type==='unit'){bb.statusEffects.push({type:'rage',target:tgt.unit,ttl:2});bbLog('🔥 '+tgt.unit.n+' RAGE!')}break;
+        case 'summon':const lane=tgt.lane||0;if(typeof buildUnit==='function'){const skel=buildUnit({id:'sum_'+Date.now(),n:'Summon',fb:'💀',t:'beast',hp:80,atk:50,def:40,spd:80,elixir:0,spdIcon:'⚡',moves:[]},'ply',lane);bb.zones.ply[1][lane].push(skel);bbLog('💀 Summoned ally!')}break;
+      }
+      await sleep(400);
+    }
+    function flashSpellAt(el,type){
+      const fx=document.createElement('div');
+      const colors={damage:'rgba(220,38,38,.85)',lightning:'rgba(255,215,0,.95)',rocket:'rgba(220,38,38,.95)',splash:'rgba(245,101,39,.85)',freeze:'rgba(34,211,238,.85)',pull:'rgba(168,85,247,.85)',heal:'rgba(34,197,94,.85)',buff:'rgba(255,215,0,.7)',summon:'rgba(120,120,120,.7)'};
+      const r=el.getBoundingClientRect();
+      fx.style.cssText='position:fixed;left:'+r.left+'px;top:'+r.top+'px;width:'+r.width+'px;height:'+r.height+'px;pointer-events:none;z-index:9999;animation:spell-flash 0.7s ease-out forwards;border-radius:14px;background:radial-gradient(circle,'+(colors[type]||colors.damage)+',transparent 60%)';
+      document.body.appendChild(fx);
+      setTimeout(()=>fx.remove(),750);
+    }
+    if(typeof runAction==='function'){
+      const _wRA=runAction;
+      window.runAction=async function(att,def,move,side){
+        const oS=side==='ply'?'foe':'ply';
+        const oSpr=document.getElementById(oS+'Sprite');
+        const sSpr=document.getElementById(side+'Sprite');
+        if(move&&!move.heal&&oSpr){
+          const t=(move.t||'').toLowerCase();
+          const colors={fire:'#ff4500',mage:'#7c3aed',ice:'#22d3ee',water:'#3b82f6',electric:'#fbbf24',archer:'#22c55e',beast:'#f97316',grass:'#22c55e',psychic:'#a855f7',ground:'#a16207',flying:'#06b6d4',rock:'#71717a',ghost:'#6366f1',dragon:'#dc2626',steel:'#71717a',poison:'#a855f7',dark:'#4c1d95',fairy:'#ec4899',tech:'#fbbf24',mutant:'#ec4899',cosmic:'#22d3ee',symbiote:'#dc2626',soldier:'#2563eb',brawler:'#ff6b35',sword:'#3b82f6',zoner:'#10b981',speedster:'#fbbf24',magic:'#a855f7',trickster:'#ec4899',knight:'#9ca3af',air:'#06b6d4',building:'#a16207'};
+          const c=colors[t]||'#ff4500';
+          const blast=document.createElement('div');blast.className='fx-blast';
+          blast.style.background='radial-gradient(circle,'+c+'cc,transparent 65%)';
+          blast.style.boxShadow='0 0 30px '+c+',inset 0 0 20px '+c;
+          oSpr.style.position='relative';oSpr.appendChild(blast);
+          setTimeout(()=>{if(blast.parentNode)blast.remove()},750);
+        }
+        if(move&&move.heal&&sSpr){
+          const heal=document.createElement('div');heal.className='fx-heal';
+          sSpr.style.position='relative';sSpr.appendChild(heal);
+          setTimeout(()=>{if(heal.parentNode)heal.remove()},1050);
+        }
+        return _wRA.apply(this,arguments);
+      };
+    }
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+
+<!-- v3 — story 1v1, dice anim, roll history, end-turn card, etc. -->
+<style>
+#home > .shield, #home > .pokeball{display:none!important}
+.dice-rolling-active .dice-cube{animation:diceSpin 1s linear infinite!important}
+.dice-rolling-active .dice-face{background:linear-gradient(135deg,#ffcb05,#ff6b00)!important;color:#000!important;text-shadow:0 0 10px rgba(255,255,255,.6);box-shadow:0 0 30px rgba(255,203,5,.8),inset 0 0 20px rgba(0,0,0,.25)!important;border-color:#fff!important}
+@keyframes diceSpin{0%{transform:rotateX(0) rotateY(0) rotateZ(0)}100%{transform:rotateX(720deg) rotateY(540deg) rotateZ(360deg)}}
+.roll-history{position:fixed;bottom:max(160px,calc(env(safe-area-inset-bottom) + 160px));left:6px;background:rgba(0,0,0,.78);border:1px solid rgba(255,203,5,.5);border-radius:8px;padding:5px 8px;font-family:'Black Ops One',cursive;font-size:9px;color:#ffcb05;z-index:7000;letter-spacing:.5px;display:none;max-width:160px}
+.roll-history.show{display:block}
+.roll-history span{color:#fff;background:rgba(255,255,255,.1);padding:1px 5px;border-radius:4px;margin-left:3px;font-size:8px}
+.end-turn-card{flex-shrink:0;width:78px;background:linear-gradient(160deg,#16a34a,#15803d)!important;border:2px solid #22c55e!important;border-radius:10px;color:#fff;cursor:pointer;font-family:'Black Ops One',cursive;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px;text-align:center;min-height:108px;letter-spacing:1px}
+.end-turn-card:active{transform:scale(.96)}
+.end-turn-card:disabled{opacity:.35;cursor:not-allowed}
+.end-turn-card .icon{font-size:32px;margin-bottom:6px;line-height:1}
+.end-turn-card .label{font-size:10px;line-height:1.15}
+</style>
+<script>
+(function(){
+  function init(){
+    if(typeof state==='undefined'||typeof refreshBoard!=='function'){setTimeout(init,150);return}
+    if(window._v3Inited)return;window._v3Inited=true;
+    function toggleControls(){const onBoard=document.querySelector('#bbattle.on');const ss=document.getElementById('ctrlSpeed');const pp=document.getElementById('ctrlPause');if(ss)ss.style.display=onBoard?'':'none';if(pp)pp.style.display=onBoard?'':'none'}
+    setInterval(toggleControls,400);toggleControls();
+    if(typeof showDice==='function'){
+      const _origShowDice=showDice;
+      window.showDice=function(type,fixedN,cb){
+        const o=document.getElementById('diceOverlay');const face=document.getElementById('diceFace');const num=document.getElementById('diceNum');const lbl=document.getElementById('diceLabel');const cont=document.getElementById('diceContinue');
+        if(!o||!face){return _origShowDice.apply(this,arguments)}
+        o.classList.add('on');o.classList.add('dice-rolling-active');
+        face.textContent='?';if(num)num.textContent='?';if(lbl)lbl.textContent='Rolling '+type+'…';if(cont)cont.style.display='none';
+        const max={D20:20,D6:6,D8:8,D12:12}[type]||20;
+        const tickInt=setInterval(()=>{face.textContent=Math.floor(Math.random()*max)+1},65);
+        setTimeout(()=>{clearInterval(tickInt);o.classList.remove('dice-rolling-active');const n=fixedN!=null?fixedN:Math.floor(Math.random()*max)+1;face.textContent=n;if(num)num.textContent=n;if(state.bb){state.bb.rollHistory=[{n,type},...(state.bb.rollHistory||[]).slice(0,2)];updateRollHistoryUI()}cb(n)},1100);
+      };
+    }
+    function updateRollHistoryUI(){let el=document.getElementById('rollHistory');if(!el){el=document.createElement('div');el.id='rollHistory';el.className='roll-history';document.body.appendChild(el)}const hist=state.bb&&state.bb.rollHistory?state.bb.rollHistory:[];const onBoard=!!document.querySelector('#bbattle.on');if(hist.length===0||!onBoard){el.classList.remove('show');return}el.innerHTML='🎲 LAST ROLLS '+hist.map(r=>'<span>'+r.type+':'+r.n+'</span>').join('');el.classList.add('show')}
+    setInterval(updateRollHistoryUI,500);
+    const _origRefresh=refreshBoard;
+    window.refreshBoard=function(){_origRefresh.apply(this,arguments);injectEndTurnCard()};
+    function injectEndTurnCard(){
+      const hand=document.getElementById('bbHand');if(!hand)return;
+      const orig=document.getElementById('bbEndDeploy');if(orig)orig.style.display='none';
+      let card=hand.querySelector('.end-turn-card');
+      const isPlayerDeploy=state.bb&&state.bb.whoseTurn==='ply'&&state.bb.phase==='deploy';
+      if(!card){card=document.createElement('button');card.className='bb-hand-card end-turn-card';card.innerHTML='<div class="icon">⏭</div><div class="label">END<br>TURN</div>';card.onclick=()=>{if(typeof endDeployPhase==='function')endDeployPhase()};hand.appendChild(card)}
+      card.style.display=isPlayerDeploy?'':'none';card.disabled=!isPlayerDeploy;
+    }
+    if(typeof BOSSES!=='undefined'&&Array.isArray(BOSSES)&&BOSSES.length>0){
+      const home=document.getElementById('home');
+      if(home&&!home.querySelector('.tb-story-btn')){const btn=document.createElement('button');btn.className='menu-btn tb-story-btn';btn.innerHTML='<span class="ico">⚔️</span><span class="lbl">1V1 CAMPAIGN<span class="sub">'+BOSSES.length+' boss duels</span></span><span class="arr">›</span>';btn.onclick=showTbStoryModal;home.appendChild(btn)}
+    }
+    function showTbStoryModal(){
+      const ov=document.createElement('div');ov.id='tbStoryModal';
+      ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9000;display:flex;flex-direction:column;align-items:center;padding:20px;padding-top:max(40px,calc(env(safe-area-inset-top) + 30px));overflow-y:auto';
+      ov.innerHTML='<div style="color:#ffcb05;font-family:Black Ops One,cursive;font-size:20px;margin-bottom:8px;letter-spacing:2px;text-align:center">⚔️ 1V1 CAMPAIGN</div><div style="color:rgba(255,255,255,.7);font-family:Black Ops One,cursive;font-size:11px;margin-bottom:16px;text-align:center;letter-spacing:.5px">Turn battle vs each boss\'s signature team</div>';
+      BOSSES.forEach(b=>{const card=document.createElement('button');card.style.cssText='width:100%;max-width:400px;margin-bottom:8px;padding:12px;background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--bdr);border-radius:10px;color:#fff;font-family:Black Ops One,cursive;cursor:pointer;display:flex;align-items:center;gap:10px;text-align:left;letter-spacing:.5px';card.innerHTML='<span style="font-size:1.8rem">'+(b.ico||'⚔')+'</span><div style="flex:1"><div style="font-size:13px;color:#ffcb05">'+b.n+'</div><div style="font-size:9px;opacity:.75;margin-top:2px">'+(b.desc||'Boss duel')+'</div></div><span style="color:#ffcb05;font-size:18px">›</span>';card.onclick=()=>{ov.remove();startStoryTb(b.id)};ov.appendChild(card)});
+      const close=document.createElement('button');close.textContent='✕ CLOSE';close.style.cssText='margin-top:14px;padding:10px 24px;background:rgba(255,80,80,.2);border:1px solid var(--red);color:#fff;font-family:Black Ops One,cursive;cursor:pointer;border-radius:8px;font-size:12px;letter-spacing:1px';close.onclick=()=>ov.remove();ov.appendChild(close);document.body.appendChild(ov);
+    }
+    window.startStoryTb=function(bossId){const boss=BOSSES.find(b=>b.id===bossId);if(!boss)return;state.pendingStoryTbBoss=boss;state.storyBoss=boss;if(typeof openSelect==='function')openSelect('tb',bossId)};
+    if(typeof startTurnBattle==='function'){
+      const _origStartTb=startTurnBattle;
+      window.startTurnBattle=function(){
+        const stashed=state.pendingStoryTbBoss;
+        _origStartTb.apply(this,arguments);
+        if(stashed){
+          state.storyBoss=stashed;state.pendingStoryTbBoss=null;
+          const lv=10;const teamIds=stashed.team||[];
+          const foes=teamIds.slice(0,3).map(id=>{const t=ROSTER.find(r=>r.id===id);return t&&typeof buildHero==='function'?buildHero(t,lv):null}).filter(Boolean);
+          if(foes.length>0){state.partyFoe=foes;state.foeActive=0;const tt=document.getElementById('tbTitle');if(tt)tt.textContent='⚔️ '+stashed.n;const tm=document.getElementById('tbMeta');if(tm)tm.textContent=stashed.desc||'Boss duel';if(typeof refreshTb==='function')refreshTb();if(typeof log==='function')log('<b>'+stashed.n+'</b> challenges you to a duel!')}
+        }
+      };
+    }
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+
+<!-- v4 — compact home + deck filters -->
+<style>
+#home.on{display:grid!important;grid-template-columns:1fr 1fr!important;gap:6px;padding:10px 12px 14px;align-content:start;overflow-y:auto}
+#home > .launcher-back,#home > img,#home > .logo-main,#home > .logo-sub,#home > .logo-tag,#home > .shield,#home > .pokeball,#home > .mode-pill{grid-column:1/-1}
+#home > .mode-pill{display:none!important}
+#home > img{max-height:54px!important;margin:2px auto!important;max-width:80%}
+#home > .logo-main{font-size:1.5rem!important;letter-spacing:3px!important;margin:0!important;line-height:1;text-align:center}
+#home > .logo-sub{font-size:.85rem!important;letter-spacing:5px!important;margin:0!important;line-height:1;text-align:center}
+#home > .logo-tag{font-size:.55rem!important;letter-spacing:1.5px!important;margin:2px 0 6px!important;text-align:center}
+#home > .menu-btn{width:auto!important;max-width:none!important;min-height:auto!important;padding:9px 8px!important;margin:0!important;font-size:.7rem!important;gap:6px!important;letter-spacing:.5px!important;display:flex!important;align-items:center}
+#home > .menu-btn .ico{font-size:1.2rem!important;width:24px!important;flex-shrink:0;text-align:center}
+#home > .menu-btn .lbl{font-size:.65rem!important;line-height:1.1!important;flex:1;min-width:0;overflow:hidden}
+#home > .menu-btn .sub{font-size:.5rem!important;letter-spacing:0!important;margin-top:1px!important;display:block;opacity:.7}
+#home > .menu-btn .arr{display:none!important}
+@media(max-height:680px){
+  #home > img{max-height:40px!important}
+  #home > .logo-main{font-size:1.2rem!important}
+  #home > .logo-sub{font-size:.75rem!important}
+  #home > .logo-tag{display:none!important}
+  #home > .menu-btn{padding:7px 6px!important;font-size:.6rem!important}
+  #home > .menu-btn .ico{font-size:1rem!important;width:20px!important}
+  #home > .menu-btn .sub{display:none!important}
+}
+.select-filters{padding:6px 10px;background:rgba(0,0,0,.4);border-bottom:1px solid var(--bdr)}
+.select-filters .filter-row{display:flex;gap:4px;margin-bottom:4px;align-items:center;flex-wrap:wrap}
+.select-filters .filter-row:last-child{margin-bottom:0}
+.select-filters .filter-label{font-family:'Black Ops One',cursive;font-size:9px;color:var(--gold);letter-spacing:1px;margin-right:4px;flex-shrink:0;min-width:42px}
+.filter-chip{padding:3px 8px;background:rgba(255,255,255,.05);border:1px solid var(--bdr);border-radius:12px;color:var(--soft);font-family:'Black Ops One',cursive;font-size:9px;cursor:pointer;letter-spacing:.5px;text-transform:uppercase}
+.filter-chip:active{transform:scale(.94)}
+.filter-chip.active{background:var(--gold);color:#000;border-color:var(--gold)}
+.filter-chip.clear{background:rgba(220,38,38,.15);border-color:var(--red);color:#fff}
+</style>
+<script>
+(function(){
+  function init(){
+    if(typeof renderSelect!=='function'||typeof ROSTER==='undefined'){setTimeout(init,150);return}
+    if(window._v4Inited)return;window._v4Inited=true;
+    let activeFilters={types:[],elixirs:[]};
+    function buildFilterUI(){const grid=document.getElementById('selectGrid');if(!grid||document.getElementById('selectFilters'))return;const types=[...new Set(ROSTER.map(c=>c.t).filter(Boolean))].sort();const elixirs=[...new Set(ROSTER.map(c=>c.elixir).filter(e=>e!=null))].sort((a,b)=>a-b);const fil=document.createElement('div');fil.id='selectFilters';fil.className='select-filters';let html='<div class="filter-row"><span class="filter-label">TYPE</span>';types.forEach(t=>{html+='<button class="filter-chip" data-filter="type" data-val="'+t+'">'+t+'</button>'});html+='</div><div class="filter-row"><span class="filter-label">ELIXIR</span>';elixirs.forEach(e=>{html+='<button class="filter-chip" data-filter="elixir" data-val="'+e+'">'+e+'</button>'});html+='<button class="filter-chip clear" id="filterClear">✕ CLEAR</button></div>';fil.innerHTML=html;grid.parentNode.insertBefore(fil,grid);fil.addEventListener('click',e=>{const t=e.target.closest('.filter-chip');if(!t)return;if(t.id==='filterClear'){activeFilters={types:[],elixirs:[]};fil.querySelectorAll('.filter-chip.active').forEach(c=>c.classList.remove('active'))}else{t.classList.toggle('active');const fi=t.dataset.filter;const val=t.dataset.val;if(fi==='type'){if(t.classList.contains('active'))activeFilters.types.push(val);else activeFilters.types=activeFilters.types.filter(x=>x!==val)}else if(fi==='elixir'){const ev=parseInt(val);if(t.classList.contains('active'))activeFilters.elixirs.push(ev);else activeFilters.elixirs=activeFilters.elixirs.filter(x=>x!==ev)}}applyFilters()})}
+    function applyFilters(){const f=activeFilters;const cards=document.querySelectorAll('#selectGrid .hero-card');const noFilter=f.types.length===0&&f.elixirs.length===0;cards.forEach(card=>{if(noFilter){card.style.display='';return}const nameEl=card.querySelector('.name');if(!nameEl){card.style.display='';return}const r=ROSTER.find(x=>x.n===nameEl.textContent);if(!r){card.style.display='';return}let show=true;if(f.types.length>0&&!f.types.includes(r.t))show=false;if(f.elixirs.length>0&&!f.elixirs.includes(r.elixir))show=false;card.style.display=show?'':'none'})}
+    const _origRender=renderSelect;
+    window.renderSelect=function(){_origRender.apply(this,arguments);buildFilterUI();applyFilters()};
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+
+<!-- FX FIX: dice settles flat, no duplicate number, sprite stays -->
+<style>
+.dice-num{display:none!important}
+@keyframes diceRoll{0%{transform:rotateX(0) rotateY(0)}40%{transform:rotateX(180deg) rotateY(180deg)}100%{transform:rotateX(0) rotateY(360deg)}}
+@keyframes diceSpin{0%{transform:rotateX(0) rotateY(0)}25%{transform:rotateX(180deg) rotateY(90deg)}50%{transform:rotateX(360deg) rotateY(180deg)}75%{transform:rotateX(540deg) rotateY(270deg)}100%{transform:rotateX(720deg) rotateY(360deg)}}
+.dice-rolling-active .dice-cube{animation:diceSpin 1s linear infinite!important}
+.dice-rolling-active .dice-face{background:linear-gradient(135deg,#ffcb05,#ff6b00)!important;color:#000!important;text-shadow:0 0 10px rgba(255,255,255,.6);box-shadow:0 0 30px rgba(255,203,5,.8),inset 0 0 20px rgba(0,0,0,.25)!important;border-color:#fff!important}
+.tb-sprite{position:absolute!important}
+.tb-sprite > .fx-blast,.tb-sprite > .fx-heal{display:none!important}
+</style>
+<script>
+(function(){
+  function init(){
+    if(typeof runAction!=='function'||typeof state==='undefined'){setTimeout(init,200);return}
+    if(window._fxFixInited)return;window._fxFixInited=true;
+    const _wRA=runAction;
+    window.runAction=async function(att,def,move,side){
+      const oS=side==='ply'?'foe':'ply';
+      const oSpr=document.getElementById(oS+'Sprite');
+      const sSpr=document.getElementById(side+'Sprite');
+      if(oSpr&&oSpr.style.position)oSpr.style.position='';
+      if(sSpr&&sSpr.style.position)sSpr.style.position='';
+      if(move&&!move.heal&&oSpr){
+        const t=(move.t||'').toLowerCase();
+        const colors={fire:'#ff4500',mage:'#7c3aed',ice:'#22d3ee',water:'#3b82f6',electric:'#fbbf24',archer:'#22c55e',beast:'#f97316',grass:'#22c55e',psychic:'#a855f7',ground:'#a16207',flying:'#06b6d4',rock:'#71717a',ghost:'#6366f1',dragon:'#dc2626',steel:'#71717a',poison:'#a855f7',dark:'#4c1d95',fairy:'#ec4899',tech:'#fbbf24',mutant:'#ec4899',cosmic:'#22d3ee',symbiote:'#dc2626',soldier:'#2563eb',brawler:'#ff6b35',sword:'#3b82f6',zoner:'#10b981',speedster:'#fbbf24',magic:'#a855f7',trickster:'#ec4899',knight:'#9ca3af',air:'#06b6d4',building:'#a16207'};
+        const c=colors[t]||'#ff4500';
+        const r=oSpr.getBoundingClientRect();
+        if(r.width&&r.height){const blast=document.createElement('div');blast.style.cssText='position:fixed;left:'+(r.left-12)+'px;top:'+(r.top-12)+'px;width:'+(r.width+24)+'px;height:'+(r.height+24)+'px;border-radius:50%;pointer-events:none;animation:fx-blast .7s ease-out forwards;z-index:50;background:radial-gradient(circle,'+c+'cc,transparent 65%);box-shadow:0 0 30px '+c+',inset 0 0 20px '+c;document.body.appendChild(blast);setTimeout(()=>{if(blast.parentNode)blast.remove()},750)}
+      }
+      if(move&&move.heal&&sSpr){
+        const r=sSpr.getBoundingClientRect();
+        if(r.width&&r.height){const heal=document.createElement('div');heal.style.cssText='position:fixed;left:'+(r.left-10)+'px;top:'+(r.top-10)+'px;width:'+(r.width+20)+'px;height:'+(r.height+20)+'px;border-radius:50%;pointer-events:none;animation:fx-heal 1s ease-out forwards;z-index:50;background:radial-gradient(circle,rgba(34,197,94,.65),transparent 70%);box-shadow:0 0 28px rgba(34,197,94,.85)';document.body.appendChild(heal);setTimeout(()=>{if(heal.parentNode)heal.remove()},1050)}
+      }
+      return _wRA.apply(this,arguments);
+    };
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+
+<!-- v5 — pre-game deck picker + reposition 1V1 campaign -->
+<style>
+.dp-modal{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9000;display:flex;flex-direction:column;align-items:center;padding:20px;padding-top:max(40px,calc(env(safe-area-inset-top) + 30px));overflow-y:auto;font-family:'Black Ops One',cursive}
+.dp-deck{width:100%;max-width:400px;margin-bottom:8px;padding:12px;background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--gold,#ffcb05);border-radius:10px;color:#fff;font-family:'Black Ops One',cursive;cursor:pointer;text-align:left;letter-spacing:.5px}
+.dp-deck:active{transform:scale(.97)}
+.dp-deck .nm{font-size:13px;color:#ffcb05}
+.dp-deck .sm{font-size:9px;opacity:.75;margin-top:3px}
+.dp-new{width:100%;max-width:400px;margin-bottom:8px;padding:12px;background:linear-gradient(135deg,#16a34a,#15803d);border:1px solid #22c55e;border-radius:10px;color:#fff;font-family:'Black Ops One',cursive;cursor:pointer;font-size:13px;letter-spacing:1px}
+.dp-close{margin-top:6px;padding:8px 20px;background:rgba(255,80,80,.15);border:1px solid var(--red,#ee1515);color:#fff;font-family:'Black Ops One',cursive;cursor:pointer;border-radius:8px;font-size:11px;letter-spacing:1px}
+</style>
+<script>
+(function(){function init(){if(typeof openSelect!=='function'||typeof state==='undefined'){setTimeout(init,150);return}if(window._deckPickerInited)return;window._deckPickerInited=true;function reposition(){const home=document.getElementById('home');if(!home)return;const tbStoryBtn=home.querySelector('.tb-story-btn');if(!tbStoryBtn)return;const qbbBtn=Array.from(home.querySelectorAll('button.menu-btn')).find(b=>!b.classList.contains('tb-story-btn')&&((b.getAttribute('onclick')||'').includes('quick-bb')||(b.textContent||'').includes('QUICK BOARD')));if(qbbBtn&&qbbBtn.previousSibling!==tbStoryBtn){qbbBtn.parentNode.insertBefore(tbStoryBtn,qbbBtn)}}setTimeout(reposition,400);setInterval(reposition,2000);const _origOpenSelect=openSelect;window.openSelect=function(mode,bossId){const decks=(typeof getDecks==='function')?(getDecks(mode)||[]):[];const valid=[];decks.forEach((d,idx)=>{if(d&&d.members&&d.members.length>0)valid.push({deck:d,idx})});if(valid.length===0)return _origOpenSelect.apply(this,arguments);showDeckPicker(mode,bossId,valid,_origOpenSelect)};function showDeckPicker(mode,bossId,validDecks,origOpen){const ov=document.createElement('div');ov.id='deckPickerModal';ov.className='dp-modal';const modeLabel=mode==='tb'?'⚔️ TURN BATTLE':'🃏 BOARD BATTLE';const bossInfo=bossId&&typeof BOSSES!=='undefined'?BOSSES.find(b=>b.id===bossId):null;let html='<div style="color:#ffcb05;font-size:18px;letter-spacing:2px;margin-bottom:6px;text-align:center">📋 PICK YOUR DECK</div>';html+='<div style="color:rgba(255,255,255,.7);font-size:11px;margin-bottom:14px;text-align:center;letter-spacing:1px">'+modeLabel+(bossInfo?' · vs '+bossInfo.n:'')+'</div>';validDecks.forEach((item,i)=>{const d=item.deck;const summary=(typeof summarizeDeck==='function')?summarizeDeck(d.members):(d.members.length+' cards');html+='<button class="dp-deck" data-real-idx="'+item.idx+'"><div class="nm">'+(d.name||'Saved Deck '+(i+1))+'</div><div class="sm">'+summary+'</div></button>'});html+='<button class="dp-new">🆕 BUILD NEW DECK</button><button class="dp-close">✕ CANCEL</button>';ov.innerHTML=html;document.body.appendChild(ov);ov.querySelectorAll('.dp-deck').forEach(b=>{b.onclick=()=>{const realIdx=parseInt(b.dataset.realIdx);const allDecks=(typeof getDecks==='function')?getDecks(mode):[];const deck=allDecks[realIdx];if(!deck||!deck.members){ov.remove();return}ov.remove();origOpen.call(window,mode,bossId);try{selectingTeam=deck.members.filter(id=>ROSTER.find(r=>r.id===id))}catch(e){}setTimeout(()=>{if(typeof startBattle==='function')startBattle()},150)}});ov.querySelector('.dp-new').onclick=()=>{ov.remove();origOpen.call(window,mode,bossId)};ov.querySelector('.dp-close').onclick=()=>ov.remove()}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init()})();
+</script>
+
+<!-- v6 — spell sync -->
+<script>
+(function(){function init(){if(typeof ROSTER==='undefined'||typeof refreshBoard!=='function'){setTimeout(init,150);return}if(window._spellSyncInited)return;window._spellSyncInited=true;const title=(document.title||'').toLowerCase();const game=title.includes('pokemon')?'pokemon':title.includes('marvel')?'marvel':title.includes('smash')?'smash':'clash';const SP={'fireball':'damage','lightning':'damage','arrows':'splash','tornado':'pull','rocket':'rocket','freeze':'freeze','earthquake':'splash','rage':'buff','log':'pull','snowball':'damage','zap':'damage','poison':'splash','heal spell':'heal','mirror':'damage','graveyard':'summon','goblin barrel':'summon','inferno cast':'damage','clone':'buff','heal':'heal'};const SW={'fireball':3,'lightning':3,'arrows':1,'tornado':0,'rocket':5,'freeze':0,'earthquake':2,'rage':0,'log':1,'snowball':1,'zap':1,'poison':1,'heal spell':2,'mirror':2,'graveyard':0,'goblin barrel':0,'inferno cast':4,'clone':0,'heal':2};const NS={pokemon:[{id:'spl_thunder',n:'THUNDERBOLT',fb:'⚡',t:'electric',elixir:3,hp:80,atk:60,def:50,spd:99,spdIcon:'⚡',isSpell:true,spellType:'damage',spellW:3,moves:['Thunder']},{id:'spl_potion',n:'HYPER POTION',fb:'🧪',t:'normal',elixir:2,hp:80,atk:30,def:50,spd:60,spdIcon:'🧍',isSpell:true,spellType:'heal',spellW:2,moves:['Heal Pulse']},{id:'spl_roar',n:'DRAGON ROAR',fb:'🐉',t:'flying',elixir:1,hp:80,atk:30,def:30,spd:90,spdIcon:'⚡',isSpell:true,spellType:'pull',spellW:0,moves:['Push Back']},{id:'spl_quake',n:'EARTHQUAKE',fb:'🌋',t:'ground',elixir:4,hp:80,atk:60,def:50,spd:60,spdIcon:'🐢',isSpell:true,spellType:'splash',spellW:2,moves:['Quake']}],marvel:[{id:'spl_repulsor',n:'STARK REPULSOR',fb:'💥',t:'tech',elixir:3,hp:80,atk:60,def:50,spd:99,spdIcon:'⚡',isSpell:true,spellType:'damage',spellW:3,moves:['Beam']},{id:'spl_web',n:'WEB SHOT',fb:'🕸️',t:'tech',elixir:2,hp:80,atk:30,def:50,spd:80,spdIcon:'⚡',isSpell:true,spellType:'freeze',spellW:0,moves:['Web Snare']},{id:'spl_heal',n:'HEALING FACTOR',fb:'💚',t:'mutant',elixir:2,hp:80,atk:30,def:50,spd:60,spdIcon:'🧍',isSpell:true,spellType:'heal',spellW:2,moves:['Heal']},{id:'spl_bomb',n:'PUMPKIN BOMB',fb:'🎃',t:'tech',elixir:4,hp:80,atk:60,def:50,spd:80,spdIcon:'🧍',isSpell:true,spellType:'splash',spellW:2,moves:['Bomb']}],smash:[{id:'spl_smashball',n:'SMASH BALL',fb:'💎',t:'magic',elixir:4,hp:80,atk:80,def:50,spd:99,spdIcon:'⚡',isSpell:true,spellType:'damage',spellW:4,moves:['Final Smash']},{id:'spl_pokeball',n:'POKE BALL',fb:'🔴',t:'magic',elixir:2,hp:80,atk:30,def:50,spd:80,spdIcon:'⚡',isSpell:true,spellType:'splash',spellW:1,moves:['Random']},{id:'spl_heart',n:'HEART CONTAINER',fb:'❤️',t:'magic',elixir:2,hp:80,atk:30,def:50,spd:60,spdIcon:'🧍',isSpell:true,spellType:'heal',spellW:2,moves:['Heal']},{id:'spl_bumper',n:'BUMPER',fb:'🎾',t:'speedster',elixir:1,hp:80,atk:30,def:30,spd:90,spdIcon:'⚡',isSpell:true,spellType:'pull',spellW:0,moves:['Knockback']}]};function syncSpells(){if(!Array.isArray(ROSTER))return;ROSTER.forEach(c=>{if(c.isSpell||!c.n)return;const n=c.n.toLowerCase();for(const k in SP){if(n.includes(k)){c.isSpell=true;c.spellType=SP[k];c.spellW=SW[k];break}}});if(game!=='clash'&&NS[game]){NS[game].forEach(s=>{if(!ROSTER.find(c=>c.id===s.id))ROSTER.push(s)})}}syncSpells();const _origRefresh=refreshBoard;window.refreshBoard=function(){syncSpells();_origRefresh.apply(this,arguments)};setInterval(syncSpells,2000)}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init()})();
+</script>
+<!-- v7 — fix spell targeting + spell card description + type fallbacks -->
+<style>
+.bb-hand-card.is-spell .uw-mini{background:rgba(124,58,237,.25)!important;border:1px solid #a855f7!important;border-radius:6px;padding:1px 3px;text-align:center}
+.bb-hand-card.is-spell{box-shadow:0 0 8px rgba(168,85,247,.5),inset 0 0 6px rgba(168,85,247,.2)}
+@keyframes spell-flash{0%{opacity:0;transform:scale(.5)}40%{opacity:1;transform:scale(1.2)}100%{opacity:0;transform:scale(1.5)}}
+</style>
+<script>
+(function(){
+  function init(){
+    if(typeof state==='undefined'||typeof refreshBoard!=='function'||typeof ROSTER==='undefined'){setTimeout(init,150);return}
+    if(window._v7Inited)return;window._v7Inited=true;
+    const FBI={electric:'⚡',normal:'⭐',flying:'🪶',ground:'🌋',fire:'🔥',water:'💧',grass:'🌿',ice:'❄️',psychic:'🔮',dark:'🌑',rock:'🪨',ghost:'👻',dragon:'🐉',steel:'⚙️',poison:'☠️',fairy:'🧚',fighting:'💪',bug:'🐛',tech:'🔧',mutant:'🧬',cosmic:'✨',soldier:'🪖',magic:'🔮',speedster:'💨',symbiote:'🖤',mystic:'🔮',brawler:'👊',sword:'⚔️',zoner:'🏹',trickster:'🎭',knight:'🛡️',archer:'🏹',mage:'🔮',beast:'🐺',air:'🦅',building:'🏛️'};
+    const FBN={electric:'ELECTRIC',normal:'NORMAL',flying:'FLYING',ground:'GROUND',fire:'FIRE',water:'WATER',grass:'GRASS',ice:'ICE',psychic:'PSYCHIC',dark:'DARK',rock:'ROCK',ghost:'GHOST',dragon:'DRAGON',steel:'STEEL',poison:'POISON',fairy:'FAIRY',fighting:'FIGHT',bug:'BUG',tech:'TECH',mutant:'MUTANT',cosmic:'COSMIC',soldier:'SOLDIER',magic:'MAGIC',speedster:'SPEED',symbiote:'SYMBIOTE',mystic:'MYSTIC',brawler:'BRAWLER',sword:'SWORD',zoner:'ZONER',trickster:'TRICK',knight:'KNIGHT',archer:'ARCHER',mage:'MAGE',beast:'BEAST',air:'AIR',building:'BUILDING'};
+    if(typeof TYPE_ICONS!=='undefined'){for(const k in FBI)if(!TYPE_ICONS[k])TYPE_ICONS[k]=FBI[k]}
+    if(typeof TYPE_NAMES!=='undefined'){for(const k in FBN)if(!TYPE_NAMES[k])TYPE_NAMES[k]=FBN[k]}
+    const SPELL_DESC={damage:'⚔ DEAL DMG',rocket:'🚀 BIG DMG',lightning:'⚡ CHAIN DMG',splash:'💥 LANE AOE',freeze:'🧊 FREEZE 2T',pull:'🌪 PUSH BACK',heal:'💚 HEAL ALLY',buff:'🔥 RAGE BUFF',summon:'💀 SUMMON'};
+    let unitMap=[];
+    function rebuildUnitMap(){
+      unitMap.length=0;const bb=state.bb;if(!bb||!bb.zones||!bb.neutral)return;
+      [0,1].forEach(l=>(bb.zones.foe[0][l]||[]).forEach(u=>unitMap.push({u,lane:l})));
+      [0,1].forEach(l=>(bb.zones.foe[1][l]||[]).forEach(u=>unitMap.push({u,lane:l})));
+      [0,1].forEach(l=>(bb.neutral[l]||[]).forEach(u=>unitMap.push({u,lane:l})));
+      [0,1].forEach(l=>(bb.zones.ply[1][l]||[]).forEach(u=>unitMap.push({u,lane:l})));
+      [0,1].forEach(l=>(bb.zones.ply[0][l]||[]).forEach(u=>unitMap.push({u,lane:l})));
+      document.querySelectorAll('#bbBoard .bb-unit').forEach((el,i)=>{el.dataset.unitIdx=i});
+    }
+    function findClickedTarget(el){
+      const bb=state.bb;
+      if(el.classList.contains('bb-king'))return{type:'king',side:el.classList.contains('foe')?'foe':'ply'};
+      if(el.classList.contains('bb-tower')){const row=el.parentElement;const idx=Array.from(row.children).indexOf(el);return{type:'tower',lane:idx,side:el.classList.contains('foe')?'foe':'ply'}}
+      if(el.classList.contains('bb-unit')){const i=parseInt(el.dataset.unitIdx);if(!isNaN(i)&&unitMap[i])return{type:'unit',unit:unitMap[i].u,lane:unitMap[i].lane,side:unitMap[i].u.side}}
+      return null;
+    }
+    function flashAt(el,type){
+      const colors={damage:'rgba(220,38,38,.85)',lightning:'rgba(255,215,0,.95)',rocket:'rgba(220,38,38,.95)',splash:'rgba(245,101,39,.85)',freeze:'rgba(34,211,238,.85)',pull:'rgba(168,85,247,.85)',heal:'rgba(34,197,94,.85)',buff:'rgba(255,215,0,.7)',summon:'rgba(120,120,120,.7)'};
+      const fx=document.createElement('div');const r=el.getBoundingClientRect();
+      fx.style.cssText='position:fixed;left:'+r.left+'px;top:'+r.top+'px;width:'+r.width+'px;height:'+r.height+'px;pointer-events:none;z-index:9999;animation:spell-flash 0.7s ease-out forwards;border-radius:14px;background:radial-gradient(circle,'+(colors[type]||colors.damage)+',transparent 60%)';
+      document.body.appendChild(fx);setTimeout(()=>{if(fx.parentNode)fx.remove()},750);
+    }
+    function removeDeadUnit(unit){
+      const bb=state.bb;const arrs=[bb.neutral[0],bb.neutral[1],bb.zones.foe[0][0],bb.zones.foe[0][1],bb.zones.foe[1][0],bb.zones.foe[1][1],bb.zones.ply[0][0],bb.zones.ply[0][1],bb.zones.ply[1][0],bb.zones.ply[1][1]];
+      arrs.forEach(arr=>{if(!arr)return;const i=arr.indexOf(unit);if(i>=0)arr.splice(i,1)});
+    }
+    async function applyEffect(card,tgt){
+      const bb=state.bb;const w=card.spellW||2;const log=typeof bbLog==='function'?bbLog:()=>{};
+      switch(card.spellType){
+        case 'damage':case 'rocket':case 'lightning':
+          if(tgt.type==='unit'){tgt.unit.wounds=Math.min(tgt.unit.woundsMax,tgt.unit.wounds+w);bb.dmgDealt=(bb.dmgDealt||0)+w;log('🔥 '+w+'w to '+tgt.unit.n);if(tgt.unit.wounds>=tgt.unit.woundsMax){log('☠ '+tgt.unit.n+' KO!');removeDeadUnit(tgt.unit)}}
+          else if(tgt.type==='tower'){bb.towers[tgt.side][tgt.lane]=Math.max(0,bb.towers[tgt.side][tgt.lane]-w);bb.dmgDealt=(bb.dmgDealt||0)+w;log('💥 Tower hit '+w+'!')}
+          else if(tgt.type==='king'){bb.king[tgt.side]=Math.max(0,bb.king[tgt.side]-w);bb.dmgDealt=(bb.dmgDealt||0)+w;log('💥 KING '+w+'!')}
+          break;
+        case 'splash':
+          if(tgt.type==='unit'){
+            const lane=tgt.lane;const targets=[];
+            (bb.neutral[lane]||[]).forEach(u=>{if(u.side==='foe')targets.push(u)});
+            (bb.zones.foe[0][lane]||[]).forEach(u=>targets.push(u));
+            (bb.zones.foe[1][lane]||[]).forEach(u=>targets.push(u));
+            targets.forEach(u=>{if(u.wounds<u.woundsMax){u.wounds=Math.min(u.woundsMax,u.wounds+w);bb.dmgDealt=(bb.dmgDealt||0)+w}});
+            log('💥 Lane '+'AB'[lane]+' splash '+w+'w!');
+            targets.forEach(u=>{if(u.wounds>=u.woundsMax)removeDeadUnit(u)});
+          }else if(tgt.type==='tower'){bb.towers[tgt.side][tgt.lane]=Math.max(0,bb.towers[tgt.side][tgt.lane]-w);log('💥 Tower splash')}
+          break;
+        case 'freeze':
+          if(tgt.type==='unit'){if(!bb.statusEffects)bb.statusEffects=[];bb.statusEffects.push({type:'frozen',target:tgt.unit,ttl:2});log('🧊 '+tgt.unit.n+' frozen 2T!')}
+          break;
+        case 'pull':
+          if(tgt.type==='unit'){let moved=false;for(let l=0;l<2;l++){const i=(bb.neutral[l]||[]).indexOf(tgt.unit);if(i>=0){bb.neutral[l].splice(i,1);bb.zones.foe[1][l].push(tgt.unit);log('🌪 '+tgt.unit.n+' pushed!');moved=true;break}}if(!moved)log('🌪 '+tgt.unit.n+' staggered!')}
+          break;
+        case 'heal':
+          if(tgt.type==='unit'){tgt.unit.wounds=Math.max(0,tgt.unit.wounds-w);log('💚 '+tgt.unit.n+' healed '+w+'w!')}
+          else if(tgt.type==='tower'){bb.towers.ply[tgt.lane]=Math.min(5,bb.towers.ply[tgt.lane]+w);log('💚 Tower healed!')}
+          else if(tgt.type==='king'){bb.king.ply=Math.min(8,bb.king.ply+w);log('💚 King healed!')}
+          break;
+        case 'buff':
+          if(tgt.type==='unit'){if(!bb.statusEffects)bb.statusEffects=[];bb.statusEffects.push({type:'rage',target:tgt.unit,ttl:2});log('🔥 '+tgt.unit.n+' RAGE!')}
+          break;
+        case 'summon':
+          {const lane=tgt.lane||0;if(typeof buildUnit==='function'){const skel=buildUnit({id:'sum_'+Date.now(),n:'Summon',fb:'💀',t:'beast',hp:80,atk:50,def:40,spd:80,elixir:0,spdIcon:'⚡',moves:[]},'ply',lane);bb.zones.ply[1][lane].push(skel);log('💀 Summoned ally!')}}
+          break;
+      }
+      if(typeof sleep==='function')await sleep(400);
+    }
+    async function myCastSpell(card,el,idx){
+      const bb=state.bb;if(bb.busy)return;
+      if(bb.elixir<card.elixir){if(typeof bbLog==='function')bbLog('⚡ Need '+card.elixir+' elixir');return}
+      bb.busy=true;bb.elixir-=card.elixir;
+      bb.hand.splice(idx,1);bb.selectedCard=null;
+      bb.deploysCount=(bb.deploysCount||0)+1;
+      if(typeof bbLog==='function')bbLog('✨ <b>'+card.n+'</b> cast!');
+      if(typeof sfxDeploy==='function')sfxDeploy();
+      try{flashAt(el,card.spellType)}catch(e){}
+      const tgt=findClickedTarget(el);
+      if(tgt)await applyEffect(card,tgt);
+      const tip=document.getElementById('spellTip');if(tip)tip.remove();
+      bb.busy=false;
+      if(typeof drawCards==='function')drawCards('ply',1);
+      if(typeof checkBoardWin==='function'&&checkBoardWin())return;
+      refreshBoard();
+    }
+    function decorateSpellCards(){
+      document.querySelectorAll('#bbHand .bb-hand-card').forEach((cardEl,idx)=>{
+        const id=state.bb&&state.bb.hand?state.bb.hand[idx]:null;
+        const card=id?ROSTER.find(r=>r.id===id):null;
+        if(!card||!card.isSpell)return;
+        cardEl.classList.add('is-spell');
+        const uwMini=cardEl.querySelector('.uw-mini');
+        if(uwMini){
+          const desc=SPELL_DESC[card.spellType]||'✨ SPELL';
+          const w=card.spellW||0;
+          const wText=w>0?(' '+w+'w'):'';
+          uwMini.innerHTML='<span style="color:#fbbf24;font-size:8px;letter-spacing:.3px;font-weight:700">'+desc+wText+'</span>';
+        }
+      });
+    }
+    const _origRefresh=refreshBoard;
+    window.refreshBoard=function(){
+      _origRefresh.apply(this,arguments);
+      rebuildUnitMap();
+      decorateSpellCards();
+      const idx=state.bb&&state.bb.selectedCard;
+      if(idx!=null&&state.bb&&state.bb.hand){
+        const card=ROSTER.find(r=>r.id===state.bb.hand[idx]);
+        if(card&&card.isSpell){
+          document.querySelectorAll('.spell-target').forEach(el=>{
+            el.onclick=(e)=>{e.stopPropagation();myCastSpell(card,el,idx)};
+          });
+        }
+      }
+    };
+    rebuildUnitMap();decorateSpellCards();
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+<script src="./_expansion-pack.js"></script>
+</body>
+</html>

@@ -278,6 +278,22 @@
 .exp-save-btn{padding:10px 14px;background:linear-gradient(135deg,#16a34a,#15803d);border:1px solid #22c55e;color:#fff;font-family:'Inter',sans-serif;font-weight:800;border-radius:8px;cursor:pointer;letter-spacing:.5px;font-size:.78rem}
 .exp-save-btn:active{transform:scale(.96)}
 .exp-save-btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* 7. Randomize button + team stats panel (expansion adv/lane pick) */
+/* Pick screen start-bar wraps to fit 4 buttons on narrow phones */
+#advPick .start-bar,#lanePick .start-bar{flex-wrap:wrap!important;gap:6px!important;padding:10px!important}
+#advPick .start-bar > *,#lanePick .start-bar > *{flex:1 1 auto;min-width:80px}
+#advPick .start-bar .start-btn,#lanePick .start-bar .start-btn{flex:1 1 100%;min-width:0;order:99}
+.exp-rnd-btn{padding:10px 14px;background:linear-gradient(135deg,#7c3aed,#3b82f6);border:1px solid #a855f7;color:#fff;font-family:'Inter',sans-serif;font-weight:800;border-radius:8px;cursor:pointer;letter-spacing:.5px;font-size:.78rem;display:flex;align-items:center;justify-content:center;gap:6px}
+.exp-rnd-btn:active{transform:scale(.96)}
+.exp-team-stats{padding:8px 12px;background:linear-gradient(135deg,rgba(255,203,5,.08),rgba(0,0,0,.3));border-bottom:1px solid var(--bdr);font-family:'Inter',sans-serif;font-size:.7rem;color:var(--soft);letter-spacing:.3px;font-weight:600;display:none}
+.exp-team-stats.on{display:block}
+.exp-team-stats-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.exp-team-stats-stat{display:flex;align-items:center;gap:4px;white-space:nowrap}
+.exp-team-stats-stat b{color:var(--gold);font-weight:800;font-size:.85rem}
+.exp-team-stats-types{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.exp-team-stats-type{padding:2px 7px;background:rgba(255,255,255,.06);border:1px solid var(--bdr);border-radius:8px;font-size:.62rem}
+.exp-team-stats-type b{color:var(--gold);font-weight:800}
 `;
   document.head.appendChild(style);
 
@@ -400,7 +416,7 @@
   <div class="topbar"><button class="back" onclick="goScreen('home')">‹ BACK</button><div class="ttl">PICK YOUR PARTY</div><div class="meta"><span id="advPickCount">0</span>/8</div></div>
   <div class="select-bar"><div class="ct">PARTY: <b id="advPickB">0</b> / 8 — pick 8 for the journey</div></div>
   <div class="page-body"><div class="roster-grid" id="advPickGrid"></div></div>
-  <div class="start-bar"><button class="clear-btn" onclick="advPickClear()">CLEAR</button><button class="exp-save-btn" id="advPickSave" onclick="expSaveDeckBtn('adv')">💾 SAVE AS DECK</button><button class="start-btn" id="advPickStart" disabled onclick="advStart()">▶ START QUEST</button></div>
+  <div class="start-bar"><button class="clear-btn" onclick="advPickClear()">CLEAR</button><button class="exp-rnd-btn" id="advPickRnd" onclick="expRandomize('adv')">🎲 RANDOM</button><button class="exp-save-btn" id="advPickSave" onclick="expSaveDeckBtn('adv')">💾 SAVE AS DECK</button><button class="start-btn" id="advPickStart" disabled onclick="advStart()">▶ START QUEST</button></div>
 </div>
 
 <!-- ============================== ADVENTURE: PLAYING ============================== -->
@@ -486,7 +502,7 @@
   <div class="topbar"><button class="back" onclick="goScreen('home')">‹ BACK</button><div class="ttl">BUILD LANE DECK</div><div class="meta"><span id="lanePickCount">0</span>/6</div></div>
   <div class="select-bar"><div class="ct">DECK: <b id="lanePickB">0</b> / 6 — pick 6 (3 spells included free)</div></div>
   <div class="page-body"><div class="roster-grid" id="lanePickGrid"></div></div>
-  <div class="start-bar"><button class="clear-btn" onclick="lanePickClear()">CLEAR</button><button class="exp-save-btn" id="lanePickSave" onclick="expSaveDeckBtn('lane')">💾 SAVE AS DECK</button><button class="start-btn" id="lanePickStart" disabled onclick="laneStart()">▶ START DUEL</button></div>
+  <div class="start-bar"><button class="clear-btn" onclick="lanePickClear()">CLEAR</button><button class="exp-rnd-btn" id="lanePickRnd" onclick="expRandomize('lane')">🎲 RANDOM</button><button class="exp-save-btn" id="lanePickSave" onclick="expSaveDeckBtn('lane')">💾 SAVE AS DECK</button><button class="start-btn" id="lanePickStart" disabled onclick="laneStart()">▶ START DUEL</button></div>
 </div>
 
 <!-- ============================== LANE: PLAYING ============================== -->
@@ -763,6 +779,82 @@
     else expSaveDeck('lane', lanePickList);
   };
 
+  // === Feature: Randomize button + Live team stats panel ===
+  function expRandomize(mode){
+    _bridgeRosterBosses();
+    var roster = window.ROSTER || [];
+    if(!roster.length){ alert('Roster not loaded yet'); return; }
+    var max = mode==='adv' ? 8 : 6;
+    var pool = roster.slice();
+    for(var i=pool.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=pool[i];pool[i]=pool[j];pool[j]=t; }
+    var picks = pool.slice(0, Math.min(max, pool.length)).map(function(c){return c.id});
+    if(mode==='adv'){
+      advPickList.length = 0;
+      picks.forEach(function(id){ advPickList.push(id); });
+      renderAdvPickRefresh();
+    } else {
+      lanePickList.length = 0;
+      picks.forEach(function(id){ lanePickList.push(id); });
+      renderLanePickRefresh();
+    }
+    if(typeof tone==='function') {
+      tone(523,0.06,'sine',0.08);
+      setTimeout(function(){tone(659,0.06,'sine',0.08)},80);
+      setTimeout(function(){tone(784,0.08,'sine',0.08)},160);
+    }
+  }
+  window.expRandomize = expRandomize;
+
+  function renderExpTeamStats(mode){
+    _bridgeRosterBosses();
+    var roster = window.ROSTER || [];
+    var screenId = mode==='adv' ? 'advPick' : 'lanePick';
+    var screen = document.getElementById(screenId); if(!screen) return;
+    var panelId = 'expTeamStats_' + mode;
+    var panel = document.getElementById(panelId);
+    if(!panel){
+      panel = document.createElement('div');
+      panel.id = panelId;
+      panel.className = 'exp-team-stats';
+      var strip = document.getElementById('expDeckStrip_' + mode);
+      if(strip && strip.parentNode){
+        strip.parentNode.insertBefore(panel, strip.nextSibling);
+      } else {
+        var pageBody = screen.querySelector('.page-body');
+        if(pageBody) screen.insertBefore(panel, pageBody);
+      }
+    }
+    var list = mode==='adv' ? advPickList : lanePickList;
+    if(!list || !list.length){ panel.classList.remove('on'); panel.innerHTML=''; return; }
+    var totalHp=0, totalAtk=0, totalElixir=0, types={};
+    list.forEach(function(id){
+      var c = roster.find(function(r){return r.id===id});
+      if(!c) return;
+      totalHp += (c.hp||0);
+      totalAtk += (c.atk||0);
+      totalElixir += (c.elixir||0);
+      var t = c.t || 'misc';
+      types[t] = (types[t]||0) + 1;
+    });
+    var avgElixir = (totalElixir / list.length).toFixed(1);
+    var typeEmoji = {jedi:'🟦',sith:'🖤',bounty:'🎯',droid:'🤖',empire:'⬜',rebel:'🚀',
+                     guard:'⚡',forward:'🛡',center:'🏔',star:'⭐',legend:'👑',rookie:'🌱',
+                     fire:'🔥',water:'💧',grass:'🌿',electric:'⚡',psychic:'🔮',ice:'❄️',
+                     tech:'🤖',mystic:'🔮',cosmic:'🌌',mutant:'🧬',symbiote:'🕷️',soldier:'🛡',
+                     speedster:'⚡',flying:'🪽',ground:'🌍',magic:'✨','big':'💪'};
+    var typeRows = Object.keys(types).sort(function(a,b){return types[b]-types[a]}).map(function(t){
+      return '<span class="exp-team-stats-type">' + (typeEmoji[t]||'') + ' ' + t + ' <b>' + types[t] + '</b></span>';
+    }).join('');
+    panel.innerHTML = '<div class="exp-team-stats-row">' +
+      '<span class="exp-team-stats-stat">❤️ <b>' + totalHp + '</b> HP</span>' +
+      '<span class="exp-team-stats-stat">⚔ <b>' + totalAtk + '</b> ATK</span>' +
+      '<span class="exp-team-stats-stat">⚡ <b>' + avgElixir + '</b> avg</span>' +
+      '<span class="exp-team-stats-stat">📋 <b>' + list.length + '</b> picked</span>' +
+    '</div>' + (typeRows ? '<div class="exp-team-stats-types">' + typeRows + '</div>' : '');
+    panel.classList.add('on');
+  }
+  window.renderExpTeamStats = renderExpTeamStats;
+
   /* ============================== ADVENTURE BOARD ============================== */
   let advState=null;
   let advPickList=[];
@@ -800,6 +892,7 @@
       grid.appendChild(el);
     });
     renderExpDeckStrip('adv');
+    if(typeof renderExpTeamStats==='function') renderExpTeamStats('adv');
   };
   function renderAdvPickRefresh(){
     $('advPickB').textContent=advPickList.length;$('advPickCount').textContent=advPickList.length;
@@ -807,6 +900,7 @@
     const cards=$('advPickGrid').children;
     const ROSTER=(_bridgeRosterBosses(),window.ROSTER||[]);
     ROSTER.forEach((h,i)=>{cards[i]&&cards[i].classList.toggle('selected',advPickList.includes(h.id))});
+    if(typeof renderExpTeamStats==='function') renderExpTeamStats('adv');
   }
   window.advPickClear = function(){advPickList=[];renderAdvPickRefresh()};
 
@@ -1404,6 +1498,7 @@
       grid.appendChild(el);
     });
     renderExpDeckStrip('lane');
+    if(typeof renderExpTeamStats==='function') renderExpTeamStats('lane');
   };
   function renderLanePickRefresh(){
     $('lanePickB').textContent=lanePickList.length;$('lanePickCount').textContent=lanePickList.length;
@@ -1411,6 +1506,7 @@
     const cards=$('lanePickGrid').children;
     const ROSTER=(_bridgeRosterBosses(),window.ROSTER||[]);
     ROSTER.forEach((h,i)=>{cards[i]&&cards[i].classList.toggle('selected',lanePickList.includes(h.id))});
+    if(typeof renderExpTeamStats==='function') renderExpTeamStats('lane');
   }
   window.lanePickClear = function(){lanePickList=[];renderLanePickRefresh()};
 

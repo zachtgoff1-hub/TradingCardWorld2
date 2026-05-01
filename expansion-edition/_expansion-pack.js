@@ -918,10 +918,18 @@
       var safeFb = (c.fb||'❓').replace(/'/g,'&#39;').replace(/"/g,'&quot;');
       var safeName = (c.n||c.id||'').replace(/'/g,'&#39;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
       var artHtml;
-      if(c.art){
-        artHtml = '<img src="' + c.art + '" alt="' + safeName + '" onerror="this.outerHTML=\'<span class=&quot;emoji&quot;>'+safeFb+'</span>\'">';
-      } else {
-        artHtml = '<span class="emoji">' + (c.fb||'❓') + '</span>';
+      // Prefer the host's artHTML — it handles each game's override system
+      // (POKEMON_OVERRIDES, MARVEL_OVERRIDES, STARWARS_OVERRIDES, NBA_OVERRIDES, dynamic
+      // image loaders, SVG fallbacks, etc.). Fall back to roster .art / .fb only if missing.
+      if(typeof window.artHTML === 'function'){
+        try { artHtml = window.artHTML(c); } catch(e){ artHtml = ''; }
+      }
+      if(!artHtml){
+        if(c.art){
+          artHtml = '<img src="' + c.art + '" alt="' + safeName + '" onerror="this.outerHTML=\'<span class=&quot;emoji&quot;>'+safeFb+'</span>\'">';
+        } else {
+          artHtml = '<span class="emoji">' + (c.fb||'❓') + '</span>';
+        }
       }
       pick.innerHTML = '<div class="ex">' + (c.elixir||0) + '</div><div class="pa">' + artHtml + '</div><div class="nm">' + safeName + '</div><div class="x">✕</div>';
       pick.onclick = function(){

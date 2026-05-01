@@ -9,6 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="NBA Arena">
 <meta name="theme-color" content="#1a0e05">
 <link rel="manifest" href="../manifest.json">
+<link rel="apple-touch-icon" href="../assets/nba-icon.jpg">
 <title>NBA Arena — Full Edition</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
@@ -225,7 +226,7 @@ body{background:radial-gradient(ellipse at top,#3a2418 0%,var(--bg) 60%);color:#
 
 <div class="screen on" id="home">
   <a class="launcher-back" href="../index.html" onclick="var t=this,x=new XMLHttpRequest();try{x.open('HEAD','../index.html',false);x.send();if(x.status>=400)t.href='../launcher.html';}catch(e){}">‹ HUB</a>
-  <div class="shield">🏀</div>
+  <img src="../assets/nba-logo.jpg" alt="NBA" style="display:block;max-width:88%;max-height:90px;margin:8px auto 6px;object-fit:contain;filter:drop-shadow(0 4px 12px rgba(0,0,0,.5))" onerror="this.style.display='none'">
   <div class="logo-main">NBA</div><div class="logo-sub">ARENA</div><div class="logo-tag">FULL EDITION · 1V1 · COURT · GAUNTLET</div>
   <div class="mode-pill">⚔️ 1V1 SHOWDOWN</div><button class="menu-btn" onclick="goScreen('quick-tb')"><span class="ico">🎮</span><span class="lbl">QUICK BATTLE<span class="sub">1v1 turn-based duel</span></span><span class="arr">›</span></button>
   <div class="mode-pill">🏀 COURT BATTLE</div><button class="menu-btn" onclick="goScreen('quick-bb')"><span class="ico">🃏</span><span class="lbl">QUICK COURT<span class="sub">Lanes, hoops, dice</span></span><span class="arr">›</span></button>

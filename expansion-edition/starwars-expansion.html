@@ -9,6 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="Star Wars Arena Expansion">
 <meta name="theme-color" content="#000000">
 <link rel="manifest" href="../manifest.json">
+<link rel="apple-touch-icon" href="../assets/starwars-icon.webp">
 <title>Star Wars Arena — Full Edition Expansion Edition</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
@@ -225,7 +226,7 @@ body{background:radial-gradient(ellipse at top,#0a0a2a 0%,var(--bg) 60%);color:#
 
 <div class="screen on" id="home">
   <a class="launcher-back" href="../index.html" onclick="var t=this,x=new XMLHttpRequest();try{x.open('HEAD','../index.html',false);x.send();if(x.status>=400)t.href='../launcher.html';}catch(e){}">‹ HUB</a>
-  <div class="shield">⚔</div>
+  <img src="../assets/starwars-logo.png" alt="Star Wars" style="display:block;max-width:88%;max-height:90px;margin:8px auto 6px;object-fit:contain;filter:drop-shadow(0 4px 12px rgba(0,0,0,.5))" onerror="this.style.display='none'">
   <div class="logo-main">STAR WARS</div><div class="logo-sub">ARENA</div><div class="logo-tag">FULL EDITION · TURN · BOARD · STORY</div>
   <div class="mode-pill">⚔️ TURN BATTLE</div><button class="menu-btn" onclick="goScreen('quick-tb')"><span class="ico">🎮</span><span class="lbl">QUICK BATTLE<span class="sub">1v1 lightsaber duel</span></span><span class="arr">›</span></button>
   <div class="mode-pill">🗺️ BOARD BATTLE</div><button class="menu-btn" onclick="goScreen('quick-bb')"><span class="ico">🃏</span><span class="lbl">QUICK BOARD<span class="sub">Lanes, towers, dice</span></span><span class="arr">›</span></button>

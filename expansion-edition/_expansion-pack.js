@@ -226,6 +226,21 @@
 .exp-daily-pill .sm{font-size:.65rem;opacity:.85;margin-top:2px;font-family:'Share Tech Mono',monospace;letter-spacing:.5px}
 .exp-daily-pill.cleared{background:linear-gradient(135deg,#16a34a,#15803d);border-color:#22c55e}
 .exp-daily-pill.failed{background:linear-gradient(135deg,#7f1d1d,#450a0a);border-color:var(--red);opacity:.7}
+
+/* 6. Saved deck strip + save button (expansion adv/lane) */
+.exp-deck-strip{display:flex;gap:8px;overflow-x:auto;padding:8px 14px;background:rgba(0,0,0,.35);border-bottom:1px solid var(--bdr);scroll-snap-type:x mandatory}
+.exp-deck-strip:empty{display:none}
+.exp-deck-strip-empty{padding:14px;text-align:center;color:var(--soft);font-size:.7rem;font-family:'Inter',sans-serif;font-weight:600;letter-spacing:.5px}
+.exp-deck-card{flex-shrink:0;background:linear-gradient(160deg,var(--panel),var(--panel2));border:2px solid var(--bdr);border-radius:10px;padding:8px 10px;min-width:140px;max-width:200px;cursor:pointer;position:relative;scroll-snap-align:start}
+.exp-deck-card:hover{border-color:var(--gold)}
+.exp-deck-card:active{transform:scale(.96)}
+.exp-deck-card .nm{font-family:'Inter',sans-serif;font-weight:800;font-size:.78rem;color:var(--gold);letter-spacing:.5px;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.exp-deck-card .ct{font-family:'Inter',sans-serif;font-weight:600;font-size:.6rem;color:var(--soft);letter-spacing:.3px;line-height:1.3}
+.exp-deck-card .x{position:absolute;top:2px;right:2px;width:20px;height:20px;background:rgba(238,21,21,.4);border:1px solid var(--red);color:#fff;border-radius:50%;font-size:11px;display:flex;align-items:center;justify-content:center;cursor:pointer;line-height:1}
+.exp-deck-card .x:hover{background:var(--red)}
+.exp-save-btn{padding:10px 14px;background:linear-gradient(135deg,#16a34a,#15803d);border:1px solid #22c55e;color:#fff;font-family:'Inter',sans-serif;font-weight:800;border-radius:8px;cursor:pointer;letter-spacing:.5px;font-size:.78rem}
+.exp-save-btn:active{transform:scale(.96)}
+.exp-save-btn:disabled{opacity:.4;cursor:not-allowed}
 `;
   document.head.appendChild(style);
 
@@ -348,7 +363,7 @@
   <div class="topbar"><button class="back" onclick="goScreen('home')">‹ BACK</button><div class="ttl">PICK YOUR PARTY</div><div class="meta"><span id="advPickCount">0</span>/8</div></div>
   <div class="select-bar"><div class="ct">PARTY: <b id="advPickB">0</b> / 8 — pick 8 for the journey</div></div>
   <div class="page-body"><div class="roster-grid" id="advPickGrid"></div></div>
-  <div class="start-bar"><button class="clear-btn" onclick="advPickClear()">CLEAR</button><button class="start-btn" id="advPickStart" disabled onclick="advStart()">▶ START QUEST</button></div>
+  <div class="start-bar"><button class="clear-btn" onclick="advPickClear()">CLEAR</button><button class="exp-save-btn" id="advPickSave" onclick="expSaveDeckBtn('adv')">💾 SAVE AS DECK</button><button class="start-btn" id="advPickStart" disabled onclick="advStart()">▶ START QUEST</button></div>
 </div>
 
 <!-- ============================== ADVENTURE: PLAYING ============================== -->
@@ -434,7 +449,7 @@
   <div class="topbar"><button class="back" onclick="goScreen('home')">‹ BACK</button><div class="ttl">BUILD LANE DECK</div><div class="meta"><span id="lanePickCount">0</span>/6</div></div>
   <div class="select-bar"><div class="ct">DECK: <b id="lanePickB">0</b> / 6 — pick 6 (3 spells included free)</div></div>
   <div class="page-body"><div class="roster-grid" id="lanePickGrid"></div></div>
-  <div class="start-bar"><button class="clear-btn" onclick="lanePickClear()">CLEAR</button><button class="start-btn" id="lanePickStart" disabled onclick="laneStart()">▶ START DUEL</button></div>
+  <div class="start-bar"><button class="clear-btn" onclick="lanePickClear()">CLEAR</button><button class="exp-save-btn" id="lanePickSave" onclick="expSaveDeckBtn('lane')">💾 SAVE AS DECK</button><button class="start-btn" id="lanePickStart" disabled onclick="laneStart()">▶ START DUEL</button></div>
 </div>
 
 <!-- ============================== LANE: PLAYING ============================== -->
@@ -594,6 +609,123 @@
   function clearAdvRun(){try{const s=loadStore();delete s.advRun;saveStore(s);}catch(e){}}
   function hasAdvRun(){try{const s=loadStore();return !!(s&&s.advRun&&Array.isArray(s.advRun.party)&&s.advRun.party.length);}catch(e){return false}}
 
+  /* ============================== EXPANSION DECK LIBRARY (adv + lane) ============================== */
+  function getExpDecks(mode){
+    var s=loadStore();
+    s.decks=s.decks||{};
+    var key='exp_'+mode;
+    return s.decks[key]||[];
+  }
+  function setExpDecks(mode, decks){
+    var s=loadStore();
+    s.decks=s.decks||{};
+    s.decks['exp_'+mode]=decks;
+    saveStore(s);
+  }
+  function expSaveDeck(mode, members, suggestedName){
+    var minN = mode==='adv' ? 8 : 6;
+    if(!members || members.length < minN){
+      alert('Pick all '+minN+' cards first.');
+      return;
+    }
+    var name = prompt('Deck name?', suggestedName || ('My ' + (mode==='adv'?'Adventure':'Lane Deck')));
+    if(!name) return;
+    var decks = getExpDecks(mode);
+    if(decks.length >= 5){
+      if(!confirm('You have 5 saved decks. Replace the oldest?')) return;
+      decks.shift();
+    }
+    decks.push({name:name, members:members.slice(), date:Date.now()});
+    setExpDecks(mode, decks);
+    if(typeof toast==='function') toast('Deck saved!');
+    else if(typeof window.toast==='function') window.toast('Deck saved!');
+    else alert('Deck saved!');
+    renderExpDeckStrip(mode);
+  }
+  function expDeleteDeck(mode, idx){
+    if(!confirm('Delete this saved deck?')) return;
+    var decks = getExpDecks(mode);
+    decks.splice(idx, 1);
+    setExpDecks(mode, decks);
+  }
+  function expLoadDeck(mode, idx){
+    var decks = getExpDecks(mode);
+    var d = decks[idx]; if(!d) return;
+    var ROSTER = window.ROSTER || [];
+    if(mode === 'adv'){
+      advPickList.length = 0;
+      d.members.forEach(function(id){
+        if(ROSTER.find(function(r){return r.id===id})){
+          if(advPickList.length < 8) advPickList.push(id);
+        }
+      });
+      renderAdvPickRefresh();
+    } else {
+      lanePickList.length = 0;
+      d.members.forEach(function(id){
+        if(ROSTER.find(function(r){return r.id===id})){
+          if(lanePickList.length < 6) lanePickList.push(id);
+        }
+      });
+      renderLanePickRefresh();
+    }
+    if(typeof toast==='function') toast('Deck loaded!');
+  }
+  function renderExpDeckStrip(mode){
+    var screenId = mode==='adv' ? 'advPick' : 'lanePick';
+    var screen = document.getElementById(screenId); if(!screen) return;
+    var stripId = 'expDeckStrip_'+mode;
+    var strip = document.getElementById(stripId);
+    if(!strip){
+      strip = document.createElement('div');
+      strip.id = stripId;
+      strip.className = 'exp-deck-strip';
+      var selectBar = screen.querySelector('.select-bar');
+      if(selectBar && selectBar.parentNode){
+        selectBar.parentNode.insertBefore(strip, selectBar.nextSibling);
+      } else {
+        var pageBody = screen.querySelector('.page-body');
+        if(pageBody) screen.insertBefore(strip, pageBody);
+      }
+    }
+    var decks = getExpDecks(mode);
+    var ROSTER = window.ROSTER || [];
+    strip.innerHTML = '';
+    if(decks.length === 0){
+      var empty = document.createElement('div');
+      empty.className = 'exp-deck-strip-empty';
+      empty.textContent = 'No saved decks yet — pick cards then tap 💾 SAVE';
+      strip.appendChild(empty);
+      return;
+    }
+    decks.forEach(function(d, i){
+      var card = document.createElement('div');
+      card.className = 'exp-deck-card';
+      var preview = d.members.slice(0,3).map(function(id){
+        var r = ROSTER.find(function(x){return x.id===id});
+        return r ? r.n : id;
+      }).join(', ');
+      if(d.members.length > 3) preview += ', +' + (d.members.length - 3);
+      var nameSafe = String(d.name).replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      var prevSafe = String(preview).replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      card.innerHTML = '<div class="nm">'+nameSafe+'</div><div class="ct">'+d.members.length+' cards · '+prevSafe+'</div><div class="x" data-mode="'+mode+'" data-idx="'+i+'">✕</div>';
+      card.onclick = function(e){
+        if(e.target && e.target.classList && e.target.classList.contains('x')){
+          e.stopPropagation();
+          expDeleteDeck(mode, i);
+          renderExpDeckStrip(mode);
+          return;
+        }
+        expLoadDeck(mode, i);
+      };
+      strip.appendChild(card);
+    });
+  }
+  window.expSaveDeckBtn = function(mode){
+    if(mode==='adv') expSaveDeck('adv', advPickList);
+    else expSaveDeck('lane', lanePickList);
+  };
+
   /* ============================== ADVENTURE BOARD ============================== */
   let advState=null;
   let advPickList=[];
@@ -630,6 +762,7 @@
       });
       grid.appendChild(el);
     });
+    renderExpDeckStrip('adv');
   };
   function renderAdvPickRefresh(){
     $('advPickB').textContent=advPickList.length;$('advPickCount').textContent=advPickList.length;
@@ -1233,6 +1366,7 @@
       });
       grid.appendChild(el);
     });
+    renderExpDeckStrip('lane');
   };
   function renderLanePickRefresh(){
     $('lanePickB').textContent=lanePickList.length;$('lanePickCount').textContent=lanePickList.length;

@@ -294,6 +294,32 @@
 .exp-team-stats-types{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
 .exp-team-stats-type{padding:2px 7px;background:rgba(255,255,255,.06);border:1px solid var(--bdr);border-radius:8px;font-size:.62rem}
 .exp-team-stats-type b{color:var(--gold);font-weight:800}
+
+/* Live deck preview strip — selected cards shown as mini-cards on pick screens */
+.exp-pick-preview{display:flex;gap:6px;padding:8px 12px;overflow-x:auto;background:rgba(0,0,0,.32);border-bottom:1px solid var(--bdr);min-height:74px;align-items:center}
+.exp-pick-preview-empty{color:var(--soft);font-family:'Inter',sans-serif;font-weight:600;font-size:.7rem;letter-spacing:.5px;text-align:center;width:100%}
+.exp-pick-preview .pick{flex:0 0 auto;width:60px;border:1px solid var(--bdr);border-radius:8px;background:rgba(255,255,255,.04);padding:4px;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;position:relative;transition:transform .12s}
+.exp-pick-preview .pick:hover{background:rgba(238,21,21,.18);border-color:var(--red);transform:translateY(-2px)}
+.exp-pick-preview .pick:hover .x{display:flex}
+.exp-pick-preview .pick .x{display:none;position:absolute;inset:0;align-items:center;justify-content:center;font-size:18px;color:#fff;background:rgba(220,38,38,.85);border-radius:8px;font-family:'Inter',sans-serif;font-weight:800}
+.exp-pick-preview .pick .pa{width:48px;height:48px;display:flex;align-items:center;justify-content:center;background:#0a0a18;border-radius:6px;overflow:hidden}
+.exp-pick-preview .pick .pa img{width:100%;height:100%;object-fit:cover}
+.exp-pick-preview .pick .pa .emoji{font-size:24px}
+.exp-pick-preview .pick .nm{font-family:'Inter',sans-serif;font-weight:800;font-size:.5rem;color:#fff;text-align:center;line-height:1.05;max-width:56px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;letter-spacing:.2px}
+.exp-pick-preview .pick .ex{position:absolute;top:-3px;left:-3px;background:#7c3aed;color:#fff;font-family:'Inter',sans-serif;font-weight:800;font-size:9px;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid #000}
+
+/* Expansion decks panel — shown on MY DECKS page above original decks list */
+.exp-decks-panel{padding:12px;margin:8px 12px 12px;background:linear-gradient(135deg,rgba(124,58,237,.14),rgba(59,130,246,.06));border:1px solid #a855f7;border-radius:12px}
+.exp-decks-panel-title{font-family:'Inter',sans-serif;font-weight:800;font-size:.85rem;color:#a855f7;letter-spacing:1.5px;margin-bottom:10px}
+.exp-decks-panel-section{margin-bottom:10px}
+.exp-decks-panel-section:last-child{margin-bottom:0}
+.exp-decks-panel-subhead{font-family:'Inter',sans-serif;font-weight:800;font-size:.72rem;color:var(--gold);letter-spacing:1px;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.exp-decks-panel-empty{font-family:'Inter',sans-serif;font-weight:600;font-size:.65rem;color:var(--soft);font-style:italic;letter-spacing:.3px;padding:6px 0}
+.exp-decks-panel-row{display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(255,255,255,.04);border:1px solid var(--bdr);border-radius:8px;margin-bottom:4px}
+.exp-decks-panel-row .nm{flex:1;font-family:'Inter',sans-serif;font-weight:800;font-size:.78rem;color:#fff;letter-spacing:.5px}
+.exp-decks-panel-row .ct{font-family:'Inter',sans-serif;font-weight:600;font-size:.6rem;color:var(--soft);letter-spacing:.3px;margin-right:8px}
+.exp-decks-panel-row .load{padding:7px 10px;background:var(--gold);color:#000;border:none;border-radius:6px;font-family:'Inter',sans-serif;font-weight:800;font-size:.65rem;cursor:pointer;letter-spacing:.5px}
+.exp-decks-panel-row .del{padding:7px 8px;background:transparent;color:var(--red);border:1px solid var(--red);border-radius:6px;font-family:'Inter',sans-serif;font-weight:800;font-size:.65rem;cursor:pointer;letter-spacing:.5px}
 `;
   document.head.appendChild(style);
 
@@ -855,6 +881,113 @@
   }
   window.renderExpTeamStats = renderExpTeamStats;
 
+  /* === Live deck preview strip — shows currently picked cards as mini-cards above grid === */
+  function renderExpPickPreview(mode){
+    _bridgeRosterBosses();
+    var roster = window.ROSTER || [];
+    var screenId = mode==='adv' ? 'advPick' : 'lanePick';
+    var screen = document.getElementById(screenId); if(!screen) return;
+    var stripId = 'expPickPreview_' + mode;
+    var strip = document.getElementById(stripId);
+    if(!strip){
+      strip = document.createElement('div');
+      strip.id = stripId;
+      strip.className = 'exp-pick-preview';
+      var anchor = document.getElementById('expTeamStats_' + mode) || document.getElementById('expDeckStrip_' + mode);
+      if(anchor && anchor.parentNode){
+        anchor.parentNode.insertBefore(strip, anchor.nextSibling);
+      } else {
+        var pageBody = screen.querySelector('.page-body');
+        if(pageBody) screen.insertBefore(strip, pageBody);
+      }
+    }
+    var list = mode==='adv' ? advPickList : lanePickList;
+    strip.innerHTML = '';
+    if(!list || !list.length){
+      var empty = document.createElement('div');
+      empty.className = 'exp-pick-preview-empty';
+      empty.textContent = 'Picks will appear here as you select';
+      strip.appendChild(empty);
+      return;
+    }
+    list.forEach(function(id, idx){
+      var c = roster.find(function(r){return r.id===id});
+      if(!c) return;
+      var pick = document.createElement('div');
+      pick.className = 'pick';
+      var safeFb = (c.fb||'❓').replace(/'/g,'&#39;').replace(/"/g,'&quot;');
+      var safeName = (c.n||c.id||'').replace(/'/g,'&#39;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+      var artHtml;
+      if(c.art){
+        artHtml = '<img src="' + c.art + '" alt="' + safeName + '" onerror="this.outerHTML=\'<span class=&quot;emoji&quot;>'+safeFb+'</span>\'">';
+      } else {
+        artHtml = '<span class="emoji">' + (c.fb||'❓') + '</span>';
+      }
+      pick.innerHTML = '<div class="ex">' + (c.elixir||0) + '</div><div class="pa">' + artHtml + '</div><div class="nm">' + safeName + '</div><div class="x">✕</div>';
+      pick.onclick = function(){
+        list.splice(idx, 1);
+        if(typeof tone==='function') tone(440,0.05,'square',0.07);
+        if(mode==='adv'){
+          if(typeof renderAdvPickRefresh==='function') renderAdvPickRefresh();
+          renderExpPickPreview('adv');
+          if(typeof renderExpTeamStats==='function') renderExpTeamStats('adv');
+    if(typeof renderExpPickPreview==='function') renderExpPickPreview('adv');
+        } else {
+          if(typeof renderLanePickRefresh==='function') renderLanePickRefresh();
+          renderExpPickPreview('lane');
+          if(typeof renderExpTeamStats==='function') renderExpTeamStats('lane');
+    if(typeof renderExpPickPreview==='function') renderExpPickPreview('lane');
+        }
+      };
+      strip.appendChild(pick);
+    });
+  }
+  window.renderExpPickPreview = renderExpPickPreview;
+
+  /* === Expansion decks panel — shown on MY DECKS page above original decks list === */
+  function renderExpDecksPanel(){
+    var decksScreen = document.getElementById('decks');
+    if(!decksScreen) return;
+    var pageBody = decksScreen.querySelector('.page-body');
+    if(!pageBody) return;
+    var panelId = 'expDecksPanel';
+    var panel = document.getElementById(panelId);
+    if(!panel){
+      panel = document.createElement('div');
+      panel.id = panelId;
+      panel.className = 'exp-decks-panel';
+      pageBody.insertBefore(panel, pageBody.firstChild);
+    }
+    function rowsFor(mode){
+      var decks = (typeof getExpDecks==='function') ? getExpDecks(mode) : [];
+      if(!decks.length){
+        return '<div class="exp-decks-panel-empty">No saved decks yet — go to ' + (mode==='adv'?'Adventure Quest':'Lane Duel') + ' to create one</div>';
+      }
+      return decks.map(function(d, i){
+        var nm = (d.name || ('Deck '+(i+1))).replace(/</g,'&lt;');
+        return '<div class="exp-decks-panel-row"><div class="nm">' + nm + '</div><div class="ct">' + d.members.length + ' cards</div><button class="load" onclick="window.expLoadDeckFromPanel(\'' + mode + '\',' + i + ')">▶ LOAD</button><button class="del" onclick="window.expDelDeckFromPanel(\'' + mode + '\',' + i + ')">✕</button></div>';
+      }).join('');
+    }
+    panel.innerHTML = '<div class="exp-decks-panel-title">🌟 EXPANSION DECKS</div>' +
+      '<div class="exp-decks-panel-section"><div class="exp-decks-panel-subhead">🗺️ Adventure Quest (8-card)</div>' + rowsFor('adv') + '</div>' +
+      '<div class="exp-decks-panel-section"><div class="exp-decks-panel-subhead">🛤️ Lane Duel (6-card)</div>' + rowsFor('lane') + '</div>';
+  }
+  window.renderExpDecksPanel = renderExpDecksPanel;
+  window.expLoadDeckFromPanel = function(mode, idx){
+    var screen = mode==='adv' ? 'advPick' : 'lanePick';
+    if(typeof goScreen === 'function'){
+      goScreen(screen);
+      setTimeout(function(){ if(typeof expLoadDeck==='function') expLoadDeck(mode, idx); }, 100);
+    }
+  };
+  window.expDelDeckFromPanel = function(mode, idx){
+    if(!confirm('Delete this saved deck?')) return;
+    var decks = (typeof getExpDecks==='function') ? getExpDecks(mode) : [];
+    decks.splice(idx, 1);
+    if(typeof setExpDecks==='function') setExpDecks(mode, decks);
+    renderExpDecksPanel();
+  };
+
   /* ============================== ADVENTURE BOARD ============================== */
   let advState=null;
   let advPickList=[];
@@ -893,6 +1026,7 @@
     });
     renderExpDeckStrip('adv');
     if(typeof renderExpTeamStats==='function') renderExpTeamStats('adv');
+    if(typeof renderExpPickPreview==='function') renderExpPickPreview('adv');
   };
   function renderAdvPickRefresh(){
     $('advPickB').textContent=advPickList.length;$('advPickCount').textContent=advPickList.length;
@@ -901,6 +1035,7 @@
     const ROSTER=(_bridgeRosterBosses(),window.ROSTER||[]);
     ROSTER.forEach((h,i)=>{cards[i]&&cards[i].classList.toggle('selected',advPickList.includes(h.id))});
     if(typeof renderExpTeamStats==='function') renderExpTeamStats('adv');
+    if(typeof renderExpPickPreview==='function') renderExpPickPreview('adv');
   }
   window.advPickClear = function(){advPickList=[];renderAdvPickRefresh()};
 
@@ -1499,6 +1634,7 @@
     });
     renderExpDeckStrip('lane');
     if(typeof renderExpTeamStats==='function') renderExpTeamStats('lane');
+    if(typeof renderExpPickPreview==='function') renderExpPickPreview('lane');
   };
   function renderLanePickRefresh(){
     $('lanePickB').textContent=lanePickList.length;$('lanePickCount').textContent=lanePickList.length;
@@ -1507,6 +1643,7 @@
     const ROSTER=(_bridgeRosterBosses(),window.ROSTER||[]);
     ROSTER.forEach((h,i)=>{cards[i]&&cards[i].classList.toggle('selected',lanePickList.includes(h.id))});
     if(typeof renderExpTeamStats==='function') renderExpTeamStats('lane');
+    if(typeof renderExpPickPreview==='function') renderExpPickPreview('lane');
   }
   window.lanePickClear = function(){lanePickList=[];renderLanePickRefresh()};
 
@@ -2204,6 +2341,7 @@
       orig(id);
       if(id === 'advPick' && typeof window.renderAdvPick === 'function') window.renderAdvPick();
       if(id === 'lanePick' && typeof window.renderLanePick === 'function') window.renderLanePick();
+      if(id === 'decks' && typeof window.renderExpDecksPanel === 'function') window.renderExpDecksPanel();
       if(id === 'home'){
         if(typeof window._expRefreshContinuePill === 'function') window._expRefreshContinuePill();
         if(typeof window._expRefreshDailyPill === 'function') window._expRefreshDailyPill();

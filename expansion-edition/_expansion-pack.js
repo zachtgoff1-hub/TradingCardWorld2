@@ -164,6 +164,68 @@
 
 @keyframes laneDeploy{0%{transform:translateY(40px) scale(.6);opacity:0;filter:drop-shadow(0 0 12px var(--gold))}60%{transform:translateY(-4px) scale(1.08);opacity:1}100%{transform:translateY(0) scale(1);filter:none}}
 .lane-unit-deploy{animation:laneDeploy .42s cubic-bezier(.2,.8,.3,1.1) both}
+
+/* ============================== EXPANSION POLISH FEATURES ============================== */
+/* 1. Settings gear + modal */
+.exp-settings-btn{position:fixed;top:max(12px,env(safe-area-inset-top));right:12px;z-index:60;width:42px;height:42px;border-radius:50%;background:rgba(0,0,0,.7);border:1px solid var(--bdr);color:var(--gold);font-size:20px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.exp-settings-btn:active{transform:scale(.94)}
+.exp-settings-overlay{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9500;display:none;flex-direction:column;align-items:center;justify-content:center;padding:24px;font-family:'Inter',sans-serif}
+.exp-settings-overlay.on{display:flex}
+.exp-settings-card{background:linear-gradient(160deg,var(--panel),var(--panel2));border:2px solid var(--gold);border-radius:16px;padding:20px;width:100%;max-width:340px}
+.exp-settings-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--bdr)}
+.exp-settings-row:last-child{border-bottom:none}
+.exp-settings-row .lbl{color:#fff;font-weight:700;letter-spacing:1px}
+.exp-toggle{width:54px;height:30px;background:rgba(255,255,255,.15);border:1px solid var(--bdr);border-radius:15px;position:relative;cursor:pointer;transition:.2s}
+.exp-toggle.on{background:#22c55e}
+.exp-toggle::after{content:'';position:absolute;top:2px;left:2px;width:24px;height:24px;background:#fff;border-radius:50%;transition:.2s}
+.exp-toggle.on::after{left:27px}
+.exp-settings-btn-wide{width:100%;padding:12px;margin-top:14px;background:rgba(238,21,21,.18);border:1px solid var(--red);color:#fff;border-radius:10px;font-weight:700;cursor:pointer;letter-spacing:1px}
+.exp-settings-close{width:100%;padding:12px;margin-top:8px;background:transparent;border:1px solid var(--bdr);color:var(--soft);border-radius:10px;font-weight:600;cursor:pointer;letter-spacing:1px}
+.exp-settings-btn-alt{width:100%;padding:12px;margin-top:8px;background:rgba(255,255,255,.06);border:1px solid var(--bdr);color:#fff;border-radius:10px;font-weight:700;cursor:pointer;letter-spacing:1px}
+
+/* 2. Stats screen */
+#expStats{flex-direction:column;background:radial-gradient(ellipse at top,#1a1f3a 0%,var(--bg) 60%);font-family:'Inter',sans-serif}
+.exp-stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.exp-stats-card{background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--bdr);border-radius:12px;padding:14px;text-align:center}
+.exp-stats-card .v{font-family:'Inter',sans-serif;font-weight:800;font-size:1.6rem;color:var(--gold);display:block}
+.exp-stats-card .k{font-size:.7rem;color:var(--soft);letter-spacing:1px;margin-top:4px}
+.exp-stats-row{display:flex;align-items:center;gap:10px;padding:10px;background:rgba(255,255,255,.04);border:1px solid var(--bdr);border-radius:10px;margin-bottom:6px}
+.exp-stats-row .ico{font-size:1.4rem}
+.exp-stats-row .gn{flex:1;font-weight:700;letter-spacing:1px}
+.exp-stats-row .nums{font-size:.65rem;color:var(--soft)}
+.exp-stats-section{font-family:'Inter',sans-serif;font-weight:800;color:var(--gold);font-size:.78rem;letter-spacing:2px;margin:14px 0 8px;padding-left:4px;border-left:3px solid var(--gold)}
+.exp-stats-section:first-child{margin-top:0}
+
+/* 3. Lane card preview */
+.lane-card-preview{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9700;display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+.lane-card-preview.on{display:flex}
+.lane-card-preview-card{background:linear-gradient(160deg,var(--panel),var(--panel2));border:2px solid var(--gold);border-radius:16px;padding:20px;width:100%;max-width:320px;color:#fff;font-family:'Inter',sans-serif}
+.lane-card-preview .nm{font-size:1.4rem;font-weight:800;color:var(--gold);text-align:center;margin-bottom:10px;letter-spacing:1px}
+.lane-card-preview .pa{display:flex;justify-content:center;align-items:center;height:80px;background:rgba(0,0,0,.3);border-radius:10px;margin-bottom:10px}
+.lane-card-preview .pa img{max-height:74px;max-width:74px}
+.lane-card-preview .pa .emoji{font-size:3rem}
+.lane-card-preview .stats{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}
+.lane-card-preview .stat{padding:6px 10px;background:rgba(0,0,0,.3);border-radius:6px;display:flex;justify-content:space-between;font-size:.75rem}
+.lane-card-preview .stat b{color:var(--gold);font-weight:800}
+.lane-card-preview .moves{font-size:.7rem;color:var(--soft);line-height:1.6}
+.lane-card-preview-close{margin-top:12px;width:100%;padding:12px;background:rgba(255,255,255,.06);border:1px solid var(--bdr);color:#fff;border-radius:10px;font-weight:700;letter-spacing:1px;cursor:pointer}
+
+/* 4. Adventure tutorial */
+.exp-tutorial{position:fixed;inset:0;background:rgba(0,0,0,.94);z-index:9800;display:none;flex-direction:column;align-items:center;justify-content:center;padding:24px;font-family:'Inter',sans-serif;color:#fff}
+.exp-tutorial.on{display:flex}
+.exp-tutorial h2{color:var(--gold);font-size:1.6rem;font-weight:800;margin-bottom:12px;letter-spacing:1px;text-align:center}
+.exp-tutorial p{font-size:.9rem;line-height:1.5;margin-bottom:8px;max-width:340px}
+.exp-tutorial p b{color:var(--gold)}
+.exp-tutorial-btn{margin-top:16px;padding:14px 28px;background:linear-gradient(135deg,var(--gold),#f59e0b);color:#000;border:none;border-radius:10px;font-weight:800;letter-spacing:1px;cursor:pointer;font-size:1rem}
+
+/* 5. Daily challenge pill */
+.exp-daily-pill{display:flex;align-items:center;gap:10px;padding:14px 16px;background:linear-gradient(135deg,#7c3aed,#3b82f6);border:2px solid #a855f7;border-radius:14px;width:auto;color:#fff;font-weight:700;cursor:pointer;letter-spacing:1px;margin:0 0 6px}
+.exp-daily-pill .ic{font-size:1.6rem}
+.exp-daily-pill .info{flex:1;min-width:0}
+.exp-daily-pill .nm{font-size:.9rem;letter-spacing:1.4px;font-weight:800}
+.exp-daily-pill .sm{font-size:.65rem;opacity:.85;margin-top:2px;font-family:'Share Tech Mono',monospace;letter-spacing:.5px}
+.exp-daily-pill.cleared{background:linear-gradient(135deg,#16a34a,#15803d);border-color:#22c55e}
+.exp-daily-pill.failed{background:linear-gradient(135deg,#7f1d1d,#450a0a);border-color:var(--red);opacity:.7}
 `;
   document.head.appendChild(style);
 
@@ -400,6 +462,39 @@
   <div class="face" id="miniDiceFace">?</div>
   <div class="lbl" id="miniDiceLabel">Rolling D6...</div>
 </div>
+
+<!-- Settings overlay -->
+<div class="exp-settings-overlay" id="expSettingsOverlay">
+  <div class="exp-settings-card">
+    <div style="font-family:'Inter',sans-serif;font-weight:800;color:var(--gold);text-align:center;font-size:1.2rem;letter-spacing:2px;margin-bottom:6px">⚙️ SETTINGS</div>
+    <div class="exp-settings-row">
+      <span class="lbl">🔊 SOUND</span>
+      <div class="exp-toggle" id="expSoundToggle"></div>
+    </div>
+    <div class="exp-settings-row">
+      <span class="lbl" style="font-size:.8rem">📖 SHOW ADVENTURE TUTORIAL</span>
+      <button class="exp-settings-btn-alt" style="width:auto;padding:8px 14px;margin:0" id="expShowTutorialBtn">SHOW</button>
+    </div>
+    <button class="exp-settings-btn-wide" id="expClearProgressBtn">🗑️ CLEAR ADVENTURE RUN</button>
+    <button class="exp-settings-close" id="expSettingsCloseBtn">✕ CLOSE</button>
+  </div>
+</div>
+
+<!-- Adventure tutorial overlay -->
+<div class="exp-tutorial" id="expTutorial">
+  <h2>🗺️ ADVENTURE QUEST</h2>
+  <p>Pick <b>8 cards</b> for your party. They share one HP pool.</p>
+  <p>Roll the <b>🎲 dice</b> to move along 25 spaces.</p>
+  <p>Spaces trigger different events: <b>⚔️ battles</b>, <b>🎁 power-ups</b>, <b>❤️ heals</b>, <b>⚠️ traps</b>.</p>
+  <p>Save power-ups for the <b>👑 boss</b> at the end!</p>
+  <button class="exp-tutorial-btn" id="expTutorialOk">GOT IT</button>
+</div>
+
+<!-- ============================== EXPANSION STATS SCREEN ============================== -->
+<div class="screen" id="expStats">
+  <div class="topbar"><button class="back" onclick="goScreen('home')">‹ BACK</button><div class="ttl">📊 STATS</div><div class="meta"></div></div>
+  <div class="page-body" id="expStatsBody" style="padding:14px;overflow-y:auto"></div>
+</div>
 `;
     while(wrap.firstChild) document.body.appendChild(wrap.firstChild);
   }
@@ -420,8 +515,15 @@
     el.innerHTML=`<div class="elixir-badge">${h.elixir||3}</div><div class="pokeart">${artHTML(h)}</div><div class="name">${h.n}</div><div class="stats"><div class="stat"><span>HP</span><b>${h.hp}</b></div><div class="stat"><span>ATK</span><b>${h.atk}</b></div></div>`;
     return el;
   }
-  function tone(f,d,t,v){if(typeof window.tone==='function')return window.tone(f,d,t,v)}
-  function tt(f,d,t,v){ try{ if(typeof window.tone==='function') window.tone(f,d,t,v); else if(window.AudioContext||window.webkitAudioContext){const ctx=tt._ctx||(tt._ctx=new (window.AudioContext||window.webkitAudioContext)());const o=ctx.createOscillator();const g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.type=t;o.frequency.value=f;g.gain.setValueAtTime(v,ctx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+d);o.start();o.stop(ctx.currentTime+d);} }catch(e){} }
+  // === Sound toggle ===
+  var soundEnabled = (function(){try{return localStorage.getItem('expSoundEnabled')!=='0'}catch(e){return true}})();
+  function tone(f,d,t,v){if(!soundEnabled)return;if(typeof window.tone==='function')return window.tone(f,d,t,v)}
+  function tt(f,d,t,v){ if(!soundEnabled)return; try{ if(typeof window.tone==='function') window.tone(f,d,t,v); else if(window.AudioContext||window.webkitAudioContext){const ctx=tt._ctx||(tt._ctx=new (window.AudioContext||window.webkitAudioContext)());const o=ctx.createOscillator();const g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.type=t;o.frequency.value=f;g.gain.setValueAtTime(v,ctx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+d);o.start();o.stop(ctx.currentTime+d);} }catch(e){} }
+  // Seeded RNG (mulberry32) for daily challenges
+  function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+  var dailySeededRng = null; // when non-null, advStart uses this for buildSpaceTypes
+  var dailyMode = false;
+  function todaySeed(){return parseInt((new Date()).toISOString().slice(0,10).replace(/-/g,''))}
   var sfx = {
     dice: ()=>{ for(let i=0;i<4;i++) setTimeout(()=>tt(700+Math.random()*400,0.04,'square',0.05), i*70); },
     step: ()=>tt(400,0.06,'square',0.05),
@@ -565,6 +667,25 @@
   };
 
   function buildSpaceTypes(){
+    // If daily mode is active, use seeded RNG to generate a different layout each day.
+    if(dailyMode && typeof dailySeededRng === 'function'){
+      const rng = dailySeededRng;
+      const arr=new Array(25).fill('battle');
+      // Index 24 (space 25) is always the boss
+      arr[24]='boss';
+      // Pool of space types to distribute across spaces 1..24
+      const pool=['battle','battle','battle','battle','battle','battle','battle','battle','battle','battle',
+                  'power','power','power','power',
+                  'heal','heal','heal',
+                  'treasure','treasure','treasure',
+                  'trap','trap',
+                  'skip',
+                  'rest'];
+      // Shuffle pool with seeded RNG (Fisher-Yates)
+      for(let i=pool.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]]}
+      for(let i=0;i<24;i++)arr[i]=pool[i];
+      return arr;
+    }
     const arr=new Array(25).fill('battle');
     const set=(num,t)=>arr[num-1]=t;
     [1,4,7,10,12,14,17,19,21,23].forEach(n=>set(n,'battle'));
@@ -590,6 +711,7 @@
     advState={
       party,space:0,types:buildSpaceTypes(),waypoints:buildBoardWaypoints(),
       inventory:[],shieldNext:false,atkBuffNext:false,log:[],busy:false,pendingSteps:0,rerollAvailable:0,
+      isDaily: !!dailyMode, dailySeed: dailyMode?todaySeed():null,
     };
     const adv=getAdventure();adv.runs=(adv.runs||0)+1;setAdventure(adv);
     goScreenInner('adventure');
@@ -687,6 +809,12 @@
     $('advHpNum').textContent=totalHp+'/'+maxHp;
     $('advSpaces').textContent='SPACE '+(advState.space)+'/25';
     $('advInvCt').textContent=advState.inventory.length;
+    // Track best space reached across all runs
+    try{
+      const s=loadStore();
+      const best=(s.advBestSpace||0);
+      if(advState.space>best){s.advBestSpace=advState.space;saveStore(s)}
+    }catch(e){}
   }
   function advLog(msg){$('advLog').innerHTML=msg;advState.log.push(msg.replace(/<[^>]+>/g,''))}
 
@@ -1068,10 +1196,21 @@
     }
     setAdventure(adv);
     clearAdvRun();
+    // Save daily challenge result if applicable
+    if(advState.isDaily && advState.dailySeed){
+      try{
+        localStorage.setItem('expDailyClear_'+advState.dailySeed, JSON.stringify({
+          cleared: !!won, spacesReached: advState.space, time: Date.now()
+        }));
+      }catch(e){}
+    }
+    // Reset daily mode flags
+    dailyMode=false; dailySeededRng=null;
     if($('endStats'))$('endStats').innerHTML=`Reached space <b>${advState.space}</b>/25 · Items collected: ${advState.inventory.length}<br>Total runs: ${adv.runs} · Wins: ${adv.wins||0} · Losses: ${adv.losses||0}`;
     if($('endNext')){$('endNext').textContent='▶ NEW QUEST';$('endNext').onclick=()=>{$('endOverlay').classList.remove('on');refreshContinuePill();goScreenInner('advPick')}}
     if($('endOverlay'))$('endOverlay').classList.add('on');
     refreshContinuePill();
+    if(typeof window._expRefreshDailyPill==='function')window._expRefreshDailyPill();
   }
 
   /* ============================== ONE-LANE BATTLE ============================== */
@@ -1219,8 +1358,87 @@
         if(!canAfford){laneLog('Not enough elixir!');return}
         laneSelCard(idx);
       };
+      // Long-press / right-click card preview
+      attachLongPress(el, ()=>showLaneCardPreview(c));
       handEl.appendChild(el);
     });
+  }
+
+  // === Lane card long-press preview ===
+  function attachLongPress(el, onLongPress){
+    let timer=null, fired=false, startX=0, startY=0;
+    const TH=8;
+    const start=(x,y)=>{
+      fired=false; startX=x; startY=y;
+      clearTimeout(timer);
+      timer=setTimeout(()=>{fired=true; onLongPress();}, 500);
+    };
+    const cancel=()=>{clearTimeout(timer); timer=null;};
+    el.addEventListener('touchstart', e=>{
+      const t=e.touches[0]; if(!t)return;
+      start(t.clientX, t.clientY);
+    }, {passive:true});
+    el.addEventListener('touchmove', e=>{
+      const t=e.touches[0]; if(!t)return;
+      if(Math.abs(t.clientX-startX)>TH || Math.abs(t.clientY-startY)>TH) cancel();
+    }, {passive:true});
+    el.addEventListener('touchend', ()=>{
+      cancel();
+      // If long-press fired, suppress the upcoming click by capturing it once
+      if(fired){
+        const blocker=(ev)=>{ev.preventDefault();ev.stopPropagation();el.removeEventListener('click',blocker,true);};
+        el.addEventListener('click', blocker, true);
+        setTimeout(()=>{try{el.removeEventListener('click',blocker,true);}catch(e){}}, 600);
+      }
+    });
+    el.addEventListener('touchcancel', cancel);
+    el.addEventListener('mousedown', e=>{ if(e.button!==0)return; start(e.clientX, e.clientY); });
+    el.addEventListener('mousemove', e=>{ if(timer && (Math.abs(e.clientX-startX)>TH||Math.abs(e.clientY-startY)>TH)) cancel(); });
+    el.addEventListener('mouseup', ()=>cancel());
+    el.addEventListener('mouseleave', ()=>cancel());
+    // Right-click also opens preview on desktop
+    el.addEventListener('contextmenu', e=>{e.preventDefault(); onLongPress();});
+  }
+
+  function showLaneCardPreview(c){
+    let modal=document.getElementById('laneCardPreview');
+    if(!modal){
+      modal=document.createElement('div');
+      modal.id='laneCardPreview';
+      modal.className='lane-card-preview';
+      modal.innerHTML='<div class="lane-card-preview-card"><div class="nm"></div><div class="pa"></div><div class="stats"></div><div class="moves"></div><button class="lane-card-preview-close">CLOSE</button></div>';
+      document.body.appendChild(modal);
+      modal.addEventListener('click', e=>{ if(e.target===modal) modal.classList.remove('on'); });
+      modal.querySelector('.lane-card-preview-close').onclick=()=>modal.classList.remove('on');
+    }
+    const card=modal.querySelector('.lane-card-preview-card');
+    card.querySelector('.nm').textContent=c.n||'???';
+    card.querySelector('.pa').innerHTML=artHTML(c);
+    const tName=c.t||'—';
+    const ROSTER=window.ROSTER||[];
+    const full=ROSTER.find(r=>r.id===c.id)||{};
+    const def=c.def||full.def||0;
+    const spd=c.spd||full.spd||0;
+    const cost=c.cost!=null?c.cost:(full.elixir||3);
+    card.querySelector('.stats').innerHTML=
+      `<div class="stat"><span>TYPE</span><b>${tName}</b></div>`+
+      `<div class="stat"><span>ELIXIR</span><b>${cost}⚡</b></div>`+
+      `<div class="stat"><span>HP</span><b>${c.hp}/${c.hpMax}</b></div>`+
+      `<div class="stat"><span>ATK</span><b>${c.atk}</b></div>`+
+      `<div class="stat"><span>DEF</span><b>${def}</b></div>`+
+      `<div class="stat"><span>SPD</span><b>${spd}</b></div>`;
+    let movesHtml='';
+    const moves=full.moves||c.moves;
+    if(Array.isArray(moves) && moves.length){
+      movesHtml='<b style="color:var(--gold);letter-spacing:1px;font-size:.7rem">MOVES</b><br>'+moves.map(m=>{
+        if(typeof m==='string')return '• '+m;
+        return '• '+(m.n||m.name||'?')+(m.dmg?' ('+m.dmg+' dmg)':'')+(m.t?' ['+m.t+']':'');
+      }).join('<br>');
+    } else {
+      movesHtml='<span style="color:var(--soft)">Long-press a card to preview its full stats.</span>';
+    }
+    card.querySelector('.moves').innerHTML=movesHtml;
+    modal.classList.add('on');
   }
 
   function laneSelCard(idx){
@@ -1455,21 +1673,240 @@
       if(typeof window.advResume === 'function'){window.advResume();}
     };
 
+    // Daily Challenge pill
+    const dailyPill = document.createElement('button');
+    dailyPill.className = 'exp-daily-pill exp-daily-btn';
+    dailyPill.innerHTML = '<span class="ic">🔥</span><span class="info"><div class="nm">DAILY CHALLENGE</div><div class="sm">Loading...</div></span>';
+    dailyPill.onclick = startDailyChallenge;
+
+    // Stats button
+    const statsBtn = document.createElement('button');
+    statsBtn.className = 'menu-btn';
+    statsBtn.onclick = () => (window.goScreen||goScreenInner)('expStats');
+    statsBtn.innerHTML = '<span class="ico">📊</span><span class="lbl">STATS<span class="sub">Run history & favorite game</span></span><span class="arr">›</span>';
+
     if(insertAfter){
       home.insertBefore(continuePill, insertAfter);
+      home.insertBefore(dailyPill, insertAfter);
       home.insertBefore(advPill, insertAfter);
       home.insertBefore(advBtn, insertAfter);
       home.insertBefore(lanePill, insertAfter);
       home.insertBefore(laneBtn, insertAfter);
+      home.insertBefore(statsBtn, insertAfter);
     } else {
       home.appendChild(continuePill);
+      home.appendChild(dailyPill);
       home.appendChild(advPill);
       home.appendChild(advBtn);
       home.appendChild(lanePill);
       home.appendChild(laneBtn);
+      home.appendChild(statsBtn);
     }
     refreshContinuePill();
+    refreshDailyPill();
+    addSettingsButton();
+    wireSettingsOverlay();
   }
+
+  // === Daily Challenge ===
+  function getDailyResult(){
+    try{const raw=localStorage.getItem('expDailyClear_'+todaySeed());return raw?JSON.parse(raw):null}catch(e){return null}
+  }
+  function refreshDailyPill(){
+    const home=document.getElementById('home');
+    if(!home)return;
+    const pill=home.querySelector('.exp-daily-btn');
+    if(!pill)return;
+    const result=getDailyResult();
+    const dateLbl=(new Date()).toISOString().slice(0,10);
+    pill.classList.remove('cleared','failed');
+    const sm=pill.querySelector('.sm');
+    const nm=pill.querySelector('.nm');
+    if(result){
+      if(result.cleared){
+        pill.classList.add('cleared');
+        if(nm)nm.textContent='DAILY CHALLENGE ✓';
+        if(sm)sm.textContent=dateLbl+' · CLEARED — try tomorrow!';
+        pill.disabled=true;
+        pill.style.cursor='default';
+      } else {
+        pill.classList.add('failed');
+        if(nm)nm.textContent='DAILY CHALLENGE ✗';
+        if(sm)sm.textContent=dateLbl+' · failed at space '+(result.spacesReached||0)+' — try tomorrow!';
+        pill.disabled=true;
+        pill.style.cursor='default';
+      }
+    } else {
+      if(nm)nm.textContent='🔥 DAILY CHALLENGE';
+      if(sm)sm.textContent=dateLbl+' · ▶ START — same board for everyone';
+      pill.disabled=false;
+      pill.style.cursor='pointer';
+    }
+  }
+  window._expRefreshDailyPill = refreshDailyPill;
+  function startDailyChallenge(){
+    const result=getDailyResult();
+    if(result){toast(result.cleared?'Already cleared today!':'Already attempted today.');return}
+    if(hasAdvRun()){
+      if(!confirm('Starting Daily Challenge will erase your saved run. Continue?'))return;
+      clearAdvRun();
+    }
+    dailyMode=true;
+    dailySeededRng=mulberry32(todaySeed());
+    (window.goScreen||goScreenInner)('advPick');
+    toast('🔥 Daily Challenge — pick 8 to start');
+  }
+
+  // === Settings button + overlay wiring ===
+  function addSettingsButton(){
+    if(document.getElementById('expSettingsBtn'))return;
+    const btn=document.createElement('button');
+    btn.id='expSettingsBtn';
+    btn.className='exp-settings-btn';
+    btn.innerHTML='⚙️';
+    btn.title='Settings';
+    btn.onclick=()=>{
+      // Only show on home screen
+      const overlay=document.getElementById('expSettingsOverlay');
+      if(!overlay)return;
+      // Sync sound toggle state
+      const tgl=document.getElementById('expSoundToggle');
+      if(tgl)tgl.classList.toggle('on', soundEnabled);
+      overlay.classList.add('on');
+    };
+    // Only show button when home is the active screen
+    document.body.appendChild(btn);
+    function syncBtnVisibility(){
+      const home=document.getElementById('home');
+      btn.style.display=(home&&home.classList.contains('on'))?'flex':'none';
+    }
+    syncBtnVisibility();
+    // Re-check visibility periodically (light) and on screen changes via MutationObserver on body
+    const mo=new MutationObserver(syncBtnVisibility);
+    mo.observe(document.body,{subtree:true,attributes:true,attributeFilter:['class']});
+  }
+  function wireSettingsOverlay(){
+    const overlay=document.getElementById('expSettingsOverlay');
+    if(!overlay || overlay._wired)return;
+    overlay._wired=true;
+    overlay.addEventListener('click', e=>{ if(e.target===overlay) overlay.classList.remove('on'); });
+    const tgl=document.getElementById('expSoundToggle');
+    if(tgl){
+      tgl.classList.toggle('on', soundEnabled);
+      tgl.onclick=()=>{
+        soundEnabled=!soundEnabled;
+        tgl.classList.toggle('on', soundEnabled);
+        try{localStorage.setItem('expSoundEnabled', soundEnabled?'1':'0')}catch(e){}
+      };
+    }
+    const closeBtn=document.getElementById('expSettingsCloseBtn');
+    if(closeBtn)closeBtn.onclick=()=>overlay.classList.remove('on');
+    const clearBtn=document.getElementById('expClearProgressBtn');
+    if(clearBtn)clearBtn.onclick=()=>{
+      if(!confirm('Clear your saved adventure run? (Stats will be kept.)'))return;
+      clearAdvRun();
+      refreshContinuePill();
+      toast('Adventure run cleared');
+    };
+    const showTut=document.getElementById('expShowTutorialBtn');
+    if(showTut)showTut.onclick=()=>{
+      try{localStorage.removeItem('expAdvTutorialSeen')}catch(e){}
+      overlay.classList.remove('on');
+      showAdventureTutorial();
+    };
+    // Tutorial OK button
+    const tutOk=document.getElementById('expTutorialOk');
+    if(tutOk && !tutOk._wired){
+      tutOk._wired=true;
+      tutOk.onclick=()=>{
+        const t=document.getElementById('expTutorial');
+        if(t)t.classList.remove('on');
+        try{localStorage.setItem('expAdvTutorialSeen','1')}catch(e){}
+      };
+    }
+    const tut=document.getElementById('expTutorial');
+    if(tut && !tut._wired){
+      tut._wired=true;
+      tut.addEventListener('click', e=>{ if(e.target===tut){tut.classList.remove('on');try{localStorage.setItem('expAdvTutorialSeen','1')}catch(_){}} });
+    }
+  }
+  function showAdventureTutorial(){
+    const t=document.getElementById('expTutorial');
+    if(t)t.classList.add('on');
+  }
+  function maybeShowAdvTutorial(){
+    try{
+      if(localStorage.getItem('expAdvTutorialSeen')==='1')return;
+    }catch(e){return}
+    showAdventureTutorial();
+  }
+
+  // === Stats screen renderer ===
+  const EXP_GAME_KEYS = [
+    {key:'pokemon-arena-full', name:'POKEMON', ico:'⚡'},
+    {key:'marvel-arena-full', name:'MARVEL', ico:'🦸'},
+    {key:'smash-arena-full', name:'SMASH', ico:'🎮'},
+    {key:'clash-arena-full', name:'CLASH', ico:'⚔️'},
+    {key:'starwars-arena-full', name:'STAR WARS', ico:'⭐'},
+    {key:'nba-arena-full', name:'NBA', ico:'🏀'},
+  ];
+  function renderExpStats(){
+    const body=document.getElementById('expStatsBody');
+    if(!body)return;
+    // Aggregate from current store
+    const adv=getAdventure();
+    const lane=getLane();
+    const advRuns=adv.runs||0;
+    const advWins=adv.wins||0;
+    const advLosses=adv.losses||0;
+    const advWR=advRuns?Math.round(advWins/advRuns*100):0;
+    const laneTotal=(lane.wins||0)+(lane.losses||0);
+    const laneWR=laneTotal?Math.round((lane.wins||0)/laneTotal*100):0;
+    let bestSpace=0;
+    try{bestSpace=loadStore().advBestSpace||0}catch(e){}
+
+    // Per-game breakdown
+    const perGame=[];
+    let favoriteGame=null;
+    let mostActivity=-1;
+    EXP_GAME_KEYS.forEach(g=>{
+      let s=null;
+      try{const raw=localStorage.getItem(g.key);if(raw)s=JSON.parse(raw)}catch(e){}
+      if(!s)s={};
+      const tb=s.turnBattle||{};
+      const bb=s.boardBattle||s.deckBattle||{};
+      const a=s.adventure||{};
+      const tbW=tb.wins||0, tbL=tb.losses||0;
+      const bbW=bb.wins||0, bbL=bb.losses||0;
+      const aRuns=a.runs||0, aWins=a.wins||0;
+      const activity = tbW+tbL+bbW+bbL+aRuns;
+      if(activity>mostActivity){mostActivity=activity; favoriteGame=g.name}
+      perGame.push({g,tbW,tbL,bbW,bbL,aRuns,aWins});
+    });
+
+    let html='';
+    html+='<div class="exp-stats-section">📈 OVERALL</div>';
+    html+='<div class="exp-stats-grid">';
+    html+=`<div class="exp-stats-card"><span class="v">${advRuns}</span><div class="k">ADV RUNS</div></div>`;
+    html+=`<div class="exp-stats-card"><span class="v">${advWins}-${advLosses}</span><div class="k">ADV W-L</div></div>`;
+    html+=`<div class="exp-stats-card"><span class="v">${advWR}%</span><div class="k">ADV WIN RATE</div></div>`;
+    html+=`<div class="exp-stats-card"><span class="v">${bestSpace}/25</span><div class="k">BEST SPACE</div></div>`;
+    html+=`<div class="exp-stats-card"><span class="v">${lane.wins||0}-${lane.losses||0}</span><div class="k">LANE W-L</div></div>`;
+    html+=`<div class="exp-stats-card"><span class="v">${laneWR}%</span><div class="k">LANE WIN RATE</div></div>`;
+    html+='</div>';
+
+    html+='<div class="exp-stats-section">🏆 FAVORITE GAME</div>';
+    html+=`<div class="exp-stats-row"><span class="ico">⭐</span><span class="gn">${favoriteGame||'—'}</span><span class="nums">most active</span></div>`;
+
+    html+='<div class="exp-stats-section">🎯 PER-GAME BREAKDOWN</div>';
+    perGame.forEach(p=>{
+      const cleared = p.aWins;
+      html+=`<div class="exp-stats-row"><span class="ico">${p.g.ico}</span><span class="gn">${p.g.name}</span><span class="nums">⚔️ ${p.tbW}W-${p.tbL}L · 🃏 ${p.bbW}W-${p.bbL}L · 🗺️ ${p.aRuns} runs (${cleared} cleared)</span></div>`;
+    });
+
+    body.innerHTML=html;
+  }
+  window._expRenderStats = renderExpStats;
   function refreshContinuePill(){
     try{
       const home = document.getElementById('home');
@@ -1500,7 +1937,12 @@
       orig(id);
       if(id === 'advPick' && typeof window.renderAdvPick === 'function') window.renderAdvPick();
       if(id === 'lanePick' && typeof window.renderLanePick === 'function') window.renderLanePick();
-      if(id === 'home' && typeof window._expRefreshContinuePill === 'function') window._expRefreshContinuePill();
+      if(id === 'home'){
+        if(typeof window._expRefreshContinuePill === 'function') window._expRefreshContinuePill();
+        if(typeof window._expRefreshDailyPill === 'function') window._expRefreshDailyPill();
+      }
+      if(id === 'expStats' && typeof window._expRenderStats === 'function') window._expRenderStats();
+      if(id === 'advPick' || id === 'adventure') maybeShowAdvTutorial();
     };
   }
   patchGoScreen();

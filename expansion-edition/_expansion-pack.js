@@ -3,6 +3,43 @@
   if(window._EXPANSION_PACK_LOADED) return;
   window._EXPANSION_PACK_LOADED = true;
 
+  // === Bridge host classic-script top-level const bindings (ROSTER, BOSSES) onto window ===
+  // Host games declare `let ROSTER = [...]` and `const BOSSES = [...]` at top level.
+  // Classic-script let/const create bindings in the *global lexical environment* — visible
+  // to other classic scripts by bare name, but NOT exposed on `window`. So `window.ROSTER`
+  // is undefined, and the rest of this IIFE (which uses `window.ROSTER`) gets nothing.
+  // We bridge them onto `window` using indirect eval, which evaluates in the global lexical
+  // scope (not the IIFE's strict-mode scope), so it can reach the host's lexical bindings.
+  // We also re-run the bridge on every roster/boss lookup in case the host declares them
+  // later than expected.
+  function _bridgeRosterBosses(){
+    if(window.ROSTER && Array.isArray(window.ROSTER) && window.ROSTER.length){ /* good */ }
+    else {
+      try{ if(typeof ROSTER !== 'undefined' && Array.isArray(ROSTER) && ROSTER.length) window.ROSTER = ROSTER; }catch(e){}
+    }
+    if(!window.ROSTER || !window.ROSTER.length){
+      try{
+        var r = (0,eval)('(typeof ROSTER!=="undefined" && Array.isArray(ROSTER)) ? ROSTER : null');
+        if(r && r.length) window.ROSTER = r;
+      }catch(e){}
+    }
+    if(window.BOSSES && Array.isArray(window.BOSSES) && window.BOSSES.length){ /* good */ }
+    else {
+      try{ if(typeof BOSSES !== 'undefined' && Array.isArray(BOSSES)) window.BOSSES = BOSSES; }catch(e){}
+    }
+    if(!window.BOSSES){
+      try{
+        var b = (0,eval)('(typeof BOSSES!=="undefined" && Array.isArray(BOSSES)) ? BOSSES : null');
+        if(b) window.BOSSES = b;
+      }catch(e){}
+    }
+  }
+  window._bridgeRosterBosses = _bridgeRosterBosses;
+  _bridgeRosterBosses(); // run immediately
+  setTimeout(_bridgeRosterBosses, 0); // run again deferred
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', _bridgeRosterBosses);
+  window.addEventListener('load', _bridgeRosterBosses);
+
   // === CSS injection ===
   const style = document.createElement('style');
   style.textContent = `
@@ -651,7 +688,7 @@
   function expLoadDeck(mode, idx){
     var decks = getExpDecks(mode);
     var d = decks[idx]; if(!d) return;
-    var ROSTER = window.ROSTER || [];
+    _bridgeRosterBosses(); var ROSTER = window.ROSTER || [];
     if(mode === 'adv'){
       advPickList.length = 0;
       d.members.forEach(function(id){
@@ -689,7 +726,7 @@
       }
     }
     var decks = getExpDecks(mode);
-    var ROSTER = window.ROSTER || [];
+    _bridgeRosterBosses(); var ROSTER = window.ROSTER || [];
     strip.innerHTML = '';
     if(decks.length === 0){
       var empty = document.createElement('div');
@@ -738,7 +775,7 @@
     if(pickBody){
       const oldBanner = pickBody.parentElement && pickBody.parentElement.querySelector('.adv-boss-preview');
       if(oldBanner) oldBanner.remove();
-      const BOSSES = window.BOSSES;
+      _bridgeRosterBosses(); const BOSSES = window.BOSSES;
       if(Array.isArray(BOSSES) && BOSSES.length){
         const boss = BOSSES[BOSSES.length-1];
         if(boss){
@@ -750,7 +787,7 @@
       }
     }
     const grid=$('advPickGrid');grid.innerHTML='';
-    const ROSTER=window.ROSTER||[];
+    const ROSTER=(_bridgeRosterBosses(),window.ROSTER||[]);
     ROSTER.forEach(h=>{
       const el=buildCardEl(h,false,()=>{
         const i=advPickList.indexOf(h.id);
@@ -768,7 +805,7 @@
     $('advPickB').textContent=advPickList.length;$('advPickCount').textContent=advPickList.length;
     $('advPickStart').disabled=advPickList.length!==8;
     const cards=$('advPickGrid').children;
-    const ROSTER=window.ROSTER||[];
+    const ROSTER=(_bridgeRosterBosses(),window.ROSTER||[]);
     ROSTER.forEach((h,i)=>{cards[i]&&cards[i].classList.toggle('selected',advPickList.includes(h.id))});
   }
   window.advPickClear = function(){advPickList=[];renderAdvPickRefresh()};
@@ -839,7 +876,7 @@
       clearAdvRun();
     }
     sfxClick();
-    const ROSTER=window.ROSTER||[];
+    const ROSTER=(_bridgeRosterBosses(),window.ROSTER||[]);
     const party=advPickList.map(id=>{const r=ROSTER.find(x=>x.id===id);return{id:r.id,n:r.n,fb:r.fb,pid:r.pid,t:r.t,atk:r.atk,def:r.def,spd:r.spd,hpMax:r.hp,hp:r.hp,xp:0,fainted:false}});
     advState={
       party,space:0,types:buildSpaceTypes(),waypoints:buildBoardWaypoints(),
@@ -857,7 +894,7 @@
     if(!hasAdvRun())return;
     try{
       const s=loadStore();const r=s.advRun;
-      const ROSTER=window.ROSTER||[];
+      const ROSTER=(_bridgeRosterBosses(),window.ROSTER||[]);
       const party=r.party.map(p=>{
         const ros=ROSTER.find(x=>x.id===p.id)||{};
         return{id:p.id,n:p.n||ros.n,fb:p.fb||ros.fb,pid:p.pid||ros.pid,t:p.t||ros.t,atk:p.atk||ros.atk,def:p.def||ros.def,spd:p.spd||ros.spd,hpMax:p.hpMax,hp:p.hp,xp:p.xp||0,fainted:!!p.fainted};
@@ -1076,7 +1113,7 @@
     return 5;
   }
   function advFightOpen(isBoss,onClose){
-    const ROSTER=window.ROSTER||[];
+    const ROSTER=(_bridgeRosterBosses(),window.ROSTER||[]);
     let foe;
     if(isBoss){
       const bossIds=['mewtwo','mew','dragonite'];
@@ -1354,7 +1391,7 @@
     lanePickList=[];
     $('lanePickB').textContent=0;$('lanePickCount').textContent=0;$('lanePickStart').disabled=true;
     const grid=$('lanePickGrid');grid.innerHTML='';
-    const ROSTER=window.ROSTER||[];
+    const ROSTER=(_bridgeRosterBosses(),window.ROSTER||[]);
     ROSTER.forEach(h=>{
       const el=buildCardEl(h,false,()=>{
         const i=lanePickList.indexOf(h.id);
@@ -1372,7 +1409,7 @@
     $('lanePickB').textContent=lanePickList.length;$('lanePickCount').textContent=lanePickList.length;
     $('lanePickStart').disabled=lanePickList.length!==6;
     const cards=$('lanePickGrid').children;
-    const ROSTER=window.ROSTER||[];
+    const ROSTER=(_bridgeRosterBosses(),window.ROSTER||[]);
     ROSTER.forEach((h,i)=>{cards[i]&&cards[i].classList.toggle('selected',lanePickList.includes(h.id))});
   }
   window.lanePickClear = function(){lanePickList=[];renderLanePickRefresh()};
@@ -1386,7 +1423,7 @@
   window.laneStart = function(){
     if(lanePickList.length!==6)return;
     sfxClick();
-    const ROSTER=window.ROSTER||[];
+    const ROSTER=(_bridgeRosterBosses(),window.ROSTER||[]);
     const deck=lanePickList.map(id=>{const r=ROSTER.find(x=>x.id===id);return{id:r.id,n:r.n,fb:r.fb,pid:r.pid,t:r.t,hp:Math.round(r.hp*1.5),hpMax:Math.round(r.hp*1.5),atk:r.atk,cost:Math.max(1,r.elixir||3),isSpell:false}});
     const pool=[...ROSTER].sort(()=>Math.random()-0.5).slice(0,6);
     const foeDeck=pool.map(r=>({id:r.id,n:r.n,fb:r.fb,pid:r.pid,t:r.t,hp:Math.round(r.hp*1.5),hpMax:Math.round(r.hp*1.5),atk:r.atk,cost:Math.max(1,r.elixir||3),isSpell:false}));
@@ -1407,7 +1444,7 @@
   };
 
   function laneDraw(side,n){
-    const ROSTER=window.ROSTER||[];
+    const ROSTER=(_bridgeRosterBosses(),window.ROSTER||[]);
     const deck=side==='ply'?laneState.deck:laneState.foeDeck;
     const hand=side==='ply'?laneState.hand:laneState.foeHand;
     for(let i=0;i<n;i++){
@@ -1549,7 +1586,7 @@
     card.querySelector('.nm').textContent=c.n||'???';
     card.querySelector('.pa').innerHTML=artHTML(c);
     const tName=c.t||'—';
-    const ROSTER=window.ROSTER||[];
+    const ROSTER=(_bridgeRosterBosses(),window.ROSTER||[]);
     const full=ROSTER.find(r=>r.id===c.id)||{};
     const def=c.def||full.def||0;
     const spd=c.spd||full.spd||0;

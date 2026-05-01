@@ -40,6 +40,16 @@
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', _bridgeRosterBosses);
   window.addEventListener('load', _bridgeRosterBosses);
 
+  // === Spell-aware roster filter for 1v1/adventure contexts ===
+  // Spells (isSpell:true) are deck-only cards meant for board-style modes (Quick Board, Lane Duel).
+  // They must NOT appear as standalone fighters in turn-battle / story / adventure modes.
+  function nonSpellRoster(){
+    _bridgeRosterBosses();
+    var r = window.ROSTER || [];
+    return r.filter(function(c){ return !c.isSpell; });
+  }
+  window._nonSpellRoster = nonSpellRoster;
+
   // === CSS injection ===
   const style = document.createElement('style');
   style.textContent = `
@@ -734,7 +744,9 @@
     if(mode === 'adv'){
       advPickList.length = 0;
       d.members.forEach(function(id){
-        if(ROSTER.find(function(r){return r.id===id})){
+        var entry = ROSTER.find(function(r){return r.id===id});
+        if(entry && entry.isSpell) return; // skip spells in adv decks
+        if(entry){
           if(advPickList.length < 8) advPickList.push(id);
         }
       });
@@ -808,7 +820,9 @@
   // === Feature: Randomize button + Live team stats panel ===
   function expRandomize(mode){
     _bridgeRosterBosses();
-    var roster = window.ROSTER || [];
+    // Adventure rolls foes from ROSTER mid-run, so its deck must exclude spells.
+    // Lane Duel deploys spells as deck cards, so keep them in its randomizer pool.
+    var roster = mode==='adv' ? nonSpellRoster() : (window.ROSTER || []);
     if(!roster.length){ alert('Roster not loaded yet'); return; }
     var max = mode==='adv' ? 8 : 6;
     var pool = roster.slice();
@@ -1020,7 +1034,7 @@
       }
     }
     const grid=$('advPickGrid');grid.innerHTML='';
-    const ROSTER=(_bridgeRosterBosses(),window.ROSTER||[]);
+    const ROSTER=nonSpellRoster();
     ROSTER.forEach(h=>{
       const el=buildCardEl(h,false,()=>{
         const i=advPickList.indexOf(h.id);
@@ -1040,7 +1054,7 @@
     $('advPickB').textContent=advPickList.length;$('advPickCount').textContent=advPickList.length;
     $('advPickStart').disabled=advPickList.length!==8;
     const cards=$('advPickGrid').children;
-    const ROSTER=(_bridgeRosterBosses(),window.ROSTER||[]);
+    const ROSTER=nonSpellRoster();
     ROSTER.forEach((h,i)=>{cards[i]&&cards[i].classList.toggle('selected',advPickList.includes(h.id))});
     if(typeof renderExpTeamStats==='function') renderExpTeamStats('adv');
     if(typeof renderExpPickPreview==='function') renderExpPickPreview('adv');
@@ -1113,8 +1127,8 @@
       clearAdvRun();
     }
     sfxClick();
-    const ROSTER=(_bridgeRosterBosses(),window.ROSTER||[]);
-    const party=advPickList.map(id=>{const r=ROSTER.find(x=>x.id===id);return{id:r.id,n:r.n,fb:r.fb,pid:r.pid,t:r.t,atk:r.atk,def:r.def,spd:r.spd,hpMax:r.hp,hp:r.hp,xp:0,fainted:false}});
+    const ROSTER=nonSpellRoster();
+    const party=advPickList.map(id=>{const r=ROSTER.find(x=>x.id===id);if(!r)return null;return{id:r.id,n:r.n,fb:r.fb,pid:r.pid,t:r.t,atk:r.atk,def:r.def,spd:r.spd,hpMax:r.hp,hp:r.hp,xp:0,fainted:false}}).filter(Boolean);
     advState={
       party,space:0,types:buildSpaceTypes(),waypoints:buildBoardWaypoints(),
       inventory:[],shieldNext:false,atkBuffNext:false,log:[],busy:false,pendingSteps:0,rerollAvailable:0,
@@ -1350,7 +1364,7 @@
     return 5;
   }
   function advFightOpen(isBoss,onClose){
-    const ROSTER=(_bridgeRosterBosses(),window.ROSTER||[]);
+    const ROSTER=nonSpellRoster();
     let foe;
     if(isBoss){
       const bossIds=['mewtwo','mew','dragonite'];
@@ -2359,5 +2373,40 @@
     };
   }
   patchGoScreen();
+
+  // === Hide spell cards from 1v1 selection (turn battle / story mode) ===
+  // Quick Battle and Story / Gym Challenge use selectMode === 'tb'. Spells are deck-only
+  // and would appear as standalone fighters there. Quick Board (selectMode === 'bb') keeps spells.
+  (function(){
+    function tryWrap(){
+      if(typeof window.renderSelect !== 'function') return setTimeout(tryWrap, 200);
+      if(window._RENDER_SELECT_SPELL_FILTER_WRAPPED) return;
+      window._RENDER_SELECT_SPELL_FILTER_WRAPPED = true;
+      var orig = window.renderSelect;
+      window.renderSelect = function(){
+        var ret = orig.apply(this, arguments);
+        try {
+          var mode = (typeof selectMode !== 'undefined') ? selectMode : (window.selectMode || 'tb');
+          if(mode === 'tb'){
+            _bridgeRosterBosses();
+            var roster = window.ROSTER || [];
+            var grid = document.getElementById('selectGrid');
+            if(!grid) return ret;
+            var cards = grid.querySelectorAll('.hero-card');
+            cards.forEach(function(card){
+              var nameEl = card.querySelector('.name');
+              if(!nameEl) return;
+              var rosterEntry = roster.find(function(r){ return r.n === nameEl.textContent; });
+              if(rosterEntry && rosterEntry.isSpell){
+                card.style.display = 'none';
+              }
+            });
+          }
+        } catch(e){}
+        return ret;
+      };
+    }
+    tryWrap();
+  })();
 
 })();
